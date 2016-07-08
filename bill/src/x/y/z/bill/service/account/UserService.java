@@ -35,8 +35,9 @@ public class UserService extends BaseService {
         return userDAO.selectByMobile(mobile);
     }
 
-    public void realNameAuth() {
+    public void realNameAuth(final Long userId) {
         UserExtra userExtra = new UserExtra();
+        userExtra.setUserId(userId);
         userExtraDAO.insert(userExtra);
     }
 
