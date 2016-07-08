@@ -17,7 +17,7 @@ public class User extends BaseObject {
 
     private String loginPwd;
 
-    private Date createTime;
+    private Date createTime = new Date();
 
     public Long getId() {
         return id;

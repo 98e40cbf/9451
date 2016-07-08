@@ -20,7 +20,7 @@ public class CapitalAccount extends BaseObject {
 
     private Long version;
 
-    private Date lastUpdate;
+    private Date lastUpdate = new Date();
 
     public Long getId() {
         return id;

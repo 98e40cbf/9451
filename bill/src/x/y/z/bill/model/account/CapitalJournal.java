@@ -24,7 +24,7 @@ public class CapitalJournal extends BaseObject {
 
     private String digest;
 
-    private Date createTime;
+    private Date createTime = new Date();
 
     public Long getId() {
         return id;
