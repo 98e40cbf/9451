@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	<definition name="error_403" template="/WEB-INF/views/common/error/403.jsp" />
+	<definition name="error_404" template="/WEB-INF/views/common/error/404.jsp" />		
+	<definition name="error_500" template="/WEB-INF/views/common/error/500.jsp" />
+	<definition name="index" template="/WEB-INF/views/index.jsp" />
+</tiles-definitions>
