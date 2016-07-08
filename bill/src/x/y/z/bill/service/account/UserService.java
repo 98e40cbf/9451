@@ -27,6 +27,14 @@ public class UserService extends BaseService {
         capitalService.createAccount(user.getId());
     }
 
+    public User queryByName(final String username) {
+        return userDAO.selectByUsername(username);
+    }
+
+    public User queryByMobile(final String mobile) {
+        return userDAO.selectByMobile(mobile);
+    }
+
     public void realNameAuth() {
         UserExtra userExtra = new UserExtra();
         userExtraDAO.insert(userExtra);
@@ -35,6 +43,4 @@ public class UserService extends BaseService {
     public void resetPwd() {
     }
 
-    
-    
 }

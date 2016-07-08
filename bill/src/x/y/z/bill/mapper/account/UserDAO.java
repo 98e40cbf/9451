@@ -6,9 +6,13 @@ import x.y.z.bill.model.account.User;
 
 @Repository
 public interface UserDAO {
-    int insert(User record);
+    int insert(User user);
 
     User selectByPrimaryKey(Long id);
 
-    int updateByPrimaryKey(User record);
+    int updateByPrimaryKey(User user);
+
+    User selectByUsername(String username);
+
+    User selectByMobile(String mobile);
 }
