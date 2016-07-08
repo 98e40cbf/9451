@@ -10,4 +10,6 @@ public interface CapitalJournalDAO {
 
     CapitalJournal selectByPrimaryKey(Long id);
 
+    CapitalJournal selectByTxnId(String txnId);
+
 }
