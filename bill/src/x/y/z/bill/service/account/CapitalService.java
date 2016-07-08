@@ -29,4 +29,13 @@ public class CapitalService extends BaseService {
         capitalAccountDAO.insert(account);
     }
 
+    public void add() {
+    }
+
+    public void freeze() {
+    }
+
+    public void unfreeze() {
+    }
+
 }

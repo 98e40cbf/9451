@@ -32,4 +32,9 @@ public class UserService extends BaseService {
         userExtraDAO.insert(userExtra);
     }
 
+    public void resetPwd() {
+    }
+
+    
+    
 }
