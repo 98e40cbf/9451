@@ -18,21 +18,37 @@
 		from user
 		where id = #{id,jdbcType=BIGINT}
 	</select>
+	<select id="selectByUsername" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from user
+		where username = #{username,jdbcType=VARCHAR}
+	</select>
+	<select id="selectByMobile" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from user
+		where mobile = #{mobile,jdbcType=VARCHAR}
+	</select>
 	<insert id="insert" parameterType="x.y.z.bill.model.account.User" useGeneratedKeys="true" keyProperty="id">
-		insert into user (username, mobile,
+		insert
+		into user (username, mobile,
 		email, loginPwd, createTime
 		)
-		values (#{username,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR},
+		values (#{username,jdbcType=VARCHAR},
+		#{mobile,jdbcType=VARCHAR},
 		#{email,jdbcType=VARCHAR}, #{loginPwd,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
 		)
 	</insert>
 	<update id="updateByPrimaryKey" parameterType="x.y.z.bill.model.account.User">
 		update user
 		set username = #{username,jdbcType=VARCHAR},
-		mobile = #{mobile,jdbcType=VARCHAR},
+		mobile =
+		#{mobile,jdbcType=VARCHAR},
 		email = #{email,jdbcType=VARCHAR},
 		loginPwd = #{loginPwd,jdbcType=VARCHAR},
-		createTime = #{createTime,jdbcType=TIMESTAMP}
+		createTime =
+		#{createTime,jdbcType=TIMESTAMP}
 		where id = #{id,jdbcType=BIGINT}
 	</update>
 </mapper>
