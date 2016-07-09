@@ -13,7 +13,7 @@ public class User extends BaseObject {
 
     private String mobile;
 
-    private String email;
+    private String email = "n/a";
 
     private String loginPwd;
 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import io.alpha.service.BaseService;
 import io.alpha.tx.annotation.TransMark;
 import io.alpha.util.DecimalUtil;
+import x.y.z.bill.constant.BizType;
 import x.y.z.bill.mapper.account.CapitalAccountDAO;
 import x.y.z.bill.mapper.account.CapitalJournalDAO;
 import x.y.z.bill.model.account.CapitalAccount;
@@ -34,9 +35,8 @@ public class CapitalService extends BaseService {
         capitalAccountDAO.insert(account);
     }
 
-    // TODO 重复请求只能成功一次
     public void add(final Long userId, final BigDecimal amount, final String txnId, final String memo,
-            final byte bizType) {
+            final BizType bizType) {
         for (;;) {
             CapitalAccount account = capitalAccountDAO.selectByPrimaryKey(userId);
             if (account == null) {
@@ -53,7 +53,7 @@ public class CapitalService extends BaseService {
                 journal.setAmount(amount);
                 journal.setBalance(account.getBalance());
                 journal.setTxnId(txnId);
-                journal.setBizType(bizType);
+                journal.setBizType(bizType.getType());
                 journal.setCreateTime(current);
                 journal.setDigest("n/a");
                 journal.setMemo(memo);
@@ -64,7 +64,7 @@ public class CapitalService extends BaseService {
     }
 
     public void freeze(final Long userId, final BigDecimal amount, final String txnId, final String memo,
-            final byte bizType) {
+            final BizType bizType) {
         for (;;) {
             CapitalAccount account = capitalAccountDAO.selectByPrimaryKey(userId);
             if (account == null) {
@@ -85,7 +85,7 @@ public class CapitalService extends BaseService {
                 journal.setAmount(amount);
                 journal.setBalance(account.getBalance());
                 journal.setTxnId(txnId);
-                journal.setBizType(bizType);
+                journal.setBizType(bizType.getType());
                 journal.setCreateTime(current);
                 journal.setDigest("n/a");
                 journal.setMemo(memo);
@@ -95,7 +95,7 @@ public class CapitalService extends BaseService {
         }
     }
 
-    public void unfreeze(final Long userId, final String origTxnId, final String memo, final byte bizType,
+    public void unfreeze(final Long userId, final String origTxnId, final String memo, final BizType bizType,
             final boolean status) {
         for (;;) {
             CapitalAccount account = capitalAccountDAO.selectByPrimaryKey(userId);
@@ -119,7 +119,7 @@ public class CapitalService extends BaseService {
                     journal.setAmount(amount);
                     journal.setBalance(account.getBalance());
                     journal.setTxnId(origTxnId);
-                    journal.setBizType(bizType);
+                    journal.setBizType(bizType.getType());
                     journal.setCreateTime(current);
                     journal.setDigest("n/a");
                     journal.setMemo(memo);
@@ -139,7 +139,7 @@ public class CapitalService extends BaseService {
                     journal.setAmount(amount);
                     journal.setBalance(account.getBalance());
                     journal.setTxnId(origTxnId);
-                    journal.setBizType(bizType);
+                    journal.setBizType(bizType.getType());
                     journal.setCreateTime(current);
                     journal.setDigest("n/a");
                     journal.setMemo(memo);
