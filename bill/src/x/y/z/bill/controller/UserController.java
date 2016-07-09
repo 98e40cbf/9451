@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import io.alpha.util.DecimalUtil;
 import io.alpha.util.SequenceHelper;
 import io.alpha.web.controller.BaseController;
+import x.y.z.bill.command.RealnameCommand;
 import x.y.z.bill.command.UserRegistCommand;
 import x.y.z.bill.constant.BizType;
 import x.y.z.bill.constant.Views;
@@ -35,6 +36,15 @@ public class UserController extends BaseController {
             return Views.INDEX_VIEW;
         }
         accountService.regist(registCommand);
+        return Views.INDEX_VIEW;
+    }
+
+    @PostMapping("/realname")
+    public String realname(@Valid final RealnameCommand realnameCommand, final BindingResult result) {
+        if (result.hasErrors()) {
+            return Views.INDEX_VIEW;
+        }
+        accountService.realname(1L, realnameCommand);
         return Views.INDEX_VIEW;
     }
 

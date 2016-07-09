@@ -32,7 +32,7 @@ CREATE TABLE `capitaljournal` (
   `createTime` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_txnId_bizType` (`bizType`,`txnId`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for user
@@ -60,8 +60,9 @@ CREATE TABLE `user_extra` (
   `userId` bigint(20) NOT NULL,
   `realName` varchar(100) NOT NULL,
   `idCardNo` varchar(100) NOT NULL,
-  `idCardType` tinyint(4) NOT NULL,
-  `paymentPwd` varchar(100) NOT NULL,
+  `idCardType` tinyint(3) unsigned NOT NULL,
+  `paymentPwd` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_idCardNo` (`idCardNo`)
+  UNIQUE KEY `uk_idCardNo` (`idCardNo`),
+  UNIQUE KEY `uk_userId` (`userId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
