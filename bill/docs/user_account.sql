@@ -25,13 +25,14 @@ CREATE TABLE `capitaljournal` (
   `amount` decimal(18,2) NOT NULL,
   `balance` decimal(18,2) NOT NULL,
   `bizType` tinyint(3) unsigned NOT NULL,
+  `direction` tinyint(3) unsigned NOT NULL,
   `txnId` varchar(40) NOT NULL,
   `memo` varchar(50) NOT NULL,
   `digest` varchar(40) NOT NULL,
   `createTime` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_txnId_bizType` (`bizType`,`txnId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for user

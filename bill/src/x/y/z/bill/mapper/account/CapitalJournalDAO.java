@@ -1,5 +1,6 @@
 package x.y.z.bill.mapper.account;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import x.y.z.bill.model.account.CapitalJournal;
@@ -10,6 +11,6 @@ public interface CapitalJournalDAO {
 
     CapitalJournal selectByPrimaryKey(Long id);
 
-    CapitalJournal selectByTxnId(String txnId);
+    CapitalJournal selectByTxnIdAndType(@Param("txnId") String txnId, @Param("bizType") byte bizType);
 
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import io.alpha.service.BaseService;
+import x.y.z.bill.command.UserRegistCommand;
 import x.y.z.bill.constant.BizType;
 import x.y.z.bill.service.account.CapitalService;
 import x.y.z.bill.service.account.UserService;
@@ -19,10 +20,11 @@ public class AccountService extends BaseService {
     @Autowired
     private CapitalService capitalService;
 
-    public boolean regist(final String username, final String mobile, final String password) {
+    public boolean regist(final UserRegistCommand registCommand) {
         try {
-            userService.create(username, mobile, password);
+            userService.create(registCommand.getUsername(), registCommand.getMobile(), registCommand.getPassword());
         } catch (Exception e) {
+            logger.catching(e);
             return false;
         }
         return true;
@@ -33,6 +35,7 @@ public class AccountService extends BaseService {
         try {
             capitalService.add(userId, amount, txnId, memo, bizType);
         } catch (Exception e) {
+            logger.catching(e);
             if (ExceptionUtil.isDuplicateKey(e)) {
                 return true;
             }
@@ -46,6 +49,7 @@ public class AccountService extends BaseService {
         try {
             capitalService.freeze(userId, amount, txnId, memo, bizType);
         } catch (Exception e) {
+            logger.catching(e);
             if (ExceptionUtil.isDuplicateKey(e)) {
                 return true;
             }
@@ -59,6 +63,7 @@ public class AccountService extends BaseService {
         try {
             capitalService.unfreeze(userId, origTxnId, memo, bizType, status);
         } catch (Exception e) {
+            logger.catching(e);
             if (ExceptionUtil.isDuplicateKey(e)) {
                 return true;
             }

@@ -18,6 +18,8 @@ public class CapitalJournal extends BaseObject {
 
     private Byte bizType;
 
+    private Byte direction;
+
     private String txnId;
 
     private String memo;
@@ -96,5 +98,13 @@ public class CapitalJournal extends BaseObject {
 
     public void setCreateTime(final Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Byte getDirection() {
+        return direction;
+    }
+
+    public void setDirection(final Byte direction) {
+        this.direction = direction;
     }
 }

@@ -10,6 +10,7 @@ import io.alpha.service.BaseService;
 import io.alpha.tx.annotation.TransMark;
 import io.alpha.util.DecimalUtil;
 import x.y.z.bill.constant.BizType;
+import x.y.z.bill.constant.Direction;
 import x.y.z.bill.mapper.account.CapitalAccountDAO;
 import x.y.z.bill.mapper.account.CapitalJournalDAO;
 import x.y.z.bill.model.account.CapitalAccount;
@@ -53,7 +54,8 @@ public class CapitalService extends BaseService {
                 journal.setAmount(amount);
                 journal.setBalance(account.getBalance());
                 journal.setTxnId(txnId);
-                journal.setBizType(bizType.getType());
+                journal.setBizType(bizType.getCode());
+                journal.setDirection(Direction.INFLOW);
                 journal.setCreateTime(current);
                 journal.setDigest("n/a");
                 journal.setMemo(memo);
@@ -85,7 +87,8 @@ public class CapitalService extends BaseService {
                 journal.setAmount(amount);
                 journal.setBalance(account.getBalance());
                 journal.setTxnId(txnId);
-                journal.setBizType(bizType.getType());
+                journal.setBizType(bizType.getCode());
+                journal.setDirection(Direction.OUTFLOW);
                 journal.setCreateTime(current);
                 journal.setDigest("n/a");
                 journal.setMemo(memo);
@@ -102,11 +105,12 @@ public class CapitalService extends BaseService {
             if (account == null) {
                 throw new RuntimeException();
             }
-            CapitalJournal origJournal = capitalJournalDAO.selectByTxnId(origTxnId);
+            CapitalJournal origJournal = capitalJournalDAO.selectByTxnIdAndType(origTxnId, BizType.preType(bizType));
             if (origJournal == null) {
                 throw new RuntimeException();
             }
             BigDecimal amount = origJournal.getAmount();
+            byte code = bizType.getCode();
             if (status) {
                 account.setFrozen(DecimalUtil.subtract(account.getFrozen(), amount));
                 account.setDigest("n/a");
@@ -119,7 +123,8 @@ public class CapitalService extends BaseService {
                     journal.setAmount(amount);
                     journal.setBalance(account.getBalance());
                     journal.setTxnId(origTxnId);
-                    journal.setBizType(bizType.getType());
+                    journal.setBizType(code);
+                    journal.setDirection(Direction.OUTFLOW);
                     journal.setCreateTime(current);
                     journal.setDigest("n/a");
                     journal.setMemo(memo);
@@ -139,7 +144,8 @@ public class CapitalService extends BaseService {
                     journal.setAmount(amount);
                     journal.setBalance(account.getBalance());
                     journal.setTxnId(origTxnId);
-                    journal.setBizType(bizType.getType());
+                    journal.setBizType(code);
+                    journal.setDirection(Direction.INFLOW);
                     journal.setCreateTime(current);
                     journal.setDigest("n/a");
                     journal.setMemo(memo);
