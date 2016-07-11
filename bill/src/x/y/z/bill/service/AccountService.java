@@ -18,6 +18,7 @@ import x.y.z.bill.service.account.CapitalService;
 import x.y.z.bill.service.account.LoginHistoryService;
 import x.y.z.bill.service.account.UserService;
 import x.y.z.bill.util.ExceptionUtil;
+import x.y.z.bill.util.SensitiveWords;
 
 @Service
 public class AccountService extends BaseService {
@@ -28,6 +29,9 @@ public class AccountService extends BaseService {
     private CapitalService capitalService;
 
     public boolean regist(final RegistForm registForm) {
+        if (SensitiveWords.exists(registForm.getUsername())) {
+            return false;
+        }
         try {
             userService.create(registForm.getUsername(), registForm.getMobile(), registForm.getPassword());
         } catch (Exception e) {
