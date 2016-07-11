@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import io.alpha.service.BaseService;
-import x.y.z.bill.command.RealnameCommand;
-import x.y.z.bill.command.UserRegistCommand;
+import x.y.z.bill.command.RealnameForm;
+import x.y.z.bill.command.RegistForm;
 import x.y.z.bill.constant.BizType;
 import x.y.z.bill.constant.IdCardType;
 import x.y.z.bill.service.account.CapitalService;
@@ -22,9 +22,9 @@ public class AccountService extends BaseService {
     @Autowired
     private CapitalService capitalService;
 
-    public boolean regist(final UserRegistCommand registCommand) {
+    public boolean regist(final RegistForm registForm) {
         try {
-            userService.create(registCommand.getUsername(), registCommand.getMobile(), registCommand.getPassword());
+            userService.create(registForm.getUsername(), registForm.getMobile(), registForm.getPassword());
         } catch (Exception e) {
             logger.catching(e);
             return false;
@@ -32,9 +32,9 @@ public class AccountService extends BaseService {
         return true;
     }
 
-    public boolean realname(final long userId, final RealnameCommand realnameCommand) {
+    public boolean realname(final long userId, final RealnameForm realnameForm) {
         try {
-            userService.realNameAuth(userId, realnameCommand.getRealName(), realnameCommand.getIdCardNo(),
+            userService.realNameAuth(userId, realnameForm.getRealName(), realnameForm.getIdCardNo(),
                     IdCardType.IDENTITY_CARD);
         } catch (Exception e) {
             logger.catching(e);
@@ -72,9 +72,9 @@ public class AccountService extends BaseService {
     }
 
     public boolean unfreeze(final Long userId, final String origTxnId, final String memo, final BizType bizType,
-            final boolean status) {
+            final boolean bizStatus) {
         try {
-            capitalService.unfreeze(userId, origTxnId, memo, bizType, status);
+            capitalService.unfreeze(userId, origTxnId, memo, bizType, bizStatus);
         } catch (Exception e) {
             logger.catching(e);
             if (ExceptionUtil.isDuplicateKey(e)) {

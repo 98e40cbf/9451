@@ -30,6 +30,7 @@
 	投资:<br/>
 	<form action="${contextPath}/user/buy" method="post">
 		<b:token/>
+		<input type="text" name="amount"/>
 		<input type="submit" />
 	</form>
 	投资成功:<br/>

@@ -4,7 +4,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import io.alpha.core.model.BaseObject;
 
-public class UserRegistCommand extends BaseObject {
+public class RegistForm extends BaseObject {
 
     private static final long serialVersionUID = 4738293626351299744L;
     @NotEmpty

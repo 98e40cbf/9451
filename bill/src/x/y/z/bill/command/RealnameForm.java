@@ -4,7 +4,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import io.alpha.core.model.BaseObject;
 
-public class RealnameCommand extends BaseObject {
+public class RealnameForm extends BaseObject {
 
     private static final long serialVersionUID = 5539652850230952027L;
     @NotEmpty
