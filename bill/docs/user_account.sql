@@ -12,7 +12,8 @@ CREATE TABLE `capitalaccount` (
   `digest` varchar(40) NOT NULL,
   `version` bigint(20) unsigned NOT NULL,
   `lastUpdate` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_userId` (`userId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -37,8 +38,8 @@ CREATE TABLE `capitaljournal` (
 -- ----------------------------
 -- Table structure for user
 -- ----------------------------
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE `user` (
+DROP TABLE IF EXISTS `user_base`;
+CREATE TABLE `user_base` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(30) NOT NULL,
   `mobile` varchar(100) NOT NULL,

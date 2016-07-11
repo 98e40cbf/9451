@@ -43,7 +43,7 @@ public class UserController extends BaseController {
             return Views.INDEX_VIEW;
         }
         accountService.regist(registForm);
-        return Views.INDEX_VIEW;
+        return "redirect:/";
     }
 
     @PostMapping("/login")
