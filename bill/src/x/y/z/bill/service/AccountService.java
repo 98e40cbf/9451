@@ -35,7 +35,6 @@ public class AccountService extends BaseService {
         try {
             userService.create(registForm.getUsername(), registForm.getMobile(), registForm.getPassword());
         } catch (Exception e) {
-            logger.catching(e);
             return false;
         }
         return true;
@@ -72,7 +71,6 @@ public class AccountService extends BaseService {
             userService.realNameAuth(userId, realnameForm.getRealName(), realnameForm.getIdCardNo(),
                     IdCardType.IDENTITY_CARD);
         } catch (Exception e) {
-            logger.catching(e);
             return false;
         }
         return true;
@@ -83,7 +81,6 @@ public class AccountService extends BaseService {
         try {
             capitalService.add(userId, amount, txnId, memo, bizType);
         } catch (Exception e) {
-            logger.catching(e);
             if (ExceptionUtil.isDuplicateKey(e)) {
                 return true;
             }
@@ -97,7 +94,6 @@ public class AccountService extends BaseService {
         try {
             capitalService.freeze(userId, amount, txnId, memo, bizType);
         } catch (Exception e) {
-            logger.catching(e);
             if (ExceptionUtil.isDuplicateKey(e)) {
                 return true;
             }
@@ -111,7 +107,6 @@ public class AccountService extends BaseService {
         try {
             capitalService.unfreeze(userId, origTxnId, memo, bizType, bizStatus);
         } catch (Exception e) {
-            logger.catching(e);
             if (ExceptionUtil.isDuplicateKey(e)) {
                 return true;
             }
