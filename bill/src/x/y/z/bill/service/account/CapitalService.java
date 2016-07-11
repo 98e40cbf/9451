@@ -11,6 +11,9 @@ import io.alpha.tx.annotation.TransMark;
 import io.alpha.util.DecimalUtil;
 import x.y.z.bill.constant.BizType;
 import x.y.z.bill.constant.Direction;
+import x.y.z.bill.exception.AccountNotFoundExcepiton;
+import x.y.z.bill.exception.BalanceNotEnoughException;
+import x.y.z.bill.exception.CapitalJournalNotFoundException;
 import x.y.z.bill.mapper.account.CapitalAccountDAO;
 import x.y.z.bill.mapper.account.CapitalJournalDAO;
 import x.y.z.bill.model.account.CapitalAccount;
@@ -41,7 +44,7 @@ public class CapitalService extends BaseService {
         for (;;) {
             CapitalAccount account = capitalAccountDAO.selectByUserId(userId);
             if (account == null) {
-                throw new RuntimeException("资金账户不存在.");
+                throw new AccountNotFoundExcepiton("资金账户不存在.");
             }
             account.setBalance(DecimalUtil.add(account.getBalance(), amount));
             account.setDigest("n/a");
@@ -70,10 +73,10 @@ public class CapitalService extends BaseService {
         for (;;) {
             CapitalAccount account = capitalAccountDAO.selectByUserId(userId);
             if (account == null) {
-                throw new RuntimeException("资金账户不存在.");
+                throw new AccountNotFoundExcepiton("资金账户不存在.");
             }
             if (DecimalUtil.lt(account.getBalance(), amount)) {
-                throw new RuntimeException("余额不足.");
+                throw new BalanceNotEnoughException("余额不足.");
             }
             account.setBalance(DecimalUtil.subtract(account.getBalance(), amount));
             account.setFrozen(DecimalUtil.add(account.getFrozen(), amount));
@@ -103,12 +106,12 @@ public class CapitalService extends BaseService {
         for (;;) {
             CapitalAccount account = capitalAccountDAO.selectByUserId(userId);
             if (account == null) {
-                throw new RuntimeException("资金账户不存在.");
+                throw new AccountNotFoundExcepiton("资金账户不存在.");
             }
             CapitalJournal origJournal = capitalJournalDAO.selectByUserIdTxnIdAndType(userId, origTxnId,
                     BizType.preType(bizType));
             if (origJournal == null) {
-                throw new RuntimeException("原冻结申请流水不存在.");
+                throw new CapitalJournalNotFoundException("冻结申请流水不存在.");
             }
             BigDecimal amount = origJournal.getAmount();
             account.setFrozen(DecimalUtil.subtract(account.getFrozen(), amount));
