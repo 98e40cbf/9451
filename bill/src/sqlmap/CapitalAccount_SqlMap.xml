@@ -13,11 +13,11 @@
 	<sql id="Base_Column_List">
 		id, userId, balance, frozen, digest, version, lastUpdate
 	</sql>
-	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+	<select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long">
 		select
 		<include refid="Base_Column_List" />
 		from capitalaccount
-		where id = #{id,jdbcType=BIGINT}
+		where userId = #{userId,jdbcType=BIGINT}
 	</select>
 	<insert id="insert" parameterType="x.y.z.bill.model.account.CapitalAccount" useGeneratedKeys="true" keyProperty="id">
 		insert into capitalaccount (userId, balance,

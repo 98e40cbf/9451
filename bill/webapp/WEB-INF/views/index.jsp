@@ -23,33 +23,38 @@
 	</form>
 	实名认证:<br>
 	<form action="${contextPath}/user/realname" method="post">
+		userId:<input name="userId" type="text" /><br/>
 		realName:<input name="realName" type="text" /><br/>
 		idCardNo:<input name="idCardNo" type="text" /><br/>
 		<b:token/>
 		<input type="submit" />
 	</form>
-	<br/>
 	充值:<br/>
 	<form action="${contextPath}/user/recharge" method="post">
 		<b:token/>
+		userId:<input name="userId" type="text" /><br/>
+		amount:<input name="amount" type="text" /><br/>
 		<input type="submit" />
 	</form>
 	投资:<br/>
 	<form action="${contextPath}/user/buy" method="post">
 		<b:token/>
-		<input type="text" name="amount"/>
+		userId:<input name="userId" type="text" /><br/>
+		amount:<input name="amount" type="text" /><br/>
 		<input type="submit" />
 	</form>
 	投资成功:<br/>
 	<form action="${contextPath}/user/buy-complete" method="post">
 		<b:token/>
-		<input type="text" name="txnId">
+		userId:<input name="userId" type="text" /><br/>
+		origTxnId:<input type="text" name="txnId"><br/>
 		<input type="submit" />
 	</form>
 	投资失败:<br/>
 	<form action="${contextPath}/user/buy-fallback" method="post">
 		<b:token/>
-		<input type="text" name="txnId">
+		userId:<input name="userId" type="text" /><br/>
+		origTxnId:<input type="text" name="txnId"><br/>
 		<input type="submit" />
 	</form>
 </body>

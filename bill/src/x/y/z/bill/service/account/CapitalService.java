@@ -39,7 +39,7 @@ public class CapitalService extends BaseService {
     public void add(final Long userId, final BigDecimal amount, final String txnId, final String memo,
             final BizType bizType) {
         for (;;) {
-            CapitalAccount account = capitalAccountDAO.selectByPrimaryKey(userId);
+            CapitalAccount account = capitalAccountDAO.selectByUserId(userId);
             if (account == null) {
                 throw new RuntimeException("资金账户不存在.");
             }
@@ -68,7 +68,7 @@ public class CapitalService extends BaseService {
     public void freeze(final Long userId, final BigDecimal amount, final String txnId, final String memo,
             final BizType bizType) {
         for (;;) {
-            CapitalAccount account = capitalAccountDAO.selectByPrimaryKey(userId);
+            CapitalAccount account = capitalAccountDAO.selectByUserId(userId);
             if (account == null) {
                 throw new RuntimeException("资金账户不存在.");
             }
@@ -101,11 +101,12 @@ public class CapitalService extends BaseService {
     public void unfreeze(final Long userId, final String origTxnId, final String memo, final BizType bizType,
             final boolean bizStatus) {
         for (;;) {
-            CapitalAccount account = capitalAccountDAO.selectByPrimaryKey(userId);
+            CapitalAccount account = capitalAccountDAO.selectByUserId(userId);
             if (account == null) {
                 throw new RuntimeException("资金账户不存在.");
             }
-            CapitalJournal origJournal = capitalJournalDAO.selectByTxnIdAndType(origTxnId, BizType.preType(bizType));
+            CapitalJournal origJournal = capitalJournalDAO.selectByUserIdTxnIdAndType(userId, origTxnId,
+                    BizType.preType(bizType));
             if (origJournal == null) {
                 throw new RuntimeException("原冻结申请流水不存在.");
             }

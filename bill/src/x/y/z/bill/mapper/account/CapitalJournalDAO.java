@@ -11,6 +11,7 @@ public interface CapitalJournalDAO {
 
     CapitalJournal selectByPrimaryKey(Long id);
 
-    CapitalJournal selectByTxnIdAndType(@Param("txnId") String txnId, @Param("bizType") byte bizType);
+    CapitalJournal selectByUserIdTxnIdAndType(@Param("userId") long userId, @Param("txnId") String txnId,
+            @Param("bizType") byte bizType);
 
 }

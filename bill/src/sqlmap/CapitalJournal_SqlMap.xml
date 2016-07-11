@@ -22,11 +22,11 @@
 		from capitaljournal
 		where id = #{id,jdbcType=BIGINT}
 	</select>
-	<select id="selectByTxnIdAndType" resultMap="BaseResultMap">
+	<select id="selectByUserIdTxnIdAndType" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
 		from capitaljournal
-		where txnId = #{txnId,jdbcType=VARCHAR} and bizType = #{bizType,jdbcType=TINYINT}
+		where txnId = #{txnId,jdbcType=VARCHAR} and bizType = #{bizType,jdbcType=TINYINT} and userId = #{userId,jdbcType=BIGINT}
 	</select>
 	<insert id="insert" parameterType="x.y.z.bill.model.account.CapitalJournal" useGeneratedKeys="true" keyProperty="id">
 		insert into capitaljournal (userId, amount,

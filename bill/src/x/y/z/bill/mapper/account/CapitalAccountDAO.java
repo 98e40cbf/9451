@@ -8,7 +8,7 @@ import x.y.z.bill.model.account.CapitalAccount;
 public interface CapitalAccountDAO {
     int insert(CapitalAccount record);
 
-    CapitalAccount selectByPrimaryKey(Long id);
+    CapitalAccount selectByUserId(Long userId);
 
     int updateByPrimaryKey(CapitalAccount record);
 }
