@@ -14,6 +14,13 @@
 		<b:token/>
 		<input type="submit" />
 	</form>
+	登陆:<br>
+	<form action="${contextPath}/user/login" method="post">
+		name:<input name="loginId" type="text" /><br/>
+		password:<input name="password" type="password" /><br/>
+		<b:token/>
+		<input type="submit" />
+	</form>
 	实名认证:<br>
 	<form action="${contextPath}/user/realname" method="post">
 		realName:<input name="realName" type="text" /><br/>

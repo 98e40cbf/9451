@@ -10,7 +10,7 @@ CREATE TABLE `capitalaccount` (
   `balance` decimal(18,2) NOT NULL,
   `frozen` decimal(18,2) NOT NULL,
   `digest` varchar(40) NOT NULL,
-  `version` bigint(20) unsigned DEFAULT '0',
+  `version` bigint(20) unsigned NOT NULL,
   `lastUpdate` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -44,8 +44,8 @@ CREATE TABLE `user` (
   `mobile` varchar(100) NOT NULL,
   `email` varchar(150) NOT NULL,
   `loginPwd` varchar(100) NOT NULL,
-  `paymentPwd` varchar(100) DEFAULT NULL,
-  `createTime` datetime DEFAULT NULL,
+  `paymentPwd` varchar(100) NOT NULL,
+  `createTime` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_username` (`username`),
   UNIQUE KEY `uk_mobile` (`mobile`),

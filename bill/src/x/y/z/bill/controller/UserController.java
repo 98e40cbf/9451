@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import io.alpha.util.DecimalUtil;
 import io.alpha.util.SequenceHelper;
 import io.alpha.web.controller.BaseController;
+import x.y.z.bill.command.LoginForm;
 import x.y.z.bill.command.RealnameForm;
 import x.y.z.bill.command.RegistForm;
 import x.y.z.bill.constant.BizType;
@@ -41,37 +42,47 @@ public class UserController extends BaseController {
         return Views.INDEX_VIEW;
     }
 
+    @PostMapping("/login")
+    public String login(@Valid final LoginForm loginForm, final BindingResult result) throws Exception {
+        if (result.hasErrors()) {
+            return Views.INDEX_VIEW;
+        }
+        boolean login = accountService.login(loginForm);
+        logger.info("登录：{}", login);
+        return "redirect:/";
+    }
+
     @PostMapping("/realname")
     public String realname(@Valid final RealnameForm realnameForm, final BindingResult result) {
         if (result.hasErrors()) {
             return Views.INDEX_VIEW;
         }
         accountService.realname(1L, realnameForm);
-        return Views.INDEX_VIEW;
+        return "redirect:/";
     }
 
     @PostMapping("/recharge")
     public String recharge() {
         accountService.add(1L, DecimalUtil.format(100), SequenceHelper.get(), "充值100", BizType.RECHARGE);
-        return Views.INDEX_VIEW;
+        return "redirect:/";
     }
 
     @PostMapping("/buy")
     public String buy(final String amount) {
         accountService.freeze(1L, DecimalUtil.format(new BigDecimal(amount)), SequenceHelper.get(), "投资" + amount,
                 BizType.INVEST_APPLY);
-        return Views.INDEX_VIEW;
+        return "redirect:/";
     }
 
     @PostMapping("/buy-complete")
     public String buyComplete(final String txnId) {
         accountService.unfreeze(1L, txnId, "投资完成 ", BizType.INVEST_UNFREEZE, true);
-        return Views.INDEX_VIEW;
+        return "redirect:/";
     }
 
     @PostMapping("/buy-fallback")
     public String buyFallback(final String txnId) {
         accountService.unfreeze(1L, txnId, "投资失败 ", BizType.INVEST_UNFREEZE, false);
-        return Views.INDEX_VIEW;
+        return "redirect:/";
     }
 }

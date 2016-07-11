@@ -35,11 +35,11 @@ public class AccountService extends BaseService {
         return true;
     }
 
-    public boolean login(final LoginForm loginForm) {
+    public boolean login(final LoginForm loginForm) throws Exception {
         String loginId = loginForm.getLoginId();
         User user;
         if (loginId.matches("\\d+")) {
-            user = userService.queryByMobile(loginId);
+            user = userService.queryByMobile(EncryptionUtils.encryptByAES(loginId));
         } else {
             user = userService.queryByName(loginId);
         }
