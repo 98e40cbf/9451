@@ -110,48 +110,27 @@ public class CapitalService extends BaseService {
                 throw new RuntimeException();
             }
             BigDecimal amount = origJournal.getAmount();
-            byte code = bizType.getCode();
-            if (status) {
-                account.setFrozen(DecimalUtil.subtract(account.getFrozen(), amount));
-                account.setDigest("n/a");
-                Date current = new Date();
-                account.setLastUpdate(current);
-                int count = capitalAccountDAO.updateByPrimaryKey(account);
-                if (count == 1) {
-                    CapitalJournal journal = new CapitalJournal();
-                    journal.setUserId(userId);
-                    journal.setAmount(amount);
-                    journal.setBalance(account.getBalance());
-                    journal.setTxnId(origTxnId);
-                    journal.setBizType(code);
-                    journal.setDirection(Direction.OUTFLOW);
-                    journal.setCreateTime(current);
-                    journal.setDigest("n/a");
-                    journal.setMemo(memo);
-                    capitalJournalDAO.insert(journal);
-                    return;
-                }
-            } else {
+            account.setFrozen(DecimalUtil.subtract(account.getFrozen(), amount));
+            if (!status) {
                 account.setBalance(DecimalUtil.add(account.getBalance(), amount));
-                account.setFrozen(DecimalUtil.subtract(account.getFrozen(), amount));
-                account.setDigest("n/a");
-                Date current = new Date();
-                account.setLastUpdate(current);
-                int count = capitalAccountDAO.updateByPrimaryKey(account);
-                if (count == 1) {
-                    CapitalJournal journal = new CapitalJournal();
-                    journal.setUserId(userId);
-                    journal.setAmount(amount);
-                    journal.setBalance(account.getBalance());
-                    journal.setTxnId(origTxnId);
-                    journal.setBizType(code);
-                    journal.setDirection(Direction.INFLOW);
-                    journal.setCreateTime(current);
-                    journal.setDigest("n/a");
-                    journal.setMemo(memo);
-                    capitalJournalDAO.insert(journal);
-                    return;
-                }
+            }
+            account.setDigest("n/a");
+            Date current = new Date();
+            account.setLastUpdate(current);
+            int count = capitalAccountDAO.updateByPrimaryKey(account);
+            if (count == 1) {
+                CapitalJournal journal = new CapitalJournal();
+                journal.setUserId(userId);
+                journal.setAmount(amount);
+                journal.setBalance(account.getBalance());
+                journal.setTxnId(origTxnId);
+                journal.setBizType(bizType.getCode());
+                journal.setDirection(status ? Direction.OUTFLOW : Direction.INFLOW);
+                journal.setCreateTime(current);
+                journal.setDigest("n/a");
+                journal.setMemo(memo);
+                capitalJournalDAO.insert(journal);
+                return;
             }
         }
     }

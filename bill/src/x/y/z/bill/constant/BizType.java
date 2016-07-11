@@ -9,9 +9,11 @@ public enum BizType {
     /***/
     INVEST_UNFREEZE((byte) 3, "投资解冻"),
     /***/
-    WITHDRAW_APPLY((byte) 4, "提现申请"),
+    PROFITS((byte) 4, "收益"),
     /***/
-    WITHDRAW_UNFREEZE((byte) 5, "提现解冻");
+    WITHDRAW_APPLY((byte) 5, "提现申请"),
+    /***/
+    WITHDRAW_UNFREEZE((byte) 6, "提现解冻");
 
     private final byte code;
     private final String desc;

@@ -15,8 +15,6 @@ public class UserExtra extends BaseObject {
 
     private Byte idCardType;
 
-    private String paymentPwd;
-
     public Long getId() {
         return id;
     }
@@ -55,13 +53,5 @@ public class UserExtra extends BaseObject {
 
     public void setIdCardType(final Byte idCardType) {
         this.idCardType = idCardType;
-    }
-
-    public String getPaymentPwd() {
-        return paymentPwd;
-    }
-
-    public void setPaymentPwd(final String paymentPwd) {
-        this.paymentPwd = paymentPwd == null ? null : paymentPwd.trim();
     }
 }

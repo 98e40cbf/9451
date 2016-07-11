@@ -7,10 +7,11 @@
 		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
 		<result column="email" property="email" jdbcType="VARCHAR" />
 		<result column="loginPwd" property="loginPwd" jdbcType="VARCHAR" />
+		<result column="paymentPwd" property="paymentPwd" jdbcType="VARCHAR" />
 		<result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, username, mobile, email, loginPwd, createTime
+		id, username, mobile, email, loginPwd, paymentPwd, createTime
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
 		select
@@ -33,11 +34,11 @@
 	<insert id="insert" parameterType="x.y.z.bill.model.account.User" useGeneratedKeys="true" keyProperty="id">
 		insert
 		into user (username, mobile,
-		email, loginPwd, createTime
+		email, loginPwd, paymentPwd, createTime
 		)
 		values (#{username,jdbcType=VARCHAR},
 		#{mobile,jdbcType=VARCHAR},
-		#{email,jdbcType=VARCHAR}, #{loginPwd,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+		#{email,jdbcType=VARCHAR}, #{loginPwd,jdbcType=VARCHAR}, #{paymentPwd,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
 		)
 	</insert>
 	<update id="updateByPrimaryKey" parameterType="x.y.z.bill.model.account.User">
@@ -47,8 +48,8 @@
 		#{mobile,jdbcType=VARCHAR},
 		email = #{email,jdbcType=VARCHAR},
 		loginPwd = #{loginPwd,jdbcType=VARCHAR},
-		createTime =
-		#{createTime,jdbcType=TIMESTAMP}
+		paymentPwd = #{paymentPwd,jdbcType=VARCHAR},
+		createTime = #{createTime,jdbcType=TIMESTAMP}
 		where id = #{id,jdbcType=BIGINT}
 	</update>
 </mapper>

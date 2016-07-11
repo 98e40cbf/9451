@@ -44,6 +44,7 @@ CREATE TABLE `user` (
   `mobile` varchar(100) NOT NULL,
   `email` varchar(150) NOT NULL,
   `loginPwd` varchar(100) NOT NULL,
+  `paymentPwd` varchar(100) DEFAULT NULL,
   `createTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_username` (`username`),
@@ -61,7 +62,6 @@ CREATE TABLE `user_extra` (
   `realName` varchar(100) NOT NULL,
   `idCardNo` varchar(100) NOT NULL,
   `idCardType` tinyint(3) unsigned NOT NULL,
-  `paymentPwd` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_idCardNo` (`idCardNo`),
   UNIQUE KEY `uk_userId` (`userId`)
