@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="x.y.z.bill.mapper.account.LoginHistoryDAO">
+	<resultMap id="BaseResultMap" type="x.y.z.bill.model.account.LoginHistory">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="userId" property="userId" jdbcType="BIGINT" />
+		<result column="loginIp" property="loginIp" jdbcType="BIGINT" />
+		<result column="loginTime" property="loginTime" jdbcType="TIMESTAMP" />
+		<result column="device" property="device" jdbcType="TINYINT" />
+		<result column="browser" property="browser" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, userId, loginIp, loginTime, device, browser
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from login_history
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<insert id="insert" parameterType="x.y.z.bill.model.account.LoginHistory" useGeneratedKeys="true" keyProperty="id">
+		insert into login_history (userId, loginIp,
+		loginTime, device, browser
+		)
+		values (#{userId,jdbcType=BIGINT}, #{loginIp,jdbcType=BIGINT},
+		#{loginTime,jdbcType=TIMESTAMP}, #{device,jdbcType=TINYINT}, #{browser,jdbcType=VARCHAR}
+		)
+	</insert>
+</mapper>

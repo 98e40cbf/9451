@@ -2,16 +2,20 @@ package x.y.z.bill.controller;
 
 import java.math.BigDecimal;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import io.alpha.util.DecimalUtil;
+import io.alpha.util.HttpUtils;
 import io.alpha.util.SequenceHelper;
 import io.alpha.web.controller.BaseController;
 import x.y.z.bill.command.LoginForm;
@@ -43,11 +47,13 @@ public class UserController extends BaseController {
     }
 
     @PostMapping("/login")
-    public String login(@Valid final LoginForm loginForm, final BindingResult result) throws Exception {
+    public String login(@Valid final LoginForm loginForm, final HttpServletRequest request,
+            @RequestHeader(HttpHeaders.USER_AGENT) final String userAgent, final BindingResult result)
+            throws Exception {
         if (result.hasErrors()) {
             return Views.INDEX_VIEW;
         }
-        boolean login = accountService.login(loginForm);
+        long login = accountService.login(loginForm, HttpUtils.getRemoteIpAddr(request), userAgent);
         logger.info("登录：{}", login);
         return "redirect:/";
     }
