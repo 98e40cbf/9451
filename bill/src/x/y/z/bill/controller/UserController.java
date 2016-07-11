@@ -58,37 +58,39 @@ public class UserController extends BaseController {
         return "redirect:/";
     }
 
+    // TODO userId get from Session.
     @PostMapping("/realname")
-    public String realname(@Valid final RealnameForm realnameForm, final BindingResult result) {
+    public String realname(final Long userId, @Valid final RealnameForm realnameForm, final BindingResult result) {
         if (result.hasErrors()) {
             return Views.INDEX_VIEW;
         }
-        accountService.realname(1L, realnameForm);
+        accountService.realname(userId, realnameForm);
         return "redirect:/";
     }
 
     @PostMapping("/recharge")
-    public String recharge() {
-        accountService.add(1L, DecimalUtil.format(100), SequenceHelper.get(), "充值100", BizType.RECHARGE);
+    public String recharge(final Long userId, final String amount) {
+        accountService.add(userId, DecimalUtil.format(new BigDecimal(amount)), SequenceHelper.get(), "充值" + amount,
+                BizType.RECHARGE);
         return "redirect:/";
     }
 
     @PostMapping("/buy")
-    public String buy(final String amount) {
-        accountService.freeze(1L, DecimalUtil.format(new BigDecimal(amount)), SequenceHelper.get(), "投资" + amount,
+    public String buy(final Long userId, final String amount) {
+        accountService.freeze(userId, DecimalUtil.format(new BigDecimal(amount)), SequenceHelper.get(), "投资" + amount,
                 BizType.INVEST_APPLY);
         return "redirect:/";
     }
 
     @PostMapping("/buy-complete")
-    public String buyComplete(final String txnId) {
-        accountService.unfreeze(1L, txnId, "投资完成 ", BizType.INVEST_UNFREEZE, true);
+    public String buyComplete(final Long userId, final String txnId) {
+        accountService.unfreeze(userId, txnId, "投资完成 ", BizType.INVEST_UNFREEZE, true);
         return "redirect:/";
     }
 
     @PostMapping("/buy-fallback")
-    public String buyFallback(final String txnId) {
-        accountService.unfreeze(1L, txnId, "投资失败 ", BizType.INVEST_UNFREEZE, false);
+    public String buyFallback(final Long userId, final String txnId) {
+        accountService.unfreeze(userId, txnId, "投资失败 ", BizType.INVEST_UNFREEZE, false);
         return "redirect:/";
     }
 }
