@@ -17,6 +17,8 @@ public class User extends BaseObject {
 
     private String loginPwd;
 
+    private String paymentPwd;
+
     private Date createTime = new Date();
 
     public Long getId() {
@@ -57,6 +59,14 @@ public class User extends BaseObject {
 
     public void setLoginPwd(final String loginPwd) {
         this.loginPwd = loginPwd == null ? null : loginPwd.trim();
+    }
+
+    public String getPaymentPwd() {
+        return paymentPwd;
+    }
+
+    public void setPaymentPwd(final String paymentPwd) {
+        this.paymentPwd = paymentPwd == null ? null : paymentPwd.trim();
     }
 
     public Date getCreateTime() {

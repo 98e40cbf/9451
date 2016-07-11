@@ -7,10 +7,9 @@
 		<result column="realName" property="realName" jdbcType="VARCHAR" />
 		<result column="idCardNo" property="idCardNo" jdbcType="VARCHAR" />
 		<result column="idCardType" property="idCardType" jdbcType="TINYINT" />
-		<result column="paymentPwd" property="paymentPwd" jdbcType="VARCHAR" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, userId, realName, idCardNo, idCardType, paymentPwd
+		id, userId, realName, idCardNo, idCardType
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
 		select
@@ -20,10 +19,10 @@
 	</select>
 	<insert id="insert" parameterType="x.y.z.bill.model.account.UserExtra" useGeneratedKeys="true" keyProperty="id">
 		insert into user_extra (userId, realName,
-		idCardNo, idCardType, paymentPwd
+		idCardNo, idCardType
 		)
 		values (#{userId,jdbcType=BIGINT}, #{realName,jdbcType=VARCHAR},
-		#{idCardNo,jdbcType=VARCHAR}, #{idCardType,jdbcType=TINYINT}, #{paymentPwd,jdbcType=VARCHAR}
+		#{idCardNo,jdbcType=VARCHAR}, #{idCardType,jdbcType=TINYINT}
 		)
 	</insert>
 	<update id="updateByPrimaryKey" parameterType="x.y.z.bill.model.account.UserExtra">
@@ -31,8 +30,7 @@
 		set userId = #{userId,jdbcType=BIGINT},
 		realName = #{realName,jdbcType=VARCHAR},
 		idCardNo = #{idCardNo,jdbcType=VARCHAR},
-		idCardType = #{idCardType,jdbcType=TINYINT},
-		paymentPwd = #{paymentPwd,jdbcType=VARCHAR}
+		idCardType = #{idCardType,jdbcType=TINYINT}
 		where id = #{id,jdbcType=BIGINT}
 	</update>
 </mapper>

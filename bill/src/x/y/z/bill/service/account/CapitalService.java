@@ -41,7 +41,7 @@ public class CapitalService extends BaseService {
         for (;;) {
             CapitalAccount account = capitalAccountDAO.selectByPrimaryKey(userId);
             if (account == null) {
-                throw new RuntimeException();
+                throw new RuntimeException("资金账户不存在.");
             }
             account.setBalance(DecimalUtil.add(account.getBalance(), amount));
             account.setDigest("n/a");
@@ -70,10 +70,10 @@ public class CapitalService extends BaseService {
         for (;;) {
             CapitalAccount account = capitalAccountDAO.selectByPrimaryKey(userId);
             if (account == null) {
-                throw new RuntimeException();
+                throw new RuntimeException("资金账户不存在.");
             }
             if (DecimalUtil.lt(account.getBalance(), amount)) {
-                throw new RuntimeException();
+                throw new RuntimeException("余额不足.");
             }
             account.setBalance(DecimalUtil.subtract(account.getBalance(), amount));
             account.setFrozen(DecimalUtil.add(account.getFrozen(), amount));
@@ -99,59 +99,38 @@ public class CapitalService extends BaseService {
     }
 
     public void unfreeze(final Long userId, final String origTxnId, final String memo, final BizType bizType,
-            final boolean status) {
+            final boolean bizStatus) {
         for (;;) {
             CapitalAccount account = capitalAccountDAO.selectByPrimaryKey(userId);
             if (account == null) {
-                throw new RuntimeException();
+                throw new RuntimeException("资金账户不存在.");
             }
             CapitalJournal origJournal = capitalJournalDAO.selectByTxnIdAndType(origTxnId, BizType.preType(bizType));
             if (origJournal == null) {
-                throw new RuntimeException();
+                throw new RuntimeException("原冻结申请流水不存在.");
             }
             BigDecimal amount = origJournal.getAmount();
-            byte code = bizType.getCode();
-            if (status) {
-                account.setFrozen(DecimalUtil.subtract(account.getFrozen(), amount));
-                account.setDigest("n/a");
-                Date current = new Date();
-                account.setLastUpdate(current);
-                int count = capitalAccountDAO.updateByPrimaryKey(account);
-                if (count == 1) {
-                    CapitalJournal journal = new CapitalJournal();
-                    journal.setUserId(userId);
-                    journal.setAmount(amount);
-                    journal.setBalance(account.getBalance());
-                    journal.setTxnId(origTxnId);
-                    journal.setBizType(code);
-                    journal.setDirection(Direction.OUTFLOW);
-                    journal.setCreateTime(current);
-                    journal.setDigest("n/a");
-                    journal.setMemo(memo);
-                    capitalJournalDAO.insert(journal);
-                    return;
-                }
-            } else {
+            account.setFrozen(DecimalUtil.subtract(account.getFrozen(), amount));
+            if (!bizStatus) {
                 account.setBalance(DecimalUtil.add(account.getBalance(), amount));
-                account.setFrozen(DecimalUtil.subtract(account.getFrozen(), amount));
-                account.setDigest("n/a");
-                Date current = new Date();
-                account.setLastUpdate(current);
-                int count = capitalAccountDAO.updateByPrimaryKey(account);
-                if (count == 1) {
-                    CapitalJournal journal = new CapitalJournal();
-                    journal.setUserId(userId);
-                    journal.setAmount(amount);
-                    journal.setBalance(account.getBalance());
-                    journal.setTxnId(origTxnId);
-                    journal.setBizType(code);
-                    journal.setDirection(Direction.INFLOW);
-                    journal.setCreateTime(current);
-                    journal.setDigest("n/a");
-                    journal.setMemo(memo);
-                    capitalJournalDAO.insert(journal);
-                    return;
-                }
+            }
+            account.setDigest("n/a");
+            Date current = new Date();
+            account.setLastUpdate(current);
+            int count = capitalAccountDAO.updateByPrimaryKey(account);
+            if (count == 1) {
+                CapitalJournal journal = new CapitalJournal();
+                journal.setUserId(userId);
+                journal.setAmount(amount);
+                journal.setBalance(account.getBalance());
+                journal.setTxnId(origTxnId);
+                journal.setBizType(bizType.getCode());
+                journal.setDirection(bizStatus ? Direction.OUTFLOW : Direction.INFLOW);
+                journal.setCreateTime(current);
+                journal.setDigest("n/a");
+                journal.setMemo(memo);
+                capitalJournalDAO.insert(journal);
+                return;
             }
         }
     }

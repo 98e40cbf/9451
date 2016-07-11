@@ -14,6 +14,13 @@
 		<b:token/>
 		<input type="submit" />
 	</form>
+	实名认证:<br>
+	<form action="${contextPath}/user/realname" method="post">
+		realName:<input name="realName" type="text" /><br/>
+		idCardNo:<input name="idCardNo" type="text" /><br/>
+		<b:token/>
+		<input type="submit" />
+	</form>
 	<br/>
 	充值:<br/>
 	<form action="${contextPath}/user/recharge" method="post">
@@ -23,6 +30,7 @@
 	投资:<br/>
 	<form action="${contextPath}/user/buy" method="post">
 		<b:token/>
+		<input type="text" name="amount"/>
 		<input type="submit" />
 	</form>
 	投资成功:<br/>

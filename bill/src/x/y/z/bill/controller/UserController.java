@@ -1,5 +1,7 @@
 package x.y.z.bill.controller;
 
+import java.math.BigDecimal;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import io.alpha.util.DecimalUtil;
 import io.alpha.util.SequenceHelper;
 import io.alpha.web.controller.BaseController;
-import x.y.z.bill.command.UserRegistCommand;
+import x.y.z.bill.command.RealnameForm;
+import x.y.z.bill.command.RegistForm;
 import x.y.z.bill.constant.BizType;
 import x.y.z.bill.constant.Views;
 import x.y.z.bill.service.AccountService;
@@ -30,11 +33,20 @@ public class UserController extends BaseController {
     }
 
     @PostMapping("/regist")
-    public String register(@Valid final UserRegistCommand registCommand, final BindingResult result) {
+    public String register(@Valid final RegistForm registForm, final BindingResult result) {
         if (result.hasErrors()) {
             return Views.INDEX_VIEW;
         }
-        accountService.regist(registCommand);
+        accountService.regist(registForm);
+        return Views.INDEX_VIEW;
+    }
+
+    @PostMapping("/realname")
+    public String realname(@Valid final RealnameForm realnameForm, final BindingResult result) {
+        if (result.hasErrors()) {
+            return Views.INDEX_VIEW;
+        }
+        accountService.realname(1L, realnameForm);
         return Views.INDEX_VIEW;
     }
 
@@ -45,20 +57,21 @@ public class UserController extends BaseController {
     }
 
     @PostMapping("/buy")
-    public String buy() {
-        accountService.freeze(1L, DecimalUtil.format(15), SequenceHelper.get(), "投资15", BizType.INVEST_APPLY);
+    public String buy(final String amount) {
+        accountService.freeze(1L, DecimalUtil.format(new BigDecimal(amount)), SequenceHelper.get(), "投资" + amount,
+                BizType.INVEST_APPLY);
         return Views.INDEX_VIEW;
     }
 
     @PostMapping("/buy-complete")
     public String buyComplete(final String txnId) {
-        accountService.unfreeze(1L, txnId, "投资15完成 ", BizType.INVEST_UNFREEZE, true);
+        accountService.unfreeze(1L, txnId, "投资完成 ", BizType.INVEST_UNFREEZE, true);
         return Views.INDEX_VIEW;
     }
 
     @PostMapping("/buy-fallback")
     public String buyFallback(final String txnId) {
-        accountService.unfreeze(1L, txnId, "投资15失败 ", BizType.INVEST_UNFREEZE, false);
+        accountService.unfreeze(1L, txnId, "投资失败 ", BizType.INVEST_UNFREEZE, false);
         return Views.INDEX_VIEW;
     }
 }
