@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="x.y.z.bill.mapper.payment.WithdrawJournalDAO" >
+  <resultMap id="BaseResultMap" type="x.y.z.bill.model.payment.WithdrawJournal" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="txnId" property="txnId" jdbcType="VARCHAR" />
+    <result column="channelCode" property="channelCode" jdbcType="VARCHAR" />
+    <result column="channelName" property="channelName" jdbcType="VARCHAR" />
+    <result column="channelSendOrder" property="channelSendOrder" jdbcType="VARCHAR" />
+    <result column="channelRecvOrder" property="channelRecvOrder" jdbcType="VARCHAR" />
+    <result column="channelSendSerial" property="channelSendSerial" jdbcType="VARCHAR" />
+    <result column="businessCode" property="businessCode" jdbcType="VARCHAR" />
+    <result column="userId" property="userId" jdbcType="BIGINT" />
+    <result column="userName" property="userName" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="actulAmount" property="actulAmount" jdbcType="DECIMAL" />
+    <result column="cost" property="cost" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="auditStatus" property="auditStatus" jdbcType="INTEGER" />
+    <result column="auditdUserId" property="auditdUserId" jdbcType="BIGINT" />
+    <result column="auditUserName" property="auditUserName" jdbcType="VARCHAR" />
+    <result column="auditTime" property="auditTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="replyCode" property="replyCode" jdbcType="VARCHAR" />
+    <result column="replyMessage" property="replyMessage" jdbcType="VARCHAR" />
+    <result column="sendTime" property="sendTime" jdbcType="TIMESTAMP" />
+    <result column="recvTime" property="recvTime" jdbcType="TIMESTAMP" />
+    <result column="toAccountTime" property="toAccountTime" jdbcType="TIMESTAMP" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="lastModifyTime" property="lastModifyTime" jdbcType="TIMESTAMP" />
+    <result column="origin" property="origin" jdbcType="VARCHAR" />
+    <result column="version" property="version" jdbcType="INTEGER" />
+    <result column="bankCardId" property="bankCardId" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, txnId, channelCode, channelName, channelSendOrder, channelRecvOrder, channelSendSerial, 
+    businessCode, userId, userName, amount, actulAmount, cost, status, auditStatus, auditdUserId, 
+    auditUserName, auditTime, remark, replyCode, replyMessage, sendTime, recvTime, toAccountTime, 
+    createTime, lastModifyTime, origin, version, bankCardId
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_payment_withdraw_journal
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <insert id="insert" parameterType="x.y.z.bill.model.payment.WithdrawJournal" >
+    insert into t_payment_withdraw_journal (id, txnId, channelCode, 
+      channelName, channelSendOrder, channelRecvOrder, 
+      channelSendSerial, businessCode, userId, 
+      userName, amount, actulAmount, 
+      cost, status, auditStatus, 
+      auditdUserId, auditUserName, auditTime, 
+      remark, replyCode, replyMessage, 
+      sendTime, recvTime, toAccountTime, 
+      createTime, lastModifyTime, origin, 
+      version, bankCardId)
+    values (#{id,jdbcType=BIGINT}, #{txnId,jdbcType=VARCHAR}, #{channelCode,jdbcType=VARCHAR}, 
+      #{channelName,jdbcType=VARCHAR}, #{channelSendOrder,jdbcType=VARCHAR}, #{channelRecvOrder,jdbcType=VARCHAR}, 
+      #{channelSendSerial,jdbcType=VARCHAR}, #{businessCode,jdbcType=VARCHAR}, #{userId,jdbcType=BIGINT}, 
+      #{userName,jdbcType=VARCHAR}, #{amount,jdbcType=DECIMAL}, #{actulAmount,jdbcType=DECIMAL}, 
+      #{cost,jdbcType=DECIMAL}, #{status,jdbcType=INTEGER}, #{auditStatus,jdbcType=INTEGER}, 
+      #{auditdUserId,jdbcType=BIGINT}, #{auditUserName,jdbcType=VARCHAR}, #{auditTime,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR}, #{replyCode,jdbcType=VARCHAR}, #{replyMessage,jdbcType=VARCHAR}, 
+      #{sendTime,jdbcType=TIMESTAMP}, #{recvTime,jdbcType=TIMESTAMP}, #{toAccountTime,jdbcType=TIMESTAMP}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP}, #{origin,jdbcType=VARCHAR}, 
+      #{version,jdbcType=INTEGER}, #{bankCardId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="x.y.z.bill.model.payment.WithdrawJournal" >
+    insert into t_payment_withdraw_journal
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="txnId != null" >
+        txnId,
+      </if>
+      <if test="channelCode != null" >
+        channelCode,
+      </if>
+      <if test="channelName != null" >
+        channelName,
+      </if>
+      <if test="channelSendOrder != null" >
+        channelSendOrder,
+      </if>
+      <if test="channelRecvOrder != null" >
+        channelRecvOrder,
+      </if>
+      <if test="channelSendSerial != null" >
+        channelSendSerial,
+      </if>
+      <if test="businessCode != null" >
+        businessCode,
+      </if>
+      <if test="userId != null" >
+        userId,
+      </if>
+      <if test="userName != null" >
+        userName,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="actulAmount != null" >
+        actulAmount,
+      </if>
+      <if test="cost != null" >
+        cost,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="auditStatus != null" >
+        auditStatus,
+      </if>
+      <if test="auditdUserId != null" >
+        auditdUserId,
+      </if>
+      <if test="auditUserName != null" >
+        auditUserName,
+      </if>
+      <if test="auditTime != null" >
+        auditTime,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="replyCode != null" >
+        replyCode,
+      </if>
+      <if test="replyMessage != null" >
+        replyMessage,
+      </if>
+      <if test="sendTime != null" >
+        sendTime,
+      </if>
+      <if test="recvTime != null" >
+        recvTime,
+      </if>
+      <if test="toAccountTime != null" >
+        toAccountTime,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="lastModifyTime != null" >
+        lastModifyTime,
+      </if>
+      <if test="origin != null" >
+        origin,
+      </if>
+      <if test="version != null" >
+        version,
+      </if>
+      <if test="bankCardId != null" >
+        bankCardId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="txnId != null" >
+        #{txnId,jdbcType=VARCHAR},
+      </if>
+      <if test="channelCode != null" >
+        #{channelCode,jdbcType=VARCHAR},
+      </if>
+      <if test="channelName != null" >
+        #{channelName,jdbcType=VARCHAR},
+      </if>
+      <if test="channelSendOrder != null" >
+        #{channelSendOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="channelRecvOrder != null" >
+        #{channelRecvOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="channelSendSerial != null" >
+        #{channelSendSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="businessCode != null" >
+        #{businessCode,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="actulAmount != null" >
+        #{actulAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="cost != null" >
+        #{cost,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="auditStatus != null" >
+        #{auditStatus,jdbcType=INTEGER},
+      </if>
+      <if test="auditdUserId != null" >
+        #{auditdUserId,jdbcType=BIGINT},
+      </if>
+      <if test="auditUserName != null" >
+        #{auditUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="replyCode != null" >
+        #{replyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="replyMessage != null" >
+        #{replyMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="sendTime != null" >
+        #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recvTime != null" >
+        #{recvTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="toAccountTime != null" >
+        #{toAccountTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifyTime != null" >
+        #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="origin != null" >
+        #{origin,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null" >
+        #{version,jdbcType=INTEGER},
+      </if>
+      <if test="bankCardId != null" >
+        #{bankCardId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="x.y.z.bill.model.payment.WithdrawJournal" >
+    update t_payment_withdraw_journal
+    <set >
+      <if test="txnId != null" >
+        txnId = #{txnId,jdbcType=VARCHAR},
+      </if>
+      <if test="channelCode != null" >
+        channelCode = #{channelCode,jdbcType=VARCHAR},
+      </if>
+      <if test="channelName != null" >
+        channelName = #{channelName,jdbcType=VARCHAR},
+      </if>
+      <if test="channelSendOrder != null" >
+        channelSendOrder = #{channelSendOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="channelRecvOrder != null" >
+        channelRecvOrder = #{channelRecvOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="channelSendSerial != null" >
+        channelSendSerial = #{channelSendSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="businessCode != null" >
+        businessCode = #{businessCode,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        userId = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="userName != null" >
+        userName = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="actulAmount != null" >
+        actulAmount = #{actulAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="cost != null" >
+        cost = #{cost,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="auditStatus != null" >
+        auditStatus = #{auditStatus,jdbcType=INTEGER},
+      </if>
+      <if test="auditdUserId != null" >
+        auditdUserId = #{auditdUserId,jdbcType=BIGINT},
+      </if>
+      <if test="auditUserName != null" >
+        auditUserName = #{auditUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="auditTime != null" >
+        auditTime = #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="replyCode != null" >
+        replyCode = #{replyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="replyMessage != null" >
+        replyMessage = #{replyMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="sendTime != null" >
+        sendTime = #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recvTime != null" >
+        recvTime = #{recvTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="toAccountTime != null" >
+        toAccountTime = #{toAccountTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifyTime != null" >
+        lastModifyTime = #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="origin != null" >
+        origin = #{origin,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null" >
+        version = #{version,jdbcType=INTEGER},
+      </if>
+      <if test="bankCardId != null" >
+        bankCardId = #{bankCardId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="x.y.z.bill.model.payment.WithdrawJournal" >
+    update t_payment_withdraw_journal
+    set txnId = #{txnId,jdbcType=VARCHAR},
+      channelCode = #{channelCode,jdbcType=VARCHAR},
+      channelName = #{channelName,jdbcType=VARCHAR},
+      channelSendOrder = #{channelSendOrder,jdbcType=VARCHAR},
+      channelRecvOrder = #{channelRecvOrder,jdbcType=VARCHAR},
+      channelSendSerial = #{channelSendSerial,jdbcType=VARCHAR},
+      businessCode = #{businessCode,jdbcType=VARCHAR},
+      userId = #{userId,jdbcType=BIGINT},
+      userName = #{userName,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      actulAmount = #{actulAmount,jdbcType=DECIMAL},
+      cost = #{cost,jdbcType=DECIMAL},
+      status = #{status,jdbcType=INTEGER},
+      auditStatus = #{auditStatus,jdbcType=INTEGER},
+      auditdUserId = #{auditdUserId,jdbcType=BIGINT},
+      auditUserName = #{auditUserName,jdbcType=VARCHAR},
+      auditTime = #{auditTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      replyCode = #{replyCode,jdbcType=VARCHAR},
+      replyMessage = #{replyMessage,jdbcType=VARCHAR},
+      sendTime = #{sendTime,jdbcType=TIMESTAMP},
+      recvTime = #{recvTime,jdbcType=TIMESTAMP},
+      toAccountTime = #{toAccountTime,jdbcType=TIMESTAMP},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      lastModifyTime = #{lastModifyTime,jdbcType=TIMESTAMP},
+      origin = #{origin,jdbcType=VARCHAR},
+      version = #{version,jdbcType=INTEGER},
+      bankCardId = #{bankCardId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

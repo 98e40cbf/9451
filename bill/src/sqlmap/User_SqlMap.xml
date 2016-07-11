@@ -16,24 +16,24 @@
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
 		select
 		<include refid="Base_Column_List" />
-		from user
+		from user_base
 		where id = #{id,jdbcType=BIGINT}
 	</select>
 	<select id="selectByUsername" resultMap="BaseResultMap" parameterType="java.lang.String">
 		select
 		<include refid="Base_Column_List" />
-		from user
+		from user_base
 		where username = #{username,jdbcType=VARCHAR}
 	</select>
 	<select id="selectByMobile" resultMap="BaseResultMap" parameterType="java.lang.String">
 		select
 		<include refid="Base_Column_List" />
-		from user
+		from user_base
 		where mobile = #{mobile,jdbcType=VARCHAR}
 	</select>
 	<insert id="insert" parameterType="x.y.z.bill.model.account.User" useGeneratedKeys="true" keyProperty="id">
 		insert
-		into user (username, mobile,
+		into user_base (username, mobile,
 		email, loginPwd, paymentPwd, createTime
 		)
 		values (#{username,jdbcType=VARCHAR},
@@ -42,10 +42,9 @@
 		)
 	</insert>
 	<update id="updateByPrimaryKey" parameterType="x.y.z.bill.model.account.User">
-		update user
+		update user_base
 		set username = #{username,jdbcType=VARCHAR},
-		mobile =
-		#{mobile,jdbcType=VARCHAR},
+		mobile = #{mobile,jdbcType=VARCHAR},
 		email = #{email,jdbcType=VARCHAR},
 		loginPwd = #{loginPwd,jdbcType=VARCHAR},
 		paymentPwd = #{paymentPwd,jdbcType=VARCHAR},

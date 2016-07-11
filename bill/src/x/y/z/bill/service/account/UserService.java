@@ -30,6 +30,7 @@ public class UserService extends BaseService {
         user.setUsername(username);
         user.setMobile(EncryptionUtils.encryptByAES(mobile));
         user.setLoginPwd(EncryptionUtils.encodePassword(password));
+        user.setPaymentPwd("n/a");
         user.setEmail(SequenceHelper.get());
         user.setCreateTime(new Date());
         userDAO.insert(user);

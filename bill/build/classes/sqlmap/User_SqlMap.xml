@@ -7,48 +7,48 @@
 		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
 		<result column="email" property="email" jdbcType="VARCHAR" />
 		<result column="loginPwd" property="loginPwd" jdbcType="VARCHAR" />
+		<result column="paymentPwd" property="paymentPwd" jdbcType="VARCHAR" />
 		<result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, username, mobile, email, loginPwd, createTime
+		id, username, mobile, email, loginPwd, paymentPwd, createTime
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
 		select
 		<include refid="Base_Column_List" />
-		from user
+		from user_base
 		where id = #{id,jdbcType=BIGINT}
 	</select>
 	<select id="selectByUsername" resultMap="BaseResultMap" parameterType="java.lang.String">
 		select
 		<include refid="Base_Column_List" />
-		from user
+		from user_base
 		where username = #{username,jdbcType=VARCHAR}
 	</select>
 	<select id="selectByMobile" resultMap="BaseResultMap" parameterType="java.lang.String">
 		select
 		<include refid="Base_Column_List" />
-		from user
+		from user_base
 		where mobile = #{mobile,jdbcType=VARCHAR}
 	</select>
 	<insert id="insert" parameterType="x.y.z.bill.model.account.User" useGeneratedKeys="true" keyProperty="id">
 		insert
-		into user (username, mobile,
-		email, loginPwd, createTime
+		into user_base (username, mobile,
+		email, loginPwd, paymentPwd, createTime
 		)
 		values (#{username,jdbcType=VARCHAR},
 		#{mobile,jdbcType=VARCHAR},
-		#{email,jdbcType=VARCHAR}, #{loginPwd,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+		#{email,jdbcType=VARCHAR}, #{loginPwd,jdbcType=VARCHAR}, #{paymentPwd,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
 		)
 	</insert>
 	<update id="updateByPrimaryKey" parameterType="x.y.z.bill.model.account.User">
-		update user
+		update user_base
 		set username = #{username,jdbcType=VARCHAR},
-		mobile =
-		#{mobile,jdbcType=VARCHAR},
+		mobile = #{mobile,jdbcType=VARCHAR},
 		email = #{email,jdbcType=VARCHAR},
 		loginPwd = #{loginPwd,jdbcType=VARCHAR},
-		createTime =
-		#{createTime,jdbcType=TIMESTAMP}
+		paymentPwd = #{paymentPwd,jdbcType=VARCHAR},
+		createTime = #{createTime,jdbcType=TIMESTAMP}
 		where id = #{id,jdbcType=BIGINT}
 	</update>
 </mapper>
