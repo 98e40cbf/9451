@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="x.y.z.bill.mapper.account.CapitalOperationHistoryDAO">
+	<resultMap id="BaseResultMap" type="x.y.z.bill.model.account.CapitalOperationHistory">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="userId" property="userId" jdbcType="BIGINT" />
+		<result column="amount" property="amount" jdbcType="DECIMAL" />
+		<result column="txnId" property="txnId" jdbcType="VARCHAR" />
+		<result column="bizType" property="bizType" jdbcType="TINYINT" />
+		<result column="memo" property="memo" jdbcType="VARCHAR" />
+		<result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, userId, amount, txnId, bizType, memo, createTime
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from capitaloperationhistory
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<insert id="insert" parameterType="x.y.z.bill.model.account.CapitalOperationHistory">
+		insert into capitaloperationhistory (userId, amount,
+		txnId, bizType, memo,
+		createTime)
+		values (#{userId,jdbcType=BIGINT}, #{amount,jdbcType=DECIMAL},
+		#{txnId,jdbcType=VARCHAR}, #{bizType,jdbcType=TINYINT}, #{memo,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP})
+	</insert>
+</mapper>

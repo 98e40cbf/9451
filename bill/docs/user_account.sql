@@ -32,8 +32,7 @@ CREATE TABLE `capitaljournal` (
   `digest` varchar(40) NOT NULL,
   `createTime` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_txnId_bizType` (`txnId`,`bizType`),
-  KEY `idx_txnId_bizType_userId` (`txnId`,`bizType`,`userId`) USING BTREE
+  UNIQUE KEY `uk_userId_txnId_bizType` (`userId`,`txnId`,`bizType`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -80,5 +79,20 @@ CREATE TABLE `login_history` (
   `loginTime` datetime NOT NULL,
   `device` tinyint(3) NOT NULL,
   `browser` varchar(150) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for capitaloperationhistory
+-- ----------------------------
+DROP TABLE IF EXISTS `capitaloperationhistory`;
+CREATE TABLE `capitaloperationhistory` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `userId` bigint(20) NOT NULL,
+  `amount` decimal(18,2) NOT NULL,
+  `txnId` varchar(40) NOT NULL,
+  `bizType` tinyint(3) unsigned NOT NULL,
+  `memo` varchar(50) NOT NULL,
+  `createTime` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -41,6 +41,7 @@ public class CapitalService extends BaseService {
 
     public void add(final Long userId, final BigDecimal amount, final String txnId, final String memo,
             final BizType bizType) {
+        CapitalHistoryService.record(userId, amount, txnId, bizType.getCode(), memo);
         for (;;) {
             CapitalAccount account = capitalAccountDAO.selectByUserId(userId);
             if (account == null) {
@@ -70,6 +71,7 @@ public class CapitalService extends BaseService {
 
     public void freeze(final Long userId, final BigDecimal amount, final String txnId, final String memo,
             final BizType bizType) {
+        CapitalHistoryService.record(userId, amount, txnId, bizType.getCode(), memo);
         for (;;) {
             CapitalAccount account = capitalAccountDAO.selectByUserId(userId);
             if (account == null) {
@@ -103,6 +105,7 @@ public class CapitalService extends BaseService {
 
     public void unfreeze(final Long userId, final String origTxnId, final String memo, final BizType bizType,
             final boolean bizStatus) {
+        CapitalHistoryService.record(userId, DecimalUtil.format(-1L), origTxnId, bizType.getCode(), memo);
         for (;;) {
             CapitalAccount account = capitalAccountDAO.selectByUserId(userId);
             if (account == null) {
