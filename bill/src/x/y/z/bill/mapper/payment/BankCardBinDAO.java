@@ -4,6 +4,8 @@ import org.springframework.stereotype.Repository;
 
 import x.y.z.bill.model.payment.BankCardBin;
 
+import java.util.List;
+
 @Repository
 public interface BankCardBinDAO {
     int insert(BankCardBin record);
@@ -15,4 +17,6 @@ public interface BankCardBinDAO {
     int updateByPrimaryKeySelective(BankCardBin record);
 
     int updateByPrimaryKey(BankCardBin record);
+
+    List<BankCardBin> queryEnabledCardBinConfigs();
 }
