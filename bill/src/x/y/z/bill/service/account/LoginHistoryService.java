@@ -14,7 +14,7 @@ import x.y.z.bill.model.account.LoginHistory;
 
 public class LoginHistoryService extends UntypedActor {
 
-    private static final ActorRef R = Actors.actorOf(ProcessorHelper.duple(), Props.create(LoginHistoryService.class),
+    private static final ActorRef R = Actors.actorOf(ProcessorHelper.triple(), Props.create(LoginHistoryService.class),
             "login:history-actor");
 
     private static final AtomicReference<LoginHistoryDAO> DAO = new AtomicReference<>();
