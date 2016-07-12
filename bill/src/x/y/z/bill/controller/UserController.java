@@ -93,4 +93,11 @@ public class UserController extends BaseController {
         accountService.unfreeze(userId, txnId, "投资失败 ", BizType.INVEST_UNFREEZE, false);
         return "redirect:/";
     }
+
+    @PostMapping("/update-password")
+    public String updatePassword(final Long userId, final String oldPassword, final String newPassword) {
+        boolean updated = accountService.updatePassword(userId, oldPassword, newPassword);
+        logger.info("更新密码：{}", updated);
+        return "redirect:/";
+    }
 }

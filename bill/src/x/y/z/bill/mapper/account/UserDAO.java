@@ -15,4 +15,8 @@ public interface UserDAO {
     User selectByUsername(String username);
 
     User selectByMobile(String mobile);
+
+    int updateLoginPassword(User user);
+
+    int updatePaymentPassword(User user);
 }

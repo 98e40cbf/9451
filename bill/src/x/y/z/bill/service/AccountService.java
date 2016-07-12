@@ -115,4 +115,12 @@ public class AccountService extends BaseService {
         return true;
     }
 
+    public boolean updatePassword(final Long userId, final String oldPassword, final String newPassword) {
+        try {
+            return userService.updateLoginPassword(userId, oldPassword, newPassword) == 1;
+        } catch (Exception e) {
+        }
+        return false;
+    }
+
 }
