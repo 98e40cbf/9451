@@ -12,7 +12,7 @@ import io.alpha.core.util.ApplicationContextHolder;
 import x.y.z.bill.mapper.account.LoginHistoryDAO;
 import x.y.z.bill.model.account.LoginHistory;
 
-public class LoginHistoryService extends UntypedActor {
+class LoginHistoryService extends UntypedActor {
 
     private static final ActorRef R = Actors.actorOf(ProcessorHelper.triple(), Props.create(LoginHistoryService.class),
             "login:history-actor");

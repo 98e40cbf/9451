@@ -17,7 +17,7 @@ import x.y.z.bill.model.account.UserExtra;
 
 @Service
 @TransMark
-public class UserService extends BaseService {
+class UserService extends BaseService {
 
     @Autowired
     private UserDAO userDAO;

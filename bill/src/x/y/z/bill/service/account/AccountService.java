@@ -1,4 +1,4 @@
-package x.y.z.bill.service;
+package x.y.z.bill.service.account;
 
 import java.math.BigDecimal;
 
@@ -14,9 +14,6 @@ import x.y.z.bill.command.RegistForm;
 import x.y.z.bill.constant.BizType;
 import x.y.z.bill.constant.IdCardType;
 import x.y.z.bill.model.account.User;
-import x.y.z.bill.service.account.CapitalService;
-import x.y.z.bill.service.account.LoginHistoryService;
-import x.y.z.bill.service.account.UserService;
 import x.y.z.bill.util.ExceptionUtil;
 import x.y.z.bill.util.SensitiveWords;
 

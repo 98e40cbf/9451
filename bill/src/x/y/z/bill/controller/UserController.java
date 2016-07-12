@@ -23,7 +23,7 @@ import x.y.z.bill.command.RealnameForm;
 import x.y.z.bill.command.RegistForm;
 import x.y.z.bill.constant.BizType;
 import x.y.z.bill.constant.Views;
-import x.y.z.bill.service.AccountService;
+import x.y.z.bill.service.account.AccountService;
 
 @Controller
 @RequestMapping("/user")

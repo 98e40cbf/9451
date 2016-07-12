@@ -21,7 +21,7 @@ import x.y.z.bill.model.account.CapitalJournal;
 
 @Service
 @TransMark
-public class CapitalService extends BaseService {
+class CapitalService extends BaseService {
 
     @Autowired
     private CapitalAccountDAO capitalAccountDAO;
