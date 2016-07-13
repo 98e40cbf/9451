@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import io.alpha.core.dto.PageResultDTO;
+import io.alpha.mybatis.session.CountBounds;
 import io.alpha.security.util.EncryptionUtils;
 import io.alpha.service.BaseService;
 import io.alpha.util.NetworkUtils;
@@ -13,6 +15,7 @@ import x.y.z.bill.command.RealnameForm;
 import x.y.z.bill.command.RegistForm;
 import x.y.z.bill.constant.BizType;
 import x.y.z.bill.constant.IdCardType;
+import x.y.z.bill.model.account.CapitalJournal;
 import x.y.z.bill.model.account.User;
 import x.y.z.bill.util.ExceptionUtil;
 import x.y.z.bill.util.SensitiveWords;
@@ -118,6 +121,31 @@ public class AccountService extends BaseService {
         } catch (Exception e) {
         }
         return false;
+    }
+
+    public PageResultDTO<CapitalJournal> loadAllCapitalJournal(final Long userId) {
+        try {
+            return capitalService.queryJournalByUserId(userId, (byte) 0, new CountBounds(0, 10));
+        } catch (Exception e) {
+            return new PageResultDTO<>();
+        }
+    }
+
+    public PageResultDTO<CapitalJournal> loadRechargeCapitalJournal(final Long userId) {
+        try {
+            return capitalService.queryJournalByUserId(userId, BizType.RECHARGE.getCode(), new CountBounds(0, 10));
+        } catch (Exception e) {
+            return new PageResultDTO<>();
+        }
+    }
+
+    public PageResultDTO<CapitalJournal> loadWithdrawCapitalJournal(final Long userId) {
+        try {
+            return capitalService.queryJournalByUserId(userId, BizType.WITHDRAW_UNFREEZE.getCode(),
+                    new CountBounds(0, 10));
+        } catch (Exception e) {
+            return new PageResultDTO<>();
+        }
     }
 
 }

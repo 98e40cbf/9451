@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import io.alpha.core.dto.PageResultDTO;
 import io.alpha.util.DecimalUtil;
 import io.alpha.util.HttpUtils;
 import io.alpha.util.SequenceHelper;
@@ -23,6 +24,7 @@ import x.y.z.bill.command.RealnameForm;
 import x.y.z.bill.command.RegistForm;
 import x.y.z.bill.constant.BizType;
 import x.y.z.bill.constant.Views;
+import x.y.z.bill.model.account.CapitalJournal;
 import x.y.z.bill.service.account.AccountService;
 
 @Controller
@@ -98,6 +100,17 @@ public class UserController extends BaseController {
     public String updatePassword(final Long userId, final String oldPassword, final String newPassword) {
         boolean updated = accountService.updatePassword(userId, oldPassword, newPassword);
         logger.info("更新密码：{}", updated);
+        return "redirect:/";
+    }
+
+    @GetMapping("/list")
+    public String list(final Long userId) {
+        PageResultDTO<CapitalJournal> list = accountService.loadAllCapitalJournal(userId);
+        logger.info("所有资金流水：{}", list);
+        list = accountService.loadRechargeCapitalJournal(userId);
+        logger.info("所有充值流水：{}", list);
+        list = accountService.loadWithdrawCapitalJournal(userId);
+        logger.info("所有提现流水：{}", list);
         return "redirect:/";
     }
 }
