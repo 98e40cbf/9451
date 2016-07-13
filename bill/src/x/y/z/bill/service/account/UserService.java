@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import io.alpha.log.annotation.IgnoreLog;
 import io.alpha.security.util.EncryptionUtils;
 import io.alpha.service.BaseService;
 import io.alpha.tx.annotation.TransMark;
@@ -15,6 +16,7 @@ import x.y.z.bill.mapper.account.UserExtraDAO;
 import x.y.z.bill.model.account.User;
 import x.y.z.bill.model.account.UserExtra;
 
+@IgnoreLog
 @Service
 @TransMark
 class UserService extends BaseService {
@@ -74,8 +76,19 @@ class UserService extends BaseService {
         return userDAO.updatePaymentPassword(user);
     }
 
-    public UserExtra queryExtra(final Long userId) {
-        return userExtraDAO.selectByUserId(userId);
+    public UserExtra queryExtra(final Long userId) throws Exception {
+        UserExtra extra = userExtraDAO.selectByUserId(userId);
+        if (extra != null) {
+            String realName = extra.getRealName();
+            if (realName != null) {
+                extra.setRealName(EncryptionUtils.decryptByAES(realName));
+            }
+            String idCardNo = extra.getIdCardNo();
+            if (idCardNo != null) {
+                extra.setIdCardNo(EncryptionUtils.decryptByAES(idCardNo));
+            }
+        }
+        return extra;
     }
 
 }

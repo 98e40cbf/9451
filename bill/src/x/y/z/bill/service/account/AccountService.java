@@ -86,6 +86,7 @@ public class AccountService extends BaseService {
             capitalService.add(addMoneyDTO.userId, addMoneyDTO.amount, addMoneyDTO.txnId, addMoneyDTO.memo,
                     addMoneyDTO.bizType);
         } catch (Exception e) {
+            logger.catching(e);
             if (ExceptionUtil.isDuplicateKey(e)) {
                 return true;
             }
@@ -100,6 +101,7 @@ public class AccountService extends BaseService {
             capitalService.freeze(freeMoneyDTO.getUserId(), freeMoneyDTO.getAmount(), freeMoneyDTO.getTxnId(),
                     freeMoneyDTO.getMemo(), freeMoneyDTO.getBizType());
         } catch (Exception e) {
+            logger.catching(e);
             if (ExceptionUtil.isDuplicateKey(e)) {
                 return true;
             }
@@ -114,6 +116,7 @@ public class AccountService extends BaseService {
             capitalService.unfreeze(unfreezeMoneyDTO.getUserId(), unfreezeMoneyDTO.getOrigTxnId(),
                     unfreezeMoneyDTO.getMemo(), unfreezeMoneyDTO.getBizType(), unfreezeMoneyDTO.isBizStatus());
         } catch (Exception e) {
+            logger.catching(e);
             if (ExceptionUtil.isDuplicateKey(e)) {
                 return true;
             }
@@ -168,7 +171,11 @@ public class AccountService extends BaseService {
     }
 
     public UserExtra queryRealName(final Long userId) {
-        return userService.queryExtra(userId);
+        try {
+            return userService.queryExtra(userId);
+        } catch (Exception e) {
+            return new UserExtra();
+        }
     }
 
 }
