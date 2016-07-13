@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="x.y.z.bill.mapper.message.SmsTemplateDAO" >
+  <resultMap id="BaseResultMap" type="x.y.z.bill.model.message.SmsTemplate" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="templateCode" property="templateCode" jdbcType="VARCHAR" />
+    <result column="templateContent" property="templateContent" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, templateCode, templateContent, createTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from sms_template
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <insert id="insert" parameterType="x.y.z.bill.model.message.SmsTemplate" >
+    insert into sms_template (id, templateCode, templateContent, 
+      createTime)
+    values (#{id,jdbcType=BIGINT}, #{templateCode,jdbcType=VARCHAR}, #{templateContent,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="x.y.z.bill.model.message.SmsTemplate" >
+    update sms_template
+    set templateCode = #{templateCode,jdbcType=VARCHAR},
+      templateContent = #{templateContent,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

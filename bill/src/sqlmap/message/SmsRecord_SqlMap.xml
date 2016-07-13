@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="x.y.z.bill.mapper.message.SmsRecordDAO" >
+  <resultMap id="BaseResultMap" type="x.y.z.bill.model.message.SmsRecord" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="txnId" property="txnId" jdbcType="VARCHAR" />
+    <result column="smsType" property="smsType" jdbcType="TINYINT" />
+    <result column="smsSource" property="smsSource" jdbcType="TINYINT" />
+    <result column="smsStatus" property="smsStatus" jdbcType="TINYINT" />
+    <result column="receiveMobiles" property="receiveMobiles" jdbcType="VARCHAR" />
+    <result column="smsParam" property="smsParam" jdbcType="VARCHAR" />
+    <result column="smsTemplateCode" property="smsTemplateCode" jdbcType="VARCHAR" />
+    <result column="priority" property="priority" jdbcType="TINYINT" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, txnId, smsType, smsSource, smsStatus, receiveMobiles, smsParam, smsTemplateCode, 
+    priority, createTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from sms_record
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <insert id="insert" parameterType="x.y.z.bill.model.message.SmsRecord" >
+    insert into sms_record (id, txnId, smsType, 
+      smsSource, smsStatus, receiveMobiles, 
+      smsParam, smsTemplateCode, priority, 
+      createTime)
+    values (#{id,jdbcType=BIGINT}, #{txnId,jdbcType=VARCHAR}, #{smsType,jdbcType=TINYINT}, 
+      #{smsSource,jdbcType=TINYINT}, #{smsStatus,jdbcType=TINYINT}, #{receiveMobiles,jdbcType=VARCHAR}, 
+      #{smsParam,jdbcType=VARCHAR}, #{smsTemplateCode,jdbcType=VARCHAR}, #{priority,jdbcType=TINYINT}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="x.y.z.bill.model.message.SmsRecord" >
+    update sms_record
+    set txnId = #{txnId,jdbcType=VARCHAR},
+      smsType = #{smsType,jdbcType=TINYINT},
+      smsSource = #{smsSource,jdbcType=TINYINT},
+      smsStatus = #{smsStatus,jdbcType=TINYINT},
+      receiveMobiles = #{receiveMobiles,jdbcType=VARCHAR},
+      smsParam = #{smsParam,jdbcType=VARCHAR},
+      smsTemplateCode = #{smsTemplateCode,jdbcType=VARCHAR},
+      priority = #{priority,jdbcType=TINYINT},
+      createTime = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
