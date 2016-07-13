@@ -1,9 +1,9 @@
 package x.y.z.bill.model.account;
 
+import io.alpha.core.model.BaseObject;
+
 import java.math.BigDecimal;
 import java.util.Date;
-
-import io.alpha.core.model.BaseObject;
 
 public class CapitalJournal extends BaseObject {
     private static final long serialVersionUID = 1L;

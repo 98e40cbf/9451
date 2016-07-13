@@ -66,7 +66,6 @@ public class LoginHistory extends BaseObject {
     }
 
     public void setBrowser(final String browser) {
-        this.browser = browser == null ? null : browser.trim();
-        this.browser = StringUtils.substring(this.browser, 0, 150);
+        this.browser = StringUtils.substring(browser == null ? null : browser.trim(), 0, 150);
     }
 }

@@ -71,7 +71,25 @@
 						type="text" name="txnId"><br /> <input type="submit" />
 				</form>
 			</td>
-			<td>&nbsp;</td>
+			<td>更改密码:<br>
+				<form action="${contextPath}/user/update-password" method="post">
+					userId:<input name="userId" type="text" /><br /> oldPassword:<input
+						name="oldPassword" type="password" /><br /> newPassword:<input
+						name="newPassword" type="password" /><br />
+					<b:token />
+					<input type="submit" />
+				</form>
+			</td>
+		</tr>
+		<tr>
+			<td>资金记录: <br />
+				<form action="${contextPath}/user/list" method="get">
+					userId:<input name="userId" type="text" /><br />
+					<input type="submit" />
+				</form>
+			</td>
+			<td>&nbsp;
+			</td>
 		</tr>
 	</table>
 

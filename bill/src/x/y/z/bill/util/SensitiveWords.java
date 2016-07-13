@@ -1,13 +1,13 @@
 package x.y.z.bill.util;
 
+import io.alpha.core.util.ResourceUtils;
+
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-
-import io.alpha.core.util.ResourceUtils;
 
 public class SensitiveWords {
 

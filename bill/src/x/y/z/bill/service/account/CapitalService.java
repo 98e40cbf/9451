@@ -3,9 +3,12 @@ package x.y.z.bill.service.account;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import io.alpha.core.dto.PageResultDTO;
+import io.alpha.mybatis.statement.RecordCountHelper;
 import io.alpha.service.BaseService;
 import io.alpha.tx.annotation.TransMark;
 import io.alpha.util.DecimalUtil;
@@ -21,7 +24,7 @@ import x.y.z.bill.model.account.CapitalJournal;
 
 @Service
 @TransMark
-public class CapitalService extends BaseService {
+class CapitalService extends BaseService {
 
     @Autowired
     private CapitalAccountDAO capitalAccountDAO;
@@ -111,7 +114,7 @@ public class CapitalService extends BaseService {
             if (account == null) {
                 throw new AccountNotFoundExcepiton("资金账户不存在.");
             }
-            CapitalJournal origJournal = capitalJournalDAO.selectByUserIdTxnIdAndType(userId, origTxnId,
+            CapitalJournal origJournal = capitalJournalDAO.selectByUserIdTxnIdAndBizType(userId, origTxnId,
                     BizType.preType(bizType));
             if (origJournal == null) {
                 throw new CapitalJournalNotFoundException("冻结申请流水不存在.");
@@ -140,6 +143,14 @@ public class CapitalService extends BaseService {
                 return;
             }
         }
+    }
+
+    public PageResultDTO<CapitalJournal> queryJournalByUserId(final Long userId, final byte bizType,
+            final RowBounds rowBounds) {
+        PageResultDTO<CapitalJournal> result = new PageResultDTO<>();
+        result.setData(capitalJournalDAO.selectByUserIdBizType(userId, bizType, rowBounds));
+        result.setTotalRow(RecordCountHelper.getCount());
+        return result;
     }
 
 }

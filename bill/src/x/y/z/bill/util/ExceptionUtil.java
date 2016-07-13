@@ -1,8 +1,8 @@
 package x.y.z.bill.util;
 
-import org.springframework.dao.DuplicateKeyException;
-
 import io.alpha.exception.util.ExceptionUtils;
+
+import org.springframework.dao.DuplicateKeyException;
 
 public class ExceptionUtil {
 

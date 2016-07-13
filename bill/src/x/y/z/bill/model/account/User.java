@@ -1,8 +1,8 @@
 package x.y.z.bill.model.account;
 
-import java.util.Date;
-
 import io.alpha.core.model.BaseObject;
+
+import java.util.Date;
 
 public class User extends BaseObject {
     private static final long serialVersionUID = 1L;

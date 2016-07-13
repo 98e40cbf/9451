@@ -32,7 +32,7 @@ CREATE TABLE `capitaljournal` (
   `digest` varchar(40) NOT NULL,
   `createTime` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_userId_txnId_bizType` (`userId`,`txnId`,`bizType`) USING BTREE
+  UNIQUE KEY `uk_userId_bizType_txnId` (`userId`,`bizType`,`txnId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------

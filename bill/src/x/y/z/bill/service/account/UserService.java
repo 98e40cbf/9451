@@ -5,18 +5,21 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import io.alpha.log.annotation.IgnoreLog;
 import io.alpha.security.util.EncryptionUtils;
 import io.alpha.service.BaseService;
 import io.alpha.tx.annotation.TransMark;
 import io.alpha.util.SequenceHelper;
+import io.alpha.util.StringUtils;
 import x.y.z.bill.mapper.account.UserDAO;
 import x.y.z.bill.mapper.account.UserExtraDAO;
 import x.y.z.bill.model.account.User;
 import x.y.z.bill.model.account.UserExtra;
 
+@IgnoreLog
 @Service
 @TransMark
-public class UserService extends BaseService {
+class UserService extends BaseService {
 
     @Autowired
     private UserDAO userDAO;
@@ -55,7 +58,37 @@ public class UserService extends BaseService {
         userExtraDAO.insert(userExtra);
     }
 
-    public void resetPwd() {
+    public int updateLoginPassword(final Long userId, final String oldPassword, final String newPassword) {
+        User user = userDAO.selectByPrimaryKey(userId);
+        if (StringUtils.isNotBlank(oldPassword) && !EncryptionUtils.verifyPassword(oldPassword, user.getLoginPwd())) {
+            return 0;
+        }
+        user.setLoginPwd(EncryptionUtils.encodePassword(newPassword.trim()));
+        return userDAO.updateLoginPassword(user);
+    }
+
+    public int updatePaymentPassword(final Long userId, final String oldPassword, final String newPassword) {
+        User user = userDAO.selectByPrimaryKey(userId);
+        if (StringUtils.isNotBlank(oldPassword) && !EncryptionUtils.verifyPassword(oldPassword, user.getPaymentPwd())) {
+            return 0;
+        }
+        user.setPaymentPwd(EncryptionUtils.encodePassword(newPassword.trim()));
+        return userDAO.updatePaymentPassword(user);
+    }
+
+    public UserExtra queryExtra(final Long userId) throws Exception {
+        UserExtra extra = userExtraDAO.selectByUserId(userId);
+        if (extra != null) {
+            String realName = extra.getRealName();
+            if (realName != null) {
+                extra.setRealName(EncryptionUtils.decryptByAES(realName));
+            }
+            String idCardNo = extra.getIdCardNo();
+            if (idCardNo != null) {
+                extra.setIdCardNo(EncryptionUtils.decryptByAES(idCardNo));
+            }
+        }
+        return extra;
     }
 
 }

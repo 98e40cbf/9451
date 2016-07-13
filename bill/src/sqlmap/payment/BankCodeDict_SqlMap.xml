@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="x.y.z.bill.mapper.payment.BankCodeDictDAO" >
+  <resultMap id="BaseResultMap" type="x.y.z.bill.model.payment.BankCodeDict" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="bankCode" property="bankCode" jdbcType="VARCHAR" />
+    <result column="bankName" property="bankName" jdbcType="VARCHAR" />
+    <result column="keywords" property="keywords" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="lastModifyTime" property="lastModifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, bankCode, bankName, keywords, createTime, lastModifyTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_payment_bank_code_dict
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <insert id="insert" parameterType="x.y.z.bill.model.payment.BankCodeDict" >
+    insert into t_payment_bank_code_dict (id, bankCode, bankName, 
+      keywords, createTime, lastModifyTime
+      )
+    values (#{id,jdbcType=BIGINT}, #{bankCode,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, 
+      #{keywords,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="x.y.z.bill.model.payment.BankCodeDict" >
+    insert into t_payment_bank_code_dict
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="bankCode != null" >
+        bankCode,
+      </if>
+      <if test="bankName != null" >
+        bankName,
+      </if>
+      <if test="keywords != null" >
+        keywords,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="lastModifyTime != null" >
+        lastModifyTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="bankCode != null" >
+        #{bankCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null" >
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="keywords != null" >
+        #{keywords,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifyTime != null" >
+        #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="x.y.z.bill.model.payment.BankCodeDict" >
+    update t_payment_bank_code_dict
+    <set >
+      <if test="bankCode != null" >
+        bankCode = #{bankCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null" >
+        bankName = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="keywords != null" >
+        keywords = #{keywords,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifyTime != null" >
+        lastModifyTime = #{lastModifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="x.y.z.bill.model.payment.BankCodeDict" >
+    update t_payment_bank_code_dict
+    set bankCode = #{bankCode,jdbcType=VARCHAR},
+      bankName = #{bankName,jdbcType=VARCHAR},
+      keywords = #{keywords,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      lastModifyTime = #{lastModifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

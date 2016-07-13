@@ -1,8 +1,8 @@
 package x.y.z.bill.command;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 import io.alpha.core.model.BaseObject;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 public class RegistForm extends BaseObject {
 

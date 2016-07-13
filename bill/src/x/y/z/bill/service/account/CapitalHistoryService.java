@@ -19,7 +19,7 @@ import x.y.z.bill.model.account.CapitalOperationHistory;
 class CapitalHistoryService extends UntypedActor {
 
     private static final ActorRef R = Actors.actorOf(ProcessorHelper.triple(),
-            Props.create(CapitalHistoryService.class), "captial:history-actor");
+            Props.create(CapitalHistoryService.class), "capital:history-actor");
 
     private static final AtomicReference<CapitalOperationHistoryDAO> DAO = new AtomicReference<>();
 

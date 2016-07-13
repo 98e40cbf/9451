@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="x.y.z.bill.mapper.product.ProductDAO">
+	<resultMap id="BaseResultMap" type="x.y.z.bill.model.product.Product">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="productName" property="productName" jdbcType="VARCHAR" />
+		<result column="amount" property="amount" jdbcType="DECIMAL" />
+		<result column="annualRate" property="annualRate" jdbcType="DECIMAL" />
+		<result column="surplusAmount" property="surplusAmount"
+			jdbcType="DECIMAL" />
+		<result column="investTotalAmount" property="investTotalAmount"
+			jdbcType="DECIMAL" />
+		<result column="investSchedule" property="investSchedule"
+			jdbcType="DECIMAL" />
+		<result column="deadline" property="deadline" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="repaymentType" property="repaymentType"
+			jdbcType="INTEGER" />
+		<result column="productType" property="productType" jdbcType="INTEGER" />
+		<result column="productArea" property="productArea" jdbcType="INTEGER" />
+		<result column="productNo" property="productNo" jdbcType="VARCHAR" />
+		<result column="valueDate" property="valueDate" jdbcType="TIMESTAMP" />
+		<result column="auditDate" property="auditDate" jdbcType="DATE" />
+		<result column="createDate" property="createDate" jdbcType="TIMESTAMP" />
+		<result column="fullDate" property="fullDate" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, productName, amount, annualRate, surplusAmount,
+		investTotalAmount,
+		investSchedule,
+		deadline, status, repaymentType,
+		productType, productArea, productNo,
+		valueDate,
+		auditDate, createDate,
+		fullDate
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from product
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<insert id="insert" parameterType="x.y.z.bill.model.product.Product">
+		insert into product (id,
+		productName, amount,
+		annualRate, surplusAmount, investTotalAmount,
+		investSchedule, deadline, status,
+		repaymentType, productType,
+		productArea,
+		productNo, valueDate, auditDate,
+		createDate, fullDate)
+		values (#{id,jdbcType=BIGINT}, #{productName,jdbcType=VARCHAR},
+		#{amount,jdbcType=DECIMAL},
+		#{annualRate,jdbcType=DECIMAL},
+		#{surplusAmount,jdbcType=DECIMAL},
+		#{investTotalAmount,jdbcType=DECIMAL},
+		#{investSchedule,jdbcType=DECIMAL}, #{deadline,jdbcType=INTEGER},
+		#{status,jdbcType=INTEGER},
+		#{repaymentType,jdbcType=INTEGER},
+		#{productType,jdbcType=INTEGER}, #{productArea,jdbcType=INTEGER},
+		#{productNo,jdbcType=VARCHAR}, #{valueDate,jdbcType=TIMESTAMP},
+		#{auditDate,jdbcType=DATE},
+		#{createDate,jdbcType=TIMESTAMP},
+		#{fullDate,jdbcType=TIMESTAMP})
+	</insert>
+
+
+	<select id="selectProductList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from product
+	</select>
+
+	<select id="selectForUpdate" resultMap="BaseResultMap"
+		parameterType="Long">
+		SELECT
+		id,productName,amount,surplusAmount,investTotalAmount,investSchedule,repaymentType,productType
+		from product where id=#{productId,jdbcType=BIGINT} for UPDATE
+	</select>
+
+	<update id="updateProduct" parameterType="Object">
+		update product set
+		surplusAmount=#{surplusAmount,jdbcType=DECIMAL},investTotalAmount=#{investTotalAmount,jdbcType=DECIMAL},investSchedule=#{investSchedule,jdbcType=DECIMAL}
+		where id=#{productId,jdbcType=BIGINT}
+	</update>
+</mapper>
