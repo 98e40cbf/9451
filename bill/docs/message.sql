@@ -12,12 +12,12 @@ CREATE TABLE `sms_record` (
   `smsStatus` tinyint(4) DEFAULT NULL COMMENT '短信状态',
   `receiveMobiles` varchar(600) NOT NULL COMMENT '接收手机号码，用英文逗号隔开',
   `smsParam` varchar(100) NOT NULL COMMENT '短信模板变量',
-  `smsTemplateId` bigint(20) unsigned NOT NULL COMMENT '短信模板ID',
+  `smsTemplateCode` varchar(20) NOT NULL COMMENT '模板编号',
   `priority` tinyint(4) unsigned NOT NULL COMMENT '优先级',
   `createTime` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uni_sms_txnId` (`txnId`),
-  KEY `ind_sms_templateId` (`smsTemplateId`)
+  KEY `ind_sms_templateCode` (`smsTemplateCode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='短信记录表';
 
 
