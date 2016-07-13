@@ -24,6 +24,9 @@ import x.y.z.bill.command.RealnameForm;
 import x.y.z.bill.command.RegistForm;
 import x.y.z.bill.constant.BizType;
 import x.y.z.bill.constant.Views;
+import x.y.z.bill.dto.AddMoneyDTO;
+import x.y.z.bill.dto.FreezeMoneyDTO;
+import x.y.z.bill.dto.UnfreezeMoneyDTO;
 import x.y.z.bill.model.account.CapitalJournal;
 import x.y.z.bill.service.account.AccountService;
 
@@ -72,33 +75,33 @@ public class UserController extends BaseController {
 
     @PostMapping("/recharge")
     public String recharge(final Long userId, final String amount) {
-        accountService.add(userId, DecimalUtil.format(new BigDecimal(amount)), SequenceHelper.get(), "充值" + amount,
-                BizType.RECHARGE);
+        accountService.add(new AddMoneyDTO(userId, DecimalUtil.format(new BigDecimal(amount)), SequenceHelper.get(),
+                BizType.RECHARGE, "充值" + amount));
         return "redirect:/";
     }
 
     @PostMapping("/buy")
     public String buy(final Long userId, final String amount) {
-        accountService.freeze(userId, DecimalUtil.format(new BigDecimal(amount)), SequenceHelper.get(), "投资" + amount,
-                BizType.INVEST_APPLY);
+        accountService.freeze(new FreezeMoneyDTO(userId, DecimalUtil.format(new BigDecimal(amount)),
+                SequenceHelper.get(), BizType.INVEST_APPLY, "投资" + amount));
         return "redirect:/";
     }
 
     @PostMapping("/buy-complete")
     public String buyComplete(final Long userId, final String txnId) {
-        accountService.unfreeze(userId, txnId, "投资完成 ", BizType.INVEST_UNFREEZE, true);
+        accountService.unfreeze(new UnfreezeMoneyDTO(userId, txnId, BizType.INVEST_UNFREEZE, true, "投资完成 "));
         return "redirect:/";
     }
 
     @PostMapping("/buy-fallback")
     public String buyFallback(final Long userId, final String txnId) {
-        accountService.unfreeze(userId, txnId, "投资失败 ", BizType.INVEST_UNFREEZE, false);
+        accountService.unfreeze(new UnfreezeMoneyDTO(userId, txnId, BizType.INVEST_UNFREEZE, false, "投资失败 "));
         return "redirect:/";
     }
 
     @PostMapping("/update-password")
     public String updatePassword(final Long userId, final String oldPassword, final String newPassword) {
-        boolean updated = accountService.updatePassword(userId, oldPassword, newPassword);
+        boolean updated = accountService.updateLoginPassword(userId, oldPassword, newPassword);
         logger.info("更新密码：{}", updated);
         return "redirect:/";
     }

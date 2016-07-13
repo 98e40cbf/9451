@@ -11,4 +11,6 @@ public interface UserExtraDAO {
     UserExtra selectByPrimaryKey(Long id);
 
     int updateByPrimaryKey(UserExtra record);
+
+    UserExtra selectByUserId(Long userId);
 }

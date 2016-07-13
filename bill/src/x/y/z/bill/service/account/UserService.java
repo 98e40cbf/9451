@@ -74,4 +74,8 @@ class UserService extends BaseService {
         return userDAO.updatePaymentPassword(user);
     }
 
+    public UserExtra queryExtra(final Long userId) {
+        return userExtraDAO.selectByUserId(userId);
+    }
+
 }

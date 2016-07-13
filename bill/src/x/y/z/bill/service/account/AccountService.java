@@ -1,7 +1,5 @@
 package x.y.z.bill.service.account;
 
-import java.math.BigDecimal;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,13 +8,18 @@ import io.alpha.mybatis.session.CountBounds;
 import io.alpha.security.util.EncryptionUtils;
 import io.alpha.service.BaseService;
 import io.alpha.util.NetworkUtils;
+import io.alpha.validation.ValidationUtils;
 import x.y.z.bill.command.LoginForm;
 import x.y.z.bill.command.RealnameForm;
 import x.y.z.bill.command.RegistForm;
 import x.y.z.bill.constant.BizType;
 import x.y.z.bill.constant.IdCardType;
+import x.y.z.bill.dto.AddMoneyDTO;
+import x.y.z.bill.dto.FreezeMoneyDTO;
+import x.y.z.bill.dto.UnfreezeMoneyDTO;
 import x.y.z.bill.model.account.CapitalJournal;
 import x.y.z.bill.model.account.User;
+import x.y.z.bill.model.account.UserExtra;
 import x.y.z.bill.util.ExceptionUtil;
 import x.y.z.bill.util.SensitiveWords;
 
@@ -76,10 +79,11 @@ public class AccountService extends BaseService {
         return true;
     }
 
-    public boolean add(final Long userId, final BigDecimal amount, final String txnId, final String memo,
-            final BizType bizType) {
+    public boolean add(final AddMoneyDTO addMoneyDTO) {
         try {
-            capitalService.add(userId, amount, txnId, memo, bizType);
+            ValidationUtils.validate(addMoneyDTO);
+            capitalService.add(addMoneyDTO.userId, addMoneyDTO.amount, addMoneyDTO.txnId, addMoneyDTO.memo,
+                    addMoneyDTO.bizType);
         } catch (Exception e) {
             if (ExceptionUtil.isDuplicateKey(e)) {
                 return true;
@@ -89,10 +93,11 @@ public class AccountService extends BaseService {
         return true;
     }
 
-    public boolean freeze(final Long userId, final BigDecimal amount, final String txnId, final String memo,
-            final BizType bizType) {
+    public boolean freeze(final FreezeMoneyDTO freeMoneyDTO) {
         try {
-            capitalService.freeze(userId, amount, txnId, memo, bizType);
+            ValidationUtils.validate(freeMoneyDTO);
+            capitalService.freeze(freeMoneyDTO.getUserId(), freeMoneyDTO.getAmount(), freeMoneyDTO.getTxnId(),
+                    freeMoneyDTO.getMemo(), freeMoneyDTO.getBizType());
         } catch (Exception e) {
             if (ExceptionUtil.isDuplicateKey(e)) {
                 return true;
@@ -102,10 +107,11 @@ public class AccountService extends BaseService {
         return true;
     }
 
-    public boolean unfreeze(final Long userId, final String origTxnId, final String memo, final BizType bizType,
-            final boolean bizStatus) {
+    public boolean unfreeze(final UnfreezeMoneyDTO unfreezeMoneyDTO) {
         try {
-            capitalService.unfreeze(userId, origTxnId, memo, bizType, bizStatus);
+            ValidationUtils.validate(unfreezeMoneyDTO);
+            capitalService.unfreeze(unfreezeMoneyDTO.getUserId(), unfreezeMoneyDTO.getOrigTxnId(),
+                    unfreezeMoneyDTO.getMemo(), unfreezeMoneyDTO.getBizType(), unfreezeMoneyDTO.isBizStatus());
         } catch (Exception e) {
             if (ExceptionUtil.isDuplicateKey(e)) {
                 return true;
@@ -115,9 +121,17 @@ public class AccountService extends BaseService {
         return true;
     }
 
-    public boolean updatePassword(final Long userId, final String oldPassword, final String newPassword) {
+    public boolean updateLoginPassword(final Long userId, final String oldPassword, final String newPassword) {
         try {
             return userService.updateLoginPassword(userId, oldPassword, newPassword) == 1;
+        } catch (Exception e) {
+        }
+        return false;
+    }
+
+    public boolean updatePaymentPassword(final Long userId, final String oldPassword, final String newPassword) {
+        try {
+            return userService.updatePaymentPassword(userId, oldPassword, newPassword) == 1;
         } catch (Exception e) {
         }
         return false;
@@ -146,6 +160,10 @@ public class AccountService extends BaseService {
         } catch (Exception e) {
             return new PageResultDTO<>();
         }
+    }
+
+    public UserExtra queryRealName(final Long userId) {
+        return userService.queryExtra(userId);
     }
 
 }
