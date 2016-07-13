@@ -22,11 +22,21 @@
 		from capitaljournal
 		where id = #{id,jdbcType=BIGINT}
 	</select>
-	<select id="selectByUserIdTxnIdAndType" resultMap="BaseResultMap">
+	<select id="selectByUserIdBizType" resultMap="BaseResultMap" parameterType="java.lang.Long">
 		select
 		<include refid="Base_Column_List" />
 		from capitaljournal
-		where userId = #{userId,jdbcType=BIGINT} and txnId = #{txnId,jdbcType=VARCHAR} and bizType = #{bizType,jdbcType=TINYINT} 
+		where userId = #{userId,jdbcType=BIGINT}
+		<if test="bizType != 0">
+		 and bizType = #{bizType,jdbcType=TINYINT}
+		</if>
+		 order by id desc
+	</select>
+	<select id="selectByUserIdTxnIdAndBizType" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from capitaljournal
+		where userId = #{userId,jdbcType=BIGINT} and bizType = #{bizType,jdbcType=TINYINT} and txnId = #{txnId,jdbcType=VARCHAR} 
 	</select>
 	<insert id="insert" parameterType="x.y.z.bill.model.account.CapitalJournal" useGeneratedKeys="true" keyProperty="id">
 		insert into capitaljournal (userId, amount,

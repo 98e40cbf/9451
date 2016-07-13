@@ -81,6 +81,16 @@
 				</form>
 			</td>
 		</tr>
+		<tr>
+			<td>资金记录: <br />
+				<form action="${contextPath}/user/list" method="get">
+					userId:<input name="userId" type="text" /><br />
+					<input type="submit" />
+				</form>
+			</td>
+			<td>&nbsp;
+			</td>
+		</tr>
 	</table>
 
 
