@@ -12,8 +12,6 @@ public class SmsRecord extends BaseObject {
 
     private Byte smsType;
 
-    private Byte smsSource;
-
     private Byte smsStatus;
 
     private String receiveMobiles;
@@ -48,14 +46,6 @@ public class SmsRecord extends BaseObject {
 
     public void setSmsType(Byte smsType) {
         this.smsType = smsType;
-    }
-
-    public Byte getSmsSource() {
-        return smsSource;
-    }
-
-    public void setSmsSource(Byte smsSource) {
-        this.smsSource = smsSource;
     }
 
     public Byte getSmsStatus() {

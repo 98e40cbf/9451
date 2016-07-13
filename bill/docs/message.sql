@@ -8,7 +8,6 @@ CREATE TABLE `sms_record` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `txnId` varchar(40) NOT NULL COMMENT '业务编号',
   `smsType` tinyint(4) unsigned NOT NULL COMMENT '短信类型',
-  `smsSource` tinyint(4) unsigned NOT NULL COMMENT '短信来源',
   `smsStatus` tinyint(4) DEFAULT NULL COMMENT '短信状态',
   `receiveMobiles` varchar(600) NOT NULL COMMENT '接收手机号码，用英文逗号隔开',
   `smsParam` varchar(100) NOT NULL COMMENT '短信模板变量',

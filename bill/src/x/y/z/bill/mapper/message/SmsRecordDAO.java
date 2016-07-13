@@ -9,5 +9,7 @@ public interface SmsRecordDAO {
 
     SmsRecord selectByPrimaryKey(Long id);
 
+    SmsRecord getByTxnId(String txnId);
+
     int updateByPrimaryKey(SmsRecord record);
 }
