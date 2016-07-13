@@ -29,6 +29,8 @@ import x.y.z.bill.dto.FreezeMoneyDTO;
 import x.y.z.bill.dto.ModifyPasswordDTO;
 import x.y.z.bill.dto.UnfreezeMoneyDTO;
 import x.y.z.bill.model.account.CapitalJournal;
+import x.y.z.bill.model.account.User;
+import x.y.z.bill.model.account.UserExtra;
 import x.y.z.bill.service.account.AccountService;
 
 @Controller
@@ -117,4 +119,19 @@ public class UserController extends BaseController {
         logger.info("所有提现流水：{}", list);
         return "redirect:/";
     }
+
+    @GetMapping("/extra")
+    public String extra(final Long userId) {
+        UserExtra extra = accountService.queryExtra(userId);
+        logger.info("用户扩展：{}", extra);
+        return "redirect:/";
+    }
+
+    @GetMapping("/get")
+    public String get(final Long userId) {
+        User user = accountService.queryUser(userId);
+        logger.info("用户：{}", user);
+        return "redirect:/";
+    }
+
 }

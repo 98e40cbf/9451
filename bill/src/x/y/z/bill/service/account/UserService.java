@@ -76,6 +76,17 @@ class UserService extends BaseService {
         return userDAO.updatePaymentPassword(user);
     }
 
+    public User queryUser(final Long id) throws Exception {
+        User user = userDAO.selectByPrimaryKey(id);
+        if (user != null) {
+            String mobile = user.getMobile();
+            if (mobile != null) {
+                user.setMobile(EncryptionUtils.decryptByAES(mobile));
+            }
+        }
+        return user;
+    }
+
     public UserExtra queryExtra(final Long userId) throws Exception {
         UserExtra extra = userExtraDAO.selectByUserId(userId);
         if (extra != null) {

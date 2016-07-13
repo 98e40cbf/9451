@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import io.alpha.core.dto.PageResultDTO;
+import io.alpha.log.annotation.IgnoreLog;
 import io.alpha.mybatis.statement.RecordCountHelper;
 import io.alpha.service.BaseService;
 import io.alpha.tx.annotation.TransMark;
@@ -22,6 +23,7 @@ import x.y.z.bill.mapper.account.CapitalJournalDAO;
 import x.y.z.bill.model.account.CapitalAccount;
 import x.y.z.bill.model.account.CapitalJournal;
 
+@IgnoreLog
 @Service
 @TransMark
 class CapitalService extends BaseService {

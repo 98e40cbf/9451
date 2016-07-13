@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import io.alpha.core.dto.PageResultDTO;
+import io.alpha.log.annotation.IgnoreLog;
 import io.alpha.mybatis.session.CountBounds;
 import io.alpha.security.util.EncryptionUtils;
 import io.alpha.service.BaseService;
@@ -24,6 +25,7 @@ import x.y.z.bill.model.account.UserExtra;
 import x.y.z.bill.util.ExceptionUtil;
 import x.y.z.bill.util.SensitiveWords;
 
+@IgnoreLog
 @Service
 public class AccountService extends BaseService {
 
@@ -131,6 +133,7 @@ public class AccountService extends BaseService {
             return userService.updateLoginPassword(modifyPasswordDTO.getUserId(), modifyPasswordDTO.getOldPassword(),
                     modifyPasswordDTO.getNewPassword()) == 1;
         } catch (Exception e) {
+            logger.catching(e);
         }
         return false;
     }
@@ -141,6 +144,7 @@ public class AccountService extends BaseService {
             return userService.updatePaymentPassword(modifyPasswordDTO.getUserId(), modifyPasswordDTO.getOldPassword(),
                     modifyPasswordDTO.getNewPassword()) == 1;
         } catch (Exception e) {
+            logger.catching(e);
         }
         return false;
     }
@@ -149,6 +153,7 @@ public class AccountService extends BaseService {
         try {
             return capitalService.queryJournalByUserId(userId, (byte) 0, new CountBounds(0, 10));
         } catch (Exception e) {
+            logger.catching(e);
             return new PageResultDTO<>();
         }
     }
@@ -157,6 +162,7 @@ public class AccountService extends BaseService {
         try {
             return capitalService.queryJournalByUserId(userId, BizType.RECHARGE.getCode(), new CountBounds(0, 10));
         } catch (Exception e) {
+            logger.catching(e);
             return new PageResultDTO<>();
         }
     }
@@ -166,15 +172,26 @@ public class AccountService extends BaseService {
             return capitalService.queryJournalByUserId(userId, BizType.WITHDRAW_UNFREEZE.getCode(),
                     new CountBounds(0, 10));
         } catch (Exception e) {
+            logger.catching(e);
             return new PageResultDTO<>();
         }
     }
 
-    public UserExtra queryRealName(final Long userId) {
+    public UserExtra queryExtra(final Long userId) {
         try {
             return userService.queryExtra(userId);
         } catch (Exception e) {
+            logger.catching(e);
             return new UserExtra();
+        }
+    }
+
+    public User queryUser(final Long id) {
+        try {
+            return userService.queryUser(id);
+        } catch (Exception e) {
+            logger.catching(e);
+            return new User();
         }
     }
 
