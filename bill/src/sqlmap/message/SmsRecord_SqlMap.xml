@@ -30,12 +30,12 @@
     where txnId = #{txnId,jdbcType=VARCHAR}
     limit 1
   </select>
-  <insert id="insert" parameterType="x.y.z.bill.model.message.SmsRecord" >
-    insert into sms_record (id, txnId, smsType, 
+  <insert id="insert" parameterType="x.y.z.bill.model.message.SmsRecord" useGeneratedKeys="true" keyProperty="id">
+    insert into sms_record (txnId, smsType,
       smsStatus, receiveMobiles, smsParam, 
       smsTemplateCode, priority, createTime
       )
-    values (#{id,jdbcType=BIGINT}, #{txnId,jdbcType=VARCHAR}, #{smsType,jdbcType=TINYINT}, 
+    values (#{txnId,jdbcType=VARCHAR}, #{smsType,jdbcType=TINYINT},
       #{smsStatus,jdbcType=TINYINT}, #{receiveMobiles,jdbcType=VARCHAR}, #{smsParam,jdbcType=VARCHAR}, 
       #{smsTemplateCode,jdbcType=VARCHAR}, #{priority,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}
       )

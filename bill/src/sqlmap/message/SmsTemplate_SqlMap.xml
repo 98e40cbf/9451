@@ -17,9 +17,9 @@
     where id = #{id,jdbcType=BIGINT}
   </select>
   <insert id="insert" parameterType="x.y.z.bill.model.message.SmsTemplate" >
-    insert into sms_template (id, templateCode, templateContent, 
+    insert into sms_template (templateCode, templateContent,
       createTime)
-    values (#{id,jdbcType=BIGINT}, #{templateCode,jdbcType=VARCHAR}, #{templateContent,jdbcType=VARCHAR}, 
+    values (#{templateCode,jdbcType=VARCHAR}, #{templateContent,jdbcType=VARCHAR},
       #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <update id="updateByPrimaryKey" parameterType="x.y.z.bill.model.message.SmsTemplate" >
