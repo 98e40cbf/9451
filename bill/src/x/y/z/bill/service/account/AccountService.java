@@ -16,6 +16,7 @@ import x.y.z.bill.constant.BizType;
 import x.y.z.bill.constant.IdCardType;
 import x.y.z.bill.dto.AddMoneyDTO;
 import x.y.z.bill.dto.FreezeMoneyDTO;
+import x.y.z.bill.dto.ModifyPasswordDTO;
 import x.y.z.bill.dto.UnfreezeMoneyDTO;
 import x.y.z.bill.model.account.CapitalJournal;
 import x.y.z.bill.model.account.User;
@@ -121,17 +122,21 @@ public class AccountService extends BaseService {
         return true;
     }
 
-    public boolean updateLoginPassword(final Long userId, final String oldPassword, final String newPassword) {
+    public boolean updateLoginPassword(final ModifyPasswordDTO modifyPasswordDTO) {
         try {
-            return userService.updateLoginPassword(userId, oldPassword, newPassword) == 1;
+            ValidationUtils.validate(modifyPasswordDTO);
+            return userService.updateLoginPassword(modifyPasswordDTO.getUserId(), modifyPasswordDTO.getOldPassword(),
+                    modifyPasswordDTO.getNewPassword()) == 1;
         } catch (Exception e) {
         }
         return false;
     }
 
-    public boolean updatePaymentPassword(final Long userId, final String oldPassword, final String newPassword) {
+    public boolean updatePaymentPassword(final ModifyPasswordDTO modifyPasswordDTO) {
         try {
-            return userService.updatePaymentPassword(userId, oldPassword, newPassword) == 1;
+            ValidationUtils.validate(modifyPasswordDTO);
+            return userService.updatePaymentPassword(modifyPasswordDTO.getUserId(), modifyPasswordDTO.getOldPassword(),
+                    modifyPasswordDTO.getNewPassword()) == 1;
         } catch (Exception e) {
         }
         return false;
