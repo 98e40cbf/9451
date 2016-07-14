@@ -88,7 +88,14 @@
 						type="submit" />
 				</form>
 			</td>
-			<td>&nbsp;</td>
+			<td>更改手机号:<br>
+				<form action="${contextPath}/user/modify-mobile" method="post">
+					userId:<input name="userId" type="text" /><br /> oldMobile:<input
+						name="oldMobile" type="text" /><br /> newMobile:<input
+						name="newMobile" type="text" /><br />
+					<b:token />
+					<input type="submit" />
+				</form></td>
 		</tr>
 		<tr>
 			<td>用户基本信息: <br />

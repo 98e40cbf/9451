@@ -17,6 +17,7 @@ import x.y.z.bill.constant.BizType;
 import x.y.z.bill.constant.IdCardType;
 import x.y.z.bill.dto.AddMoneyDTO;
 import x.y.z.bill.dto.FreezeMoneyDTO;
+import x.y.z.bill.dto.ModifyMobileDTO;
 import x.y.z.bill.dto.ModifyPasswordDTO;
 import x.y.z.bill.dto.UnfreezeMoneyDTO;
 import x.y.z.bill.model.account.CapitalJournal;
@@ -127,10 +128,10 @@ public class AccountService extends BaseService {
         return true;
     }
 
-    public boolean updateLoginPassword(final ModifyPasswordDTO modifyPasswordDTO) {
+    public boolean modifyLoginPassword(final ModifyPasswordDTO modifyPasswordDTO) {
         try {
             ValidationUtils.validate(modifyPasswordDTO);
-            return userService.updateLoginPassword(modifyPasswordDTO.getUserId(), modifyPasswordDTO.getOldPassword(),
+            return userService.modifyLoginPassword(modifyPasswordDTO.getUserId(), modifyPasswordDTO.getOldPassword(),
                     modifyPasswordDTO.getNewPassword()) == 1;
         } catch (Exception e) {
             logger.catching(e);
@@ -138,10 +139,10 @@ public class AccountService extends BaseService {
         return false;
     }
 
-    public boolean updatePaymentPassword(final ModifyPasswordDTO modifyPasswordDTO) {
+    public boolean modifyPaymentPassword(final ModifyPasswordDTO modifyPasswordDTO) {
         try {
             ValidationUtils.validate(modifyPasswordDTO);
-            return userService.updatePaymentPassword(modifyPasswordDTO.getUserId(), modifyPasswordDTO.getOldPassword(),
+            return userService.modifyPaymentPassword(modifyPasswordDTO.getUserId(), modifyPasswordDTO.getOldPassword(),
                     modifyPasswordDTO.getNewPassword()) == 1;
         } catch (Exception e) {
             logger.catching(e);
@@ -192,6 +193,21 @@ public class AccountService extends BaseService {
         } catch (Exception e) {
             logger.catching(e);
             return new User();
+        }
+    }
+
+    public boolean modifyMobile(final ModifyMobileDTO modifyMobileDTO) {
+        try {
+            ValidationUtils.validate(modifyMobileDTO);
+            boolean success = userService.modifyMobile(modifyMobileDTO.getUserId(), modifyMobileDTO.getOldMobile(),
+                    modifyMobileDTO.getNewMobile()) == 1;
+            if (success) {
+                MobileChangeHistoryService.record(modifyMobileDTO.getUserId(), modifyMobileDTO.getOldMobile(),
+                        modifyMobileDTO.getNewMobile());
+            }
+            return success;
+        } catch (Exception e) {
+            return false;
         }
     }
 

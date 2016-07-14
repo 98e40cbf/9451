@@ -16,11 +16,11 @@
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
 		select
 		<include refid="Base_Column_List" />
-		from capitaloperationhistory
+		from capital_operation_history
 		where id = #{id,jdbcType=BIGINT}
 	</select>
 	<insert id="insert" parameterType="x.y.z.bill.model.account.CapitalOperationHistory">
-		insert into capitaloperationhistory (userId, amount,
+		insert into capital_operation_history (userId, amount,
 		txnId, bizType, memo,
 		createTime)
 		values (#{userId,jdbcType=BIGINT}, #{amount,jdbcType=DECIMAL},

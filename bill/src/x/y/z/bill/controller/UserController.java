@@ -26,6 +26,7 @@ import x.y.z.bill.constant.BizType;
 import x.y.z.bill.constant.Views;
 import x.y.z.bill.dto.AddMoneyDTO;
 import x.y.z.bill.dto.FreezeMoneyDTO;
+import x.y.z.bill.dto.ModifyMobileDTO;
 import x.y.z.bill.dto.ModifyPasswordDTO;
 import x.y.z.bill.dto.UnfreezeMoneyDTO;
 import x.y.z.bill.model.account.CapitalJournal;
@@ -104,7 +105,7 @@ public class UserController extends BaseController {
 
     @PostMapping("/update-password")
     public String updatePassword(final Long userId, final String oldPassword, final String newPassword) {
-        boolean updated = accountService.updateLoginPassword(new ModifyPasswordDTO(userId, oldPassword, newPassword));
+        boolean updated = accountService.modifyLoginPassword(new ModifyPasswordDTO(userId, oldPassword, newPassword));
         logger.info("更新密码：{}", updated);
         return "redirect:/";
     }
@@ -131,6 +132,13 @@ public class UserController extends BaseController {
     public String get(final Long userId) {
         User user = accountService.queryUser(userId);
         logger.info("用户：{}", user);
+        return "redirect:/";
+    }
+
+    @PostMapping("/modify-mobile")
+    public String modifyMobile(final long userId, final String oldMobile, final String newMobile) {
+        boolean status = accountService.modifyMobile(new ModifyMobileDTO(userId, oldMobile, newMobile));
+        logger.info("更改手机号：{}", status);
         return "redirect:/";
     }
 

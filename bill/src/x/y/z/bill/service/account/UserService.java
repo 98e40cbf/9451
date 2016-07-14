@@ -58,7 +58,7 @@ class UserService extends BaseService {
         userExtraDAO.insert(userExtra);
     }
 
-    public int updateLoginPassword(final Long userId, final String oldPassword, final String newPassword) {
+    public int modifyLoginPassword(final Long userId, final String oldPassword, final String newPassword) {
         User user = userDAO.selectByPrimaryKey(userId);
         if (StringUtils.isNotBlank(oldPassword) && !EncryptionUtils.verifyPassword(oldPassword, user.getLoginPwd())) {
             return 0;
@@ -67,13 +67,24 @@ class UserService extends BaseService {
         return userDAO.updateLoginPassword(user);
     }
 
-    public int updatePaymentPassword(final Long userId, final String oldPassword, final String newPassword) {
+    public int modifyPaymentPassword(final Long userId, final String oldPassword, final String newPassword) {
         User user = userDAO.selectByPrimaryKey(userId);
         if (StringUtils.isNotBlank(oldPassword) && !EncryptionUtils.verifyPassword(oldPassword, user.getPaymentPwd())) {
             return 0;
         }
         user.setPaymentPwd(EncryptionUtils.encodePassword(newPassword.trim()));
         return userDAO.updatePaymentPassword(user);
+    }
+
+    public int modifyMobile(final Long userId, final String oldMobile, final String newMobile) throws Exception {
+        User user = userDAO.selectByPrimaryKey(userId);
+        if (user != null) {
+            if (user.getMobile().equals(EncryptionUtils.encryptByAES(oldMobile))) {
+                user.setMobile(EncryptionUtils.encryptByAES(newMobile));
+                return userDAO.updateMobile(user);
+            }
+        }
+        return 0;
     }
 
     public User queryUser(final Long id) throws Exception {

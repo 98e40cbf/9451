@@ -83,10 +83,10 @@ CREATE TABLE `login_history` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for capitaloperationhistory
+-- Table structure for capital_operation_history
 -- ----------------------------
-DROP TABLE IF EXISTS `capitaloperationhistory`;
-CREATE TABLE `capitaloperationhistory` (
+DROP TABLE IF EXISTS `capital_operation_history`;
+CREATE TABLE `capital_operation_history` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `userId` bigint(20) NOT NULL,
   `amount` decimal(18,2) NOT NULL,
@@ -114,4 +114,17 @@ CREATE TABLE `bookkeeping` (
 -- Records of bookkeeping
 -- ----------------------------
 INSERT INTO `bookkeeping` VALUES (1, 0.00, 0.00, 0.00, '2016-07-01 00:00:00');
+
+-- ----------------------------
+-- Table structure for mobile_change_history
+-- ----------------------------
+DROP TABLE IF EXISTS `mobile_change_history`;
+CREATE TABLE `mobile_change_history` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `userId` bigint(20) NOT NULL,
+  `source` varchar(100) NOT NULL,
+  `target` varchar(100) NOT NULL,
+  `createTime` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
