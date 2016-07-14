@@ -16,7 +16,7 @@ public class BookKeeping extends BaseObject {
 
     private BigDecimal withdraw;
 
-    private Date lastUpdate;
+    private Date lastUpdate = new Date();
 
     public Integer getId() {
         return id;

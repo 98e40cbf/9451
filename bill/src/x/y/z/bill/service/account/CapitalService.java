@@ -14,6 +14,7 @@ import io.alpha.mybatis.statement.RecordCountHelper;
 import io.alpha.service.BaseService;
 import io.alpha.tx.annotation.TransMark;
 import io.alpha.util.DecimalUtil;
+import io.alpha.util.FstUtils;
 import io.alpha.vertx.util.VertxUtils;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
@@ -82,7 +83,7 @@ class CapitalService extends BaseService {
                 journal.setDigest("n/a");
                 journal.setMemo(memo);
                 capitalJournalDAO.insert(journal);
-                vertx.eventBus().send(BOOKKEEPING_ADDRESS, new Accounting(bizType, amount));
+                vertx.eventBus().send(BOOKKEEPING_ADDRESS, FstUtils.serialize(new Accounting(bizType, amount)));
                 return;
             }
         }
@@ -156,7 +157,9 @@ class CapitalService extends BaseService {
                 journal.setDigest("n/a");
                 journal.setMemo(memo);
                 capitalJournalDAO.insert(journal);
-                vertx.eventBus().send(BOOKKEEPING_ADDRESS, new Accounting(bizType, amount));
+                if (bizStatus) {
+                    vertx.eventBus().send(BOOKKEEPING_ADDRESS, FstUtils.serialize(new Accounting(bizType, amount)));
+                }
                 return;
             }
         }
