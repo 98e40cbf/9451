@@ -19,6 +19,7 @@ import io.alpha.util.DecimalUtil;
 import io.alpha.util.HttpUtils;
 import io.alpha.util.SequenceHelper;
 import io.alpha.web.controller.BaseController;
+import io.alpha.web.secure.SessionProtection;
 import x.y.z.bill.command.LoginForm;
 import x.y.z.bill.command.RealnameForm;
 import x.y.z.bill.command.RegistForm;
@@ -29,10 +30,12 @@ import x.y.z.bill.dto.FreezeMoneyDTO;
 import x.y.z.bill.dto.ModifyMobileDTO;
 import x.y.z.bill.dto.ModifyPasswordDTO;
 import x.y.z.bill.dto.UnfreezeMoneyDTO;
+import x.y.z.bill.dto.UserSession;
 import x.y.z.bill.model.account.CapitalJournal;
 import x.y.z.bill.model.account.User;
 import x.y.z.bill.model.account.UserExtra;
 import x.y.z.bill.service.account.AccountService;
+import x.y.z.bill.util.SessionUtil;
 
 @Controller
 @RequestMapping("/user")
@@ -62,8 +65,13 @@ public class UserController extends BaseController {
         if (result.hasErrors()) {
             return Views.INDEX_VIEW;
         }
-        long login = accountService.login(loginForm, HttpUtils.getRemoteIpAddr(request), userAgent);
-        logger.info("登录：{}", login);
+        UserSession userSession = accountService.login(loginForm, HttpUtils.getRemoteIpAddr(request), userAgent);
+        if (UserSession.NULL != userSession) {
+            SessionUtil.setAttribute(request.getSession(), SessionUtil.CURRENT_LOGIN_USER, userSession);
+            SessionUtil.setAttribute(request.getSession(), SessionUtil.CURRENT_LOGIN_USER_NAME, userSession.getName());
+            SessionProtection.applySessionFixation(request);
+        }
+        logger.info("登录：{}", userSession);
         return "redirect:/";
     }
 

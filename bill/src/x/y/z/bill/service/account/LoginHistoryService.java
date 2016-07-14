@@ -19,7 +19,7 @@ class LoginHistoryService extends UntypedActor {
 
     private static final AtomicReference<LoginHistoryDAO> DAO = new AtomicReference<>();
 
-    public static void checkIn(final long userId, final long loginIp, final String browser) {
+    public static void record(final long userId, final long loginIp, final String browser) {
         LoginHistory loginHistory = new LoginHistory();
         loginHistory.setUserId(userId);
         loginHistory.setLoginIp(loginIp);

@@ -20,6 +20,7 @@ import x.y.z.bill.dto.FreezeMoneyDTO;
 import x.y.z.bill.dto.ModifyMobileDTO;
 import x.y.z.bill.dto.ModifyPasswordDTO;
 import x.y.z.bill.dto.UnfreezeMoneyDTO;
+import x.y.z.bill.dto.UserSession;
 import x.y.z.bill.model.account.CapitalJournal;
 import x.y.z.bill.model.account.User;
 import x.y.z.bill.model.account.UserExtra;
@@ -47,7 +48,7 @@ public class AccountService extends BaseService {
         return true;
     }
 
-    public long login(final LoginForm loginForm, final String loginIp, final String browser) throws Exception {
+    public UserSession login(final LoginForm loginForm, final String loginIp, final String browser) throws Exception {
         String loginId = loginForm.getLoginId();
         User user;
         if (loginId.matches("\\d+")) {
@@ -57,11 +58,11 @@ public class AccountService extends BaseService {
         }
         if (user != null) {
             if (EncryptionUtils.verifyPassword(loginForm.getPassword(), user.getLoginPwd())) {
-                LoginHistoryService.checkIn(user.getId(), convert(loginIp), browser);
-                return user.getId();
+                LoginHistoryService.record(user.getId(), convert(loginIp), browser);
+                return new UserSession(user.getId(), user.getUsername());
             }
         }
-        return -1L;
+        return UserSession.NULL;
     }
 
     private long convert(final String reqIp) {
