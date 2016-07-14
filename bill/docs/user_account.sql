@@ -96,3 +96,22 @@ CREATE TABLE `capitaloperationhistory` (
   `createTime` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for bookkeeping
+-- ----------------------------
+DROP TABLE IF EXISTS `bookkeeping`;
+CREATE TABLE `bookkeeping` (
+  `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+  `recharge` decimal(18,2) NOT NULL,
+  `invest` decimal(18,2) NOT NULL,
+  `withdraw` decimal(18,2) NOT NULL,
+  `lastUpdate` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of bookkeeping
+-- ----------------------------
+INSERT INTO `bookkeeping` VALUES (1, 0.00, 0.00, 0.00, '2016-07-01 00:00:00');
+

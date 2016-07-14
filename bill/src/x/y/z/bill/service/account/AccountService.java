@@ -85,8 +85,8 @@ public class AccountService extends BaseService {
     public boolean add(final AddMoneyDTO addMoneyDTO) {
         try {
             ValidationUtils.validate(addMoneyDTO);
-            capitalService.add(addMoneyDTO.userId, addMoneyDTO.amount, addMoneyDTO.txnId, addMoneyDTO.memo,
-                    addMoneyDTO.bizType);
+            capitalService.add(addMoneyDTO.getUserId(), addMoneyDTO.getAmount(), addMoneyDTO.getTxnId(),
+                    addMoneyDTO.getMemo(), addMoneyDTO.getBizType());
         } catch (Exception e) {
             logger.catching(e);
             if (ExceptionUtil.isDuplicateKey(e)) {
