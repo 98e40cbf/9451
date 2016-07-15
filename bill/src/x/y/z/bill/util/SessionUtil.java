@@ -45,7 +45,7 @@ public final class SessionUtil {
 
     public static void setSMSVerificationCode(final HttpSession session, final String key, final String mobile,
             final String verificationCode) {
-        session.setAttribute(key, String.join("_", mobile, verificationCode));
+        setAttribute(session, key, String.join("_", mobile, verificationCode));
     }
 
     public static boolean verifySMSVerificationCode(final HttpSession session, final String key, final String mobile,
@@ -57,6 +57,7 @@ public final class SessionUtil {
                 String code = savedCode.substring(idx + 1);
                 if (code.equals(verificationCode)) {
                     if (savedCode.substring(0, idx).equals(mobile)) {
+                        session.removeAttribute(key);
                         return true;
                     }
                 }

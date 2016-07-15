@@ -2,8 +2,8 @@ package x.y.z.bill.util;
 
 import java.math.BigDecimal;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.alpha.logging.Logger;
+import io.alpha.logging.LoggerFactory;
 
 public class ArithmeticUtils {
 
