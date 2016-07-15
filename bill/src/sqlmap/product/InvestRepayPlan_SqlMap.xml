@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="x.y.z.bill.mapper.product.InvestRepayPlanDAO">
+	<resultMap id="BaseResultMap" type="x.y.z.bill.model.product.InvestRepayPlan">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="payId" property="payId" jdbcType="BIGINT" />
+		<result column="investId" property="investId" jdbcType="BIGINT" />
+		<result column="userId" property="userId" jdbcType="BIGINT" />
+		<result column="productId" property="productId" jdbcType="BIGINT" />
+		<result column="repayPeriod" property="repayPeriod" jdbcType="VARCHAR" />
+		<result column="repayStatus" property="repayStatus" jdbcType="INTEGER" />
+		<result column="repayDate" property="repayDate" jdbcType="TIMESTAMP" />
+		<result column="orderNo" property="orderNo" jdbcType="VARCHAR" />
+		<result column="stillPrincipal" property="stillPrincipal"
+			jdbcType="DECIMAL" />
+		<result column="stillInterest" property="stillInterest"
+			jdbcType="DECIMAL" />
+		<result column="productName" property="productName" jdbcType="VARCHAR" />
+		<result column="productType" property="productType" jdbcType="INTEGER" />
+		<result column="repaymentType" property="repaymentType"
+			jdbcType="INTEGER" />
+		<result column="createDate" property="createDate" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, payId, investId, userId, productId, repayPeriod, repayStatus,
+		repayDate, orderNo,
+		stillPrincipal, stillInterest, productName, productType, repaymentType, createDate
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from invest_repay_plan
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<insert id="insert" parameterType="x.y.z.bill.model.product.InvestRepayPlan">
+		insert into invest_repay_plan (id, payId, investId,
+		userId, productId, repayPeriod,
+		repayStatus, repayDate, orderNo,
+		stillPrincipal, stillInterest, productName,
+		productType, repaymentType, createDate
+		)
+		values (#{id,jdbcType=BIGINT}, #{payId,jdbcType=BIGINT},
+		#{investId,jdbcType=BIGINT},
+		#{userId,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, #{repayPeriod,jdbcType=VARCHAR},
+		#{repayStatus,jdbcType=INTEGER}, #{repayDate,jdbcType=TIMESTAMP},
+		#{orderNo,jdbcType=VARCHAR},
+		#{stillPrincipal,jdbcType=DECIMAL}, #{stillInterest,jdbcType=DECIMAL}, #{productName,jdbcType=VARCHAR},
+		#{productType,jdbcType=INTEGER}, #{repaymentType,jdbcType=INTEGER},
+		#{createDate,jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+	<insert id="addInvestRepayBatch" useGeneratedKeys="true"
+		parameterType="java.util.List">
+		<selectKey resultType="long" keyProperty="id" order="AFTER">
+			SELECT
+			LAST_INSERT_ID()
+		</selectKey>
+		insert into invest_repay_plan ( payId, investId,
+		userId, productId, repayPeriod,
+		repayStatus, repayDate, orderNo,
+		stillPrincipal, stillInterest, productName,
+		productType, repaymentType, createDate
+		)
+		values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			( #{payId,jdbcType=BIGINT}, #{investId,jdbcType=BIGINT},
+			#{userId,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT},
+			#{repayPeriod,jdbcType=VARCHAR},
+			#{repayStatus,jdbcType=INTEGER}, #{repayDate,jdbcType=TIMESTAMP}, #{orderNo,jdbcType=VARCHAR},
+			#{stillPrincipal,jdbcType=DECIMAL},
+			#{stillInterest,jdbcType=DECIMAL}, #{productName,jdbcType=VARCHAR},
+			#{productType,jdbcType=INTEGER}, #{repaymentType,jdbcType=INTEGER},
+			#{createDate,jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+</mapper>

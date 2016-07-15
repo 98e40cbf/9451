@@ -13,32 +13,33 @@ public class TradeResponseDTO extends BaseObject {
 	private static final long serialVersionUID = 1L;
 
 	private Integer status;
-	private String errorCode;
-	private String errorDetails;
+	private String resultCode;
+	private String resultDetails;
 	private Long data;
 
 	public Integer getStatus() {
 		return status;
 	}
 
+
 	public void setStatus(Integer status) {
 		this.status = status;
 	}
 
-	public String getErrorCode() {
-		return errorCode;
+	public String getResultCode() {
+		return resultCode;
 	}
 
-	public void setErrorCode(String errorCode) {
-		this.errorCode = errorCode;
+	public void setResultCode(String resultCode) {
+		this.resultCode = resultCode;
 	}
 
-	public String getErrorDetails() {
-		return errorDetails;
+	public String getResultDetails() {
+		return resultDetails;
 	}
 
-	public void setErrorDetails(String errorDetails) {
-		this.errorDetails = errorDetails;
+	public void setResultDetails(String resultDetails) {
+		this.resultDetails = resultDetails;
 	}
 
 	public Long getData() {

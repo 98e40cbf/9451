@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="x.y.z.bill.mapper.product.ProductRepayPlanDAO" >
+  <resultMap id="BaseResultMap" type="x.y.z.bill.model.product.ProductRepayPlan" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="repayDate" property="repayDate" jdbcType="TIMESTAMP" />
+    <result column="realRepayDate" property="realRepayDate" jdbcType="TIMESTAMP" />
+    <result column="repayPeriod" property="repayPeriod" jdbcType="VARCHAR" />
+    <result column="hasPI" property="hasPI" jdbcType="DECIMAL" />
+    <result column="stillPrincipal" property="stillPrincipal" jdbcType="DECIMAL" />
+    <result column="stillInterest" property="stillInterest" jdbcType="DECIMAL" />
+    <result column="repayStatus" property="repayStatus" jdbcType="INTEGER" />
+    <result column="productId" property="productId" jdbcType="BIGINT" />
+    <result column="productName" property="productName" jdbcType="VARCHAR" />
+    <result column="productType" property="productType" jdbcType="INTEGER" />
+    <result column="repaymentType" property="repaymentType" jdbcType="INTEGER" />
+    <result column="createDate" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, repayDate, realRepayDate, repayPeriod, hasPI, stillPrincipal, stillInterest, 
+    repayStatus, productId, productName, productType, repaymentType, createDate
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from product_repay_plan
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <insert id="insert" parameterType="x.y.z.bill.model.product.ProductRepayPlan" >
+    insert into product_repay_plan (id, repayDate, realRepayDate, 
+      repayPeriod, hasPI, stillPrincipal, 
+      stillInterest, repayStatus, productId, 
+      productName, productType, repaymentType, 
+      createDate)
+    values (#{id,jdbcType=BIGINT}, #{repayDate,jdbcType=TIMESTAMP}, #{realRepayDate,jdbcType=TIMESTAMP}, 
+      #{repayPeriod,jdbcType=VARCHAR}, #{hasPI,jdbcType=DECIMAL}, #{stillPrincipal,jdbcType=DECIMAL}, 
+      #{stillInterest,jdbcType=DECIMAL}, #{repayStatus,jdbcType=INTEGER}, #{productId,jdbcType=BIGINT}, 
+      #{productName,jdbcType=VARCHAR}, #{productType,jdbcType=INTEGER}, #{repaymentType,jdbcType=INTEGER}, 
+      #{createDate,jdbcType=TIMESTAMP})
+  </insert>
+ 
+</mapper>

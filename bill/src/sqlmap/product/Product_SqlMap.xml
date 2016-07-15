@@ -24,38 +24,7 @@
 		<result column="createDate" property="createDate" jdbcType="TIMESTAMP" />
 		<result column="fullDate" property="fullDate" jdbcType="TIMESTAMP" />
 	</resultMap>
-	<sql id="Example_Where_Clause">
-		<where>
-			<foreach collection="oredCriteria" item="criteria" separator="or">
-				<if test="criteria.valid">
-					<trim prefix="(" suffix=")" prefixOverrides="and">
-						<foreach collection="criteria.criteria" item="criterion">
-							<choose>
-								<when test="criterion.noValue">
-									and ${criterion.condition}
-								</when>
-								<when test="criterion.singleValue">
-									and ${criterion.condition} #{criterion.value}
-								</when>
-								<when test="criterion.betweenValue">
-									and ${criterion.condition} #{criterion.value}
-									and
-									#{criterion.secondValue}
-								</when>
-								<when test="criterion.listValue">
-									and ${criterion.condition}
-									<foreach collection="criterion.value" item="listItem"
-										open="(" close=")" separator=",">
-										#{listItem}
-									</foreach>
-								</when>
-							</choose>
-						</foreach>
-					</trim>
-				</if>
-			</foreach>
-		</where>
-	</sql>
+	
 	<sql id="Base_Column_List">
 		id, productName, amount, annualRate, surplusAmount,
 		investTotalAmount,
@@ -115,6 +84,12 @@
 	<update id="updateProduct" parameterType="Object">
 		update product set
 		surplusAmount=#{surplusAmount,jdbcType=DECIMAL},investTotalAmount=#{investTotalAmount,jdbcType=DECIMAL},investSchedule=#{investSchedule,jdbcType=DECIMAL}
+		where id=#{productId,jdbcType=BIGINT}
+	</update>
+	
+	<update id="updateSoldProduct" parameterType="Object">
+		update product set
+		status=#{status,jdbcType=BIGINT},valueDate=#{valueDate,jdbcType=TIMESTAMP},fullDate=#{fullDate,jdbcType=TIMESTAMP}
 		where id=#{productId,jdbcType=BIGINT}
 	</update>
 </mapper>
