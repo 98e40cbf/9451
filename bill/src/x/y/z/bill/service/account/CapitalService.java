@@ -7,11 +7,17 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import io.alpha.core.config.ProcessorHelper;
 import io.alpha.core.dto.PageResultDTO;
+import io.alpha.log.annotation.IgnoreLog;
 import io.alpha.mybatis.statement.RecordCountHelper;
 import io.alpha.service.BaseService;
 import io.alpha.tx.annotation.TransMark;
 import io.alpha.util.DecimalUtil;
+import io.alpha.util.FstUtils;
+import io.alpha.vertx.util.VertxUtils;
+import io.vertx.core.DeploymentOptions;
+import io.vertx.core.Vertx;
 import x.y.z.bill.constant.BizType;
 import x.y.z.bill.constant.Direction;
 import x.y.z.bill.exception.AccountNotFoundExcepiton;
@@ -22,9 +28,19 @@ import x.y.z.bill.mapper.account.CapitalJournalDAO;
 import x.y.z.bill.model.account.CapitalAccount;
 import x.y.z.bill.model.account.CapitalJournal;
 
+@IgnoreLog
 @Service
 @TransMark
 class CapitalService extends BaseService {
+
+    static final String BOOKKEEPING_ADDRESS = "bookkeeping.accounting.address";
+    private static final Vertx vertx;
+
+    static {
+        vertx = VertxUtils.get("BOOKKEEPING-ACCOUNTING-Vertx");
+        vertx.deployVerticle(BookKeepingVerticle.class.getName(),
+                new DeploymentOptions().setInstances(ProcessorHelper.triple()));
+    }
 
     @Autowired
     private CapitalAccountDAO capitalAccountDAO;
@@ -67,6 +83,7 @@ class CapitalService extends BaseService {
                 journal.setDigest("n/a");
                 journal.setMemo(memo);
                 capitalJournalDAO.insert(journal);
+                vertx.eventBus().send(BOOKKEEPING_ADDRESS, FstUtils.serialize(new Accounting(bizType, amount)));
                 return;
             }
         }
@@ -140,6 +157,9 @@ class CapitalService extends BaseService {
                 journal.setDigest("n/a");
                 journal.setMemo(memo);
                 capitalJournalDAO.insert(journal);
+                if (bizStatus) {
+                    vertx.eventBus().send(BOOKKEEPING_ADDRESS, FstUtils.serialize(new Accounting(bizType, amount)));
+                }
                 return;
             }
         }

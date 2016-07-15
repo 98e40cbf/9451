@@ -19,4 +19,6 @@ public interface UserDAO {
     int updateLoginPassword(User user);
 
     int updatePaymentPassword(User user);
+
+    int updateMobile(User user);
 }

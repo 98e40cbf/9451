@@ -15,16 +15,16 @@ public class AddMoneyDTO extends BaseObject {
     private static final long serialVersionUID = 5029181108005392100L;
     @NotNull
     @Min(1L)
-    public Long userId;
+    private Long userId;
     @NotNull
     @DecimalMin("0.01")
-    public BigDecimal amount;
+    private BigDecimal amount;
     @Length(min = 1, max = 40)
-    public String txnId;
+    private String txnId;
     @NotNull
-    public BizType bizType;
+    private BizType bizType;
     @Length(max = 50)
-    public String memo;
+    private String memo;
 
     public AddMoneyDTO() {
     }

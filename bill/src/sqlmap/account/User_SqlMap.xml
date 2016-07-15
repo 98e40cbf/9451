@@ -61,4 +61,9 @@
 		set paymentPwd = #{paymentPwd,jdbcType=VARCHAR},
 		where id = #{id,jdbcType=BIGINT}
 	</update>
+	<update id="updateMobile" parameterType="x.y.z.bill.model.account.User">
+		update user_base
+		set mobile = #{mobile,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
 </mapper>

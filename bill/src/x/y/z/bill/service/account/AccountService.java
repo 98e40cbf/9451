@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import io.alpha.core.dto.PageResultDTO;
+import io.alpha.log.annotation.IgnoreLog;
 import io.alpha.mybatis.session.CountBounds;
 import io.alpha.security.util.EncryptionUtils;
 import io.alpha.service.BaseService;
@@ -16,14 +17,17 @@ import x.y.z.bill.constant.BizType;
 import x.y.z.bill.constant.IdCardType;
 import x.y.z.bill.dto.AddMoneyDTO;
 import x.y.z.bill.dto.FreezeMoneyDTO;
+import x.y.z.bill.dto.ModifyMobileDTO;
 import x.y.z.bill.dto.ModifyPasswordDTO;
 import x.y.z.bill.dto.UnfreezeMoneyDTO;
+import x.y.z.bill.dto.UserSession;
 import x.y.z.bill.model.account.CapitalJournal;
 import x.y.z.bill.model.account.User;
 import x.y.z.bill.model.account.UserExtra;
 import x.y.z.bill.util.ExceptionUtil;
 import x.y.z.bill.util.SensitiveWords;
 
+@IgnoreLog
 @Service
 public class AccountService extends BaseService {
 
@@ -44,7 +48,7 @@ public class AccountService extends BaseService {
         return true;
     }
 
-    public long login(final LoginForm loginForm, final String loginIp, final String browser) throws Exception {
+    public UserSession login(final LoginForm loginForm, final String loginIp, final String browser) throws Exception {
         String loginId = loginForm.getLoginId();
         User user;
         if (loginId.matches("\\d+")) {
@@ -54,11 +58,11 @@ public class AccountService extends BaseService {
         }
         if (user != null) {
             if (EncryptionUtils.verifyPassword(loginForm.getPassword(), user.getLoginPwd())) {
-                LoginHistoryService.checkIn(user.getId(), convert(loginIp), browser);
-                return user.getId();
+                LoginHistoryService.record(user.getId(), convert(loginIp), browser);
+                return new UserSession(user.getId(), user.getUsername());
             }
         }
-        return -1L;
+        return UserSession.NULL;
     }
 
     private long convert(final String reqIp) {
@@ -83,8 +87,8 @@ public class AccountService extends BaseService {
     public boolean add(final AddMoneyDTO addMoneyDTO) {
         try {
             ValidationUtils.validate(addMoneyDTO);
-            capitalService.add(addMoneyDTO.userId, addMoneyDTO.amount, addMoneyDTO.txnId, addMoneyDTO.memo,
-                    addMoneyDTO.bizType);
+            capitalService.add(addMoneyDTO.getUserId(), addMoneyDTO.getAmount(), addMoneyDTO.getTxnId(),
+                    addMoneyDTO.getMemo(), addMoneyDTO.getBizType());
         } catch (Exception e) {
             logger.catching(e);
             if (ExceptionUtil.isDuplicateKey(e)) {
@@ -125,22 +129,24 @@ public class AccountService extends BaseService {
         return true;
     }
 
-    public boolean updateLoginPassword(final ModifyPasswordDTO modifyPasswordDTO) {
+    public boolean modifyLoginPassword(final ModifyPasswordDTO modifyPasswordDTO) {
         try {
             ValidationUtils.validate(modifyPasswordDTO);
-            return userService.updateLoginPassword(modifyPasswordDTO.getUserId(), modifyPasswordDTO.getOldPassword(),
+            return userService.modifyLoginPassword(modifyPasswordDTO.getUserId(), modifyPasswordDTO.getOldPassword(),
                     modifyPasswordDTO.getNewPassword()) == 1;
         } catch (Exception e) {
+            logger.catching(e);
         }
         return false;
     }
 
-    public boolean updatePaymentPassword(final ModifyPasswordDTO modifyPasswordDTO) {
+    public boolean modifyPaymentPassword(final ModifyPasswordDTO modifyPasswordDTO) {
         try {
             ValidationUtils.validate(modifyPasswordDTO);
-            return userService.updatePaymentPassword(modifyPasswordDTO.getUserId(), modifyPasswordDTO.getOldPassword(),
+            return userService.modifyPaymentPassword(modifyPasswordDTO.getUserId(), modifyPasswordDTO.getOldPassword(),
                     modifyPasswordDTO.getNewPassword()) == 1;
         } catch (Exception e) {
+            logger.catching(e);
         }
         return false;
     }
@@ -149,6 +155,7 @@ public class AccountService extends BaseService {
         try {
             return capitalService.queryJournalByUserId(userId, (byte) 0, new CountBounds(0, 10));
         } catch (Exception e) {
+            logger.catching(e);
             return new PageResultDTO<>();
         }
     }
@@ -157,6 +164,7 @@ public class AccountService extends BaseService {
         try {
             return capitalService.queryJournalByUserId(userId, BizType.RECHARGE.getCode(), new CountBounds(0, 10));
         } catch (Exception e) {
+            logger.catching(e);
             return new PageResultDTO<>();
         }
     }
@@ -166,15 +174,41 @@ public class AccountService extends BaseService {
             return capitalService.queryJournalByUserId(userId, BizType.WITHDRAW_UNFREEZE.getCode(),
                     new CountBounds(0, 10));
         } catch (Exception e) {
+            logger.catching(e);
             return new PageResultDTO<>();
         }
     }
 
-    public UserExtra queryRealName(final Long userId) {
+    public UserExtra queryExtra(final Long userId) {
         try {
             return userService.queryExtra(userId);
         } catch (Exception e) {
+            logger.catching(e);
             return new UserExtra();
+        }
+    }
+
+    public User queryUser(final Long id) {
+        try {
+            return userService.queryUser(id);
+        } catch (Exception e) {
+            logger.catching(e);
+            return new User();
+        }
+    }
+
+    public boolean modifyMobile(final ModifyMobileDTO modifyMobileDTO) {
+        try {
+            ValidationUtils.validate(modifyMobileDTO);
+            boolean success = userService.modifyMobile(modifyMobileDTO.getUserId(), modifyMobileDTO.getOldMobile(),
+                    modifyMobileDTO.getNewMobile()) == 1;
+            if (success) {
+                MobileChangeHistoryService.record(modifyMobileDTO.getUserId(), modifyMobileDTO.getOldMobile(),
+                        modifyMobileDTO.getNewMobile());
+            }
+            return success;
+        } catch (Exception e) {
+            return false;
         }
     }
 
