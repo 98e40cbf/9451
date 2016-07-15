@@ -3,7 +3,6 @@ package x.y.z.bill.service.product;
 import io.alpha.core.dto.PageResultDTO;
 import io.alpha.mybatis.statement.RecordCountHelper;
 import io.alpha.service.BaseService;
-import io.alpha.util.DateUtils;
 import io.alpha.util.DecimalUtil;
 
 import java.math.BigDecimal;
@@ -11,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
