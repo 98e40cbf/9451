@@ -59,7 +59,7 @@ public class AccountService extends BaseService {
         if (user != null) {
             if (EncryptionUtils.verifyPassword(loginForm.getPassword(), user.getLoginPwd())) {
                 LoginHistoryService.record(user.getId(), convert(loginIp), browser);
-                return new UserSession(user.getId(), user.getUsername());
+                return new UserSession(user.getId(), user.getUsername(), user.getMobile());
             }
         }
         return UserSession.NULL;
@@ -200,14 +200,15 @@ public class AccountService extends BaseService {
     public boolean modifyMobile(final ModifyMobileDTO modifyMobileDTO) {
         try {
             ValidationUtils.validate(modifyMobileDTO);
-            boolean success = userService.modifyMobile(modifyMobileDTO.getUserId(), modifyMobileDTO.getOldMobile(),
+            boolean status = userService.modifyMobile(modifyMobileDTO.getUserId(), modifyMobileDTO.getOldMobile(),
                     modifyMobileDTO.getNewMobile()) == 1;
-            if (success) {
+            if (status) {
                 MobileChangeHistoryService.record(modifyMobileDTO.getUserId(), modifyMobileDTO.getOldMobile(),
                         modifyMobileDTO.getNewMobile());
             }
-            return success;
+            return status;
         } catch (Exception e) {
+            logger.catching(e);
             return false;
         }
     }

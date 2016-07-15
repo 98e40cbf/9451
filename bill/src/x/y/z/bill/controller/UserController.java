@@ -66,9 +66,9 @@ public class UserController extends BaseController {
             return Views.INDEX_VIEW;
         }
         UserSession userSession = accountService.login(loginForm, HttpUtils.getRemoteIpAddr(request), userAgent);
-        if (UserSession.NULL != userSession) {
-            SessionUtil.setAttribute(request.getSession(), SessionUtil.CURRENT_LOGIN_USER, userSession);
-            SessionUtil.setAttribute(request.getSession(), SessionUtil.CURRENT_LOGIN_USER_NAME, userSession.getName());
+        if (!UserSession.NULL.equals(userSession)) {
+            SessionUtil.setAttribute(request, SessionUtil.CURRENT_LOGIN_USER, userSession);
+            SessionUtil.setAttribute(request, SessionUtil.CURRENT_LOGIN_USER_NAME, userSession.getName());
             SessionProtection.applySessionFixation(request);
         }
         logger.info("登录：{}", userSession);
@@ -147,6 +147,12 @@ public class UserController extends BaseController {
     public String modifyMobile(final long userId, final String oldMobile, final String newMobile) {
         boolean status = accountService.modifyMobile(new ModifyMobileDTO(userId, oldMobile, newMobile));
         logger.info("更改手机号：{}", status);
+        return "redirect:/";
+    }
+
+    @GetMapping("/logout")
+    public String logout(final HttpServletRequest request) {
+        SessionUtil.invalidate(request.getSession());
         return "redirect:/";
     }
 

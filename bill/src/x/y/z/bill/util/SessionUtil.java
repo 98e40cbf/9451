@@ -20,7 +20,7 @@ public final class SessionUtil {
     }
 
     public static boolean hasLogin(final HttpSession session) {
-        return currentUser(session) != UserSession.NULL;
+        return UserSession.NULL.equals(currentUser(session)) == false;
     }
 
     public static UserSession currentUser(final HttpSession session) {
@@ -30,6 +30,56 @@ public final class SessionUtil {
         }
         return UserSession.NULL;
 
+    }
+
+    public static void invalidate(final HttpSession session) {
+        // Enumeration<String> attributeNames = session.getAttributeNames();
+        // List<String> names = new ArrayList<>();
+        // while (attributeNames.hasMoreElements()) {
+        // names.add(attributeNames.nextElement());
+        // }
+        // names.forEach(session::removeAttribute);
+        session.removeAttribute(CURRENT_LOGIN_USER);
+        session.invalidate();
+    }
+
+    public static void setSMSVerificationCode(final HttpSession session, final String key, final String mobile,
+            final String verificationCode) {
+        session.setAttribute(key, String.join("_", mobile, verificationCode));
+    }
+
+    public static boolean verifySMSVerificationCode(final HttpSession session, final String key, final String mobile,
+            final String verificationCode) {
+        String savedCode = (String) session.getAttribute(key);
+        if (savedCode != null) {
+            int idx = savedCode.indexOf("_");
+            if (idx > 0) {
+                String code = savedCode.substring(idx + 1);
+                if (code.equals(verificationCode)) {
+                    if (savedCode.substring(0, idx).equals(mobile)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public static void setSMSVerificationCode(final HttpSession session, final String key,
+            final String verificationCode) {
+        UserSession currentUser = currentUser(session);
+        if (!UserSession.NULL.equals(currentUser)) {
+            setSMSVerificationCode(session, key, currentUser.getMobile(), verificationCode);
+        }
+    }
+
+    public static boolean verifySMSVerificationCode(final HttpSession session, final String key,
+            final String verificationCode) {
+        UserSession currentUser = currentUser(session);
+        if (UserSession.NULL.equals(currentUser)) {
+            return false;
+        }
+        return verifySMSVerificationCode(session, key, currentUser.getMobile(), verificationCode);
     }
 
 }

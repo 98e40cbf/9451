@@ -4,19 +4,21 @@ import io.alpha.core.model.BaseObject;
 
 public final class UserSession extends BaseObject {
 
-    private static final long serialVersionUID = 9120238102262445775L;
+    private static final long serialVersionUID = -536789386612459567L;
 
     public static final UserSession NULL = new UserSession();
 
-    private long id = 0L;
-    private String name = "";
+    private long id = -1L;
+    private String name = "n/a";
+    private String mobile = "n/a";
 
     public UserSession() {
     }
 
-    public UserSession(final long id, final String name) {
+    public UserSession(final long id, final String name, final String mobile) {
         this.id = id;
         this.name = name;
+        this.mobile = mobile;
     }
 
     public long getId() {
@@ -33,5 +35,13 @@ public final class UserSession extends BaseObject {
 
     public void setName(final String name) {
         this.name = name;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(final String mobile) {
+        this.mobile = mobile;
     }
 }

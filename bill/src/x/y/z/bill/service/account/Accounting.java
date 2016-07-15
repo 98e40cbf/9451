@@ -3,6 +3,7 @@ package x.y.z.bill.service.account;
 import java.math.BigDecimal;
 
 import io.alpha.core.model.BaseObject;
+import io.alpha.util.DecimalUtil;
 import x.y.z.bill.constant.BizType;
 
 class Accounting extends BaseObject {
@@ -13,7 +14,7 @@ class Accounting extends BaseObject {
 
     public Accounting(final BizType bizType, final BigDecimal amount) {
         this.bizType = bizType;
-        this.amount = amount;
+        this.amount = DecimalUtil.format(amount);
     }
 
     public BizType getBizType() {

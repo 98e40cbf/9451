@@ -111,6 +111,14 @@
 				</form>
 			</td>
 		</tr>
+		<tr>
+			<td>退出: <br />
+				<form action="${contextPath}/user/logout" method="get">
+					<input type="submit" />
+				</form>
+			</td>
+			<td>&nbsp;
+		</tr>
 	</table>
 
 
