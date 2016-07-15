@@ -19,5 +19,6 @@
 		<context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice" />
 	</context:component-scan>
 
+	<bean id="billRedisConnection" class="x.y.z.bill.component.RedisConnectionFactoryBean" />
 
 </beans>
