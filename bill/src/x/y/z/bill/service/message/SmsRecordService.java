@@ -47,9 +47,9 @@ public class SmsRecordService extends BaseService {
         smsRecord.setSmsTemplateCode(smsTypeEnum.getTemplateCode());
         smsRecord.setPriority(SmsPriority.INESSENTIAL);
         smsRecord.setCreateTime(new Date());
-        try{
+        try {
             smsRecordDAO.insert(smsRecord);
-        }catch (Exception e){
+        } catch (Exception e) {
             if (ExceptionUtil.isDuplicateKey(e)) {
                 return getByTxnId(txnId);
             }
