@@ -10,9 +10,9 @@ import io.alpha.validation.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import x.y.z.bill.builder.ResultBuilder;
-import x.y.z.bill.constant.ResultTypeEnum;
-import x.y.z.bill.constant.SmsTypeEnum;
-import x.y.z.bill.dto.SmsDTO;
+import x.y.z.bill.constant.message.ResultTypeEnum;
+import x.y.z.bill.constant.message.SmsTypeEnum;
+import x.y.z.bill.dto.message.SmsDTO;
 import x.y.z.bill.model.message.SmsRecord;
 
 /**

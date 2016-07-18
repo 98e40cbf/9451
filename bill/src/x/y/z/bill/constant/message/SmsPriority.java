@@ -1,4 +1,4 @@
-package x.y.z.bill.constant;
+package x.y.z.bill.constant.message;
 
 /**
  * 短信优先等级

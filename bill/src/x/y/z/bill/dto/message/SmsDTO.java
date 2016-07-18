@@ -1,8 +1,8 @@
-package x.y.z.bill.dto;
+package x.y.z.bill.dto.message;
 
 import io.alpha.core.model.BaseObject;
 import org.hibernate.validator.constraints.Length;
-import x.y.z.bill.constant.SmsTypeEnum;
+import x.y.z.bill.constant.message.SmsTypeEnum;
 
 import javax.validation.constraints.NotNull;
 

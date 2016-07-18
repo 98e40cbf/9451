@@ -1,4 +1,4 @@
-package x.y.z.bill.constant;
+package x.y.z.bill.constant.message;
 
 /**
  * 操作结果类型.

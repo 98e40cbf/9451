@@ -1,7 +1,7 @@
 package x.y.z.bill.builder;
 
 import io.alpha.core.dto.ResultDTO;
-import x.y.z.bill.constant.ResultTypeEnum;
+import x.y.z.bill.constant.message.ResultTypeEnum;
 
 public final class ResultBuilder {
     private ResultBuilder() {

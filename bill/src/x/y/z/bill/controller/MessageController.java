@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import x.y.z.bill.command.RegistForm;
-import x.y.z.bill.constant.SmsTypeEnum;
+import x.y.z.bill.constant.message.SmsTypeEnum;
 import x.y.z.bill.constant.Views;
-import x.y.z.bill.dto.SmsDTO;
+import x.y.z.bill.dto.message.SmsDTO;
 import x.y.z.bill.service.message.SmsFacade;
 
 import javax.validation.Valid;
