@@ -54,16 +54,16 @@
 	<update id="updateLoginPassword" parameterType="x.y.z.bill.model.account.ValueUpdate">
 		update user_base
 		set loginPwd = #{newValue,jdbcType=VARCHAR}
-		where id = #{id,jdbcType=BIGINT} and loginPwd = ${oldValue}
+		where id = #{id,jdbcType=BIGINT} and loginPwd = #{oldValue}
 	</update>
 	<update id="updatePaymentPassword" parameterType="x.y.z.bill.model.account.ValueUpdate">
 		update user_base
 		set paymentPwd = #{newValue,jdbcType=VARCHAR},
-		where id = #{id,jdbcType=BIGINT} and paymentPwd = ${oldValue}
+		where id = #{id,jdbcType=BIGINT} and paymentPwd = #{oldValue}
 	</update>
 	<update id="updateMobile" parameterType="x.y.z.bill.model.account.ValueUpdate">
 		update user_base
 		set mobile = #{newValue,jdbcType=VARCHAR}
-		where id = #{id,jdbcType=BIGINT} and mobile = ${oldValue}
+		where id = #{id,jdbcType=BIGINT} and mobile = #{oldValue}
 	</update>
 </mapper>

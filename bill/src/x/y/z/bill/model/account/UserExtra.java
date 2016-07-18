@@ -1,5 +1,7 @@
 package x.y.z.bill.model.account;
 
+import java.util.Date;
+
 import io.alpha.core.model.BaseObject;
 
 public class UserExtra extends BaseObject {
@@ -14,6 +16,8 @@ public class UserExtra extends BaseObject {
     private String idCardNo;
 
     private Byte idCardType;
+
+    private Date createTime = new Date();
 
     public Long getId() {
         return id;
@@ -53,5 +57,13 @@ public class UserExtra extends BaseObject {
 
     public void setIdCardType(final Byte idCardType) {
         this.idCardType = idCardType;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(final Date createTime) {
+        this.createTime = createTime;
     }
 }

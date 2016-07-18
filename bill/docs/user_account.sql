@@ -63,16 +63,18 @@ CREATE TABLE `user_extra` (
   `realName` varchar(100) NOT NULL,
   `idCardNo` varchar(100) NOT NULL,
   `idCardType` tinyint(3) unsigned NOT NULL,
+  `createTime` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_idCardNo` (`idCardNo`),
   UNIQUE KEY `uk_userId` (`userId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for login_history
+-- Table structure for user_login_history
 -- ----------------------------
 DROP TABLE IF EXISTS `login_history`;
-CREATE TABLE `login_history` (
+DROP TABLE IF EXISTS `user_login_history`;
+CREATE TABLE `user_login_history` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `userId` bigint(20) NOT NULL,
   `loginIp` bigint(20) NOT NULL,
