@@ -3,6 +3,7 @@ package x.y.z.bill.mapper.account;
 import org.springframework.stereotype.Repository;
 
 import x.y.z.bill.model.account.User;
+import x.y.z.bill.model.account.ValueUpdate;
 
 @Repository
 public interface UserDAO {
@@ -16,9 +17,9 @@ public interface UserDAO {
 
     User selectByMobile(String mobile);
 
-    int updateLoginPassword(User user);
+    int updateLoginPassword(ValueUpdate value);
 
-    int updatePaymentPassword(User user);
+    int updatePaymentPassword(ValueUpdate value);
 
-    int updateMobile(User user);
+    int updateMobile(ValueUpdate value);
 }

@@ -50,19 +50,23 @@ public class AccountService extends BaseService {
 
     public UserSession login(final LoginForm loginForm, final String loginIp, final String browser) throws Exception {
         String loginId = loginForm.getLoginId();
-        User user;
-        if (loginId.matches("\\d+")) {
-            user = userService.queryByMobile(EncryptionUtils.encryptByAES(loginId));
-        } else {
-            user = userService.queryByName(loginId);
-        }
-        if (user != null) {
-            if (EncryptionUtils.verifyPassword(loginForm.getPassword(), user.getLoginPwd())) {
-                LoginHistoryService.record(user.getId(), convert(loginIp), browser);
-                return new UserSession(user.getId(), user.getUsername(), user.getMobile());
+        try {
+            User user;
+            if (loginId.matches("\\d+")) {
+                user = userService.queryByMobile(EncryptionUtils.encryptByAES(loginId));
+            } else {
+                user = userService.queryByName(loginId);
             }
+            if (user != null) {
+                if (EncryptionUtils.verifyPassword(loginForm.getPassword(), user.getLoginPwd())) {
+                    LoginHistoryService.record(user.getId(), convert(loginIp), browser);
+                    return new UserSession(user.getId(), user.getUsername(), user.getMobile());
+                }
+            }
+        } catch (Exception e) {
+            logger.catching(e);
         }
-        return UserSession.NULL;
+        return UserSession.NONE;
     }
 
     private long convert(final String reqIp) {

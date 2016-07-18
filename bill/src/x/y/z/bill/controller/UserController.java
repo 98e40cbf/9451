@@ -66,7 +66,7 @@ public class UserController extends BaseController {
             return Views.INDEX_VIEW;
         }
         UserSession userSession = accountService.login(loginForm, HttpUtils.getRemoteIpAddr(request), userAgent);
-        if (!UserSession.NULL.equals(userSession)) {
+        if (!UserSession.NONE.equals(userSession)) {
             SessionUtil.setAttribute(request, SessionUtil.CURRENT_LOGIN_USER, userSession);
             SessionUtil.setAttribute(request, SessionUtil.CURRENT_LOGIN_USER_NAME, userSession.getName());
             SessionProtection.applySessionFixation(request);

@@ -6,7 +6,7 @@ public final class UserSession extends BaseObject {
 
     private static final long serialVersionUID = -536789386612459567L;
 
-    public static final UserSession NULL = new UserSession();
+    public static final UserSession NONE = new UserSession();
 
     private long id = -1L;
     private String name = "n/a";

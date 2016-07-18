@@ -49,7 +49,7 @@ public final class SessionUtil {
     }
 
     public static boolean hasLogin(final HttpSession session) {
-        return UserSession.NULL.equals(currentUser(session)) == false;
+        return UserSession.NONE.equals(currentUser(session)) == false;
     }
 
     public static UserSession currentUser(final HttpSession session) {
@@ -57,7 +57,7 @@ public final class SessionUtil {
         if (object instanceof UserSession) {
             return (UserSession) object;
         }
-        return UserSession.NULL;
+        return UserSession.NONE;
 
     }
 
@@ -104,7 +104,7 @@ public final class SessionUtil {
     public static void setSMSVerificationCode(final HttpSession session, final String key,
             final String verificationCode) {
         UserSession currentUser = currentUser(session);
-        if (!UserSession.NULL.equals(currentUser)) {
+        if (!UserSession.NONE.equals(currentUser)) {
             setSMSVerificationCode(session, key, currentUser.getMobile(), verificationCode);
         }
     }
@@ -112,10 +112,25 @@ public final class SessionUtil {
     public static boolean verifySMSVerificationCode(final HttpSession session, final String key,
             final String verificationCode) {
         UserSession currentUser = currentUser(session);
-        if (UserSession.NULL.equals(currentUser)) {
+        if (UserSession.NONE.equals(currentUser)) {
             return false;
         }
         return verifySMSVerificationCode(session, key, currentUser.getMobile(), verificationCode);
+    }
+
+    /**
+     * 用于事件重复操作限制，如：60S只能发一次短信验证码.
+     *
+     * @return true key存在且未过期.
+     */
+    public static boolean existsOrSetWithTimeout(final String key, final int seconds, final String value) {
+        RedisConnection<String, String> connection = get();
+        String storedValue = connection.get(key);
+        if (storedValue == null) {
+            connection.setex(key, seconds, value);
+            return false;
+        }
+        return true;
     }
 
     public static boolean checkVerificationLimit(final String key, final int limit) {

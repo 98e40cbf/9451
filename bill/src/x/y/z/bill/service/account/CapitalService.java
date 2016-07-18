@@ -64,7 +64,7 @@ class CapitalService extends BaseService {
         for (;;) {
             CapitalAccount account = capitalAccountDAO.selectByUserId(userId);
             if (account == null) {
-                throw new AccountNotFoundExcepiton("资金账户不存在.");
+                throw new AccountNotFoundExcepiton("资金账户不存在:" + userId);
             }
             account.setBalance(DecimalUtil.add(account.getBalance(), amount));
             account.setDigest("n/a");
@@ -95,10 +95,10 @@ class CapitalService extends BaseService {
         for (;;) {
             CapitalAccount account = capitalAccountDAO.selectByUserId(userId);
             if (account == null) {
-                throw new AccountNotFoundExcepiton("资金账户不存在.");
+                throw new AccountNotFoundExcepiton("资金账户不存在:" + userId);
             }
             if (DecimalUtil.lt(account.getBalance(), amount)) {
-                throw new BalanceNotEnoughException("余额不足.");
+                throw new BalanceNotEnoughException("余额不足:" + userId);
             }
             account.setBalance(DecimalUtil.subtract(account.getBalance(), amount));
             account.setFrozen(DecimalUtil.add(account.getFrozen(), amount));
@@ -129,12 +129,12 @@ class CapitalService extends BaseService {
         for (;;) {
             CapitalAccount account = capitalAccountDAO.selectByUserId(userId);
             if (account == null) {
-                throw new AccountNotFoundExcepiton("资金账户不存在.");
+                throw new AccountNotFoundExcepiton("资金账户不存在:" + userId);
             }
             CapitalJournal origJournal = capitalJournalDAO.selectByUserIdTxnIdAndBizType(userId, origTxnId,
                     BizType.preType(bizType));
             if (origJournal == null) {
-                throw new CapitalJournalNotFoundException("冻结申请流水不存在.");
+                throw new CapitalJournalNotFoundException("冻结申请流水不存在:" + origTxnId);
             }
             BigDecimal amount = origJournal.getAmount();
             account.setFrozen(DecimalUtil.subtract(account.getFrozen(), amount));
