@@ -13,14 +13,15 @@ public final class IdCardNoValidator {
 
     private static final int POWER[] = { 7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2 };
 
+    private static final Pattern P = Pattern
+            .compile("^[1-9]\\d{5}(?:19|20)\\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|1[0-9]|2[0-9]|3[0-1])\\d{3}(?:\\d|x|X)$");
+
     public static boolean validate(final String idCardNo) {
         if (isIdCardNo(idCardNo)) {
             return validate0(idCardNo);
         }
         return false;
     }
-
-    private static final Pattern P = Pattern.compile("^\\d{17}(?:\\d|x|X)$");
 
     private static boolean isIdCardNo(final String idCardNo) {
         if (StringUtils.isBlank(idCardNo) || idCardNo.length() != 18) {
@@ -74,10 +75,10 @@ public final class IdCardNoValidator {
     }
 
     private static int[] converCharToInt(final char[] chars) throws NumberFormatException {
-        int[] arr = new int[chars.length];
+        int[] array = new int[chars.length];
         for (int i = 0; i < chars.length; i++) {
-            arr[i] = CharUtils.toIntValue(chars[i]);
+            array[i] = CharUtils.toIntValue(chars[i]);
         }
-        return arr;
+        return array;
     }
 }
