@@ -30,34 +30,17 @@ public final class IdCardNoValidator {
     }
 
     private static boolean validate0(final String idCardNo) {
-        char front17Chars[] = idCardNo.substring(0, 17).toCharArray();
-        if (!isDigital(front17Chars)) {
-            return false;
-        }
-        String checkCode = calculateCheckCode(powerSum(converCharToInt(front17Chars)));
-        String lastChar = idCardNo.substring(17, 18);
-        if (!lastChar.equalsIgnoreCase(checkCode)) {
-            return false;
-        }
-        return true;
+        return idCardNo.substring(17).equalsIgnoreCase(
+                calculateCheckCode(powerSum(converCharToInt(idCardNo.substring(0, 17).toCharArray()))));
     }
 
-    private static boolean isDigital(final char[] chars) {
-        for (char c : chars) {
-            if (!Character.isDigit(c)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private static int powerSum(final int[] bit) {
+    private static int powerSum(final int[] bits) {
         int sum = 0;
-        if (POWER.length != bit.length) {
+        if (POWER.length != bits.length) {
             return sum;
         }
-        for (int i = 0; i < bit.length; i++) {
-            sum = sum + bit[i] * POWER[i];
+        for (int i = 0; i < bits.length; i++) {
+            sum = sum + bits[i] * POWER[i];
         }
         return sum;
     }
