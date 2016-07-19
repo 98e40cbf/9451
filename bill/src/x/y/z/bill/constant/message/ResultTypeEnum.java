@@ -4,14 +4,16 @@ package x.y.z.bill.constant.message;
  * 操作结果类型.
  */
 public enum ResultTypeEnum {
-    /** 0 - 失败 */
-    FAILED((byte) 0, "FAILED", "失败"),
+    /** 0 - 不确定的 */
+    UNSURE((byte) 0, "UNSURE", "不确定的"),
     /** 1 - 成功 */
     SUCCESS((byte) 1, "SUCCESS", "成功"),
     /** 2 - 失败 */
-    PARAM_INVALID((byte) 2, "PARAM_INVALID", "无效的参数"),
-    /** 3 - 超时 */
-    OVERTIME((byte) 3, "OVERTIME", "超时");
+    FAILED((byte) 2, "FAILED", "失败"),
+    /** 3 - 失败 */
+    PARAM_INVALID((byte) 3, "PARAM_INVALID", "无效的参数"),
+    /** 4 - 超时 */
+    OVERTIME((byte) 4, "OVERTIME", "超时");
 
     private byte status;
     private String code;

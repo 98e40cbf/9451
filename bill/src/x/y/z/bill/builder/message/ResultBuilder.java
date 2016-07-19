@@ -1,4 +1,4 @@
-package x.y.z.bill.builder;
+package x.y.z.bill.builder.message;
 
 import io.alpha.core.dto.ResultDTO;
 import x.y.z.bill.constant.message.ResultTypeEnum;

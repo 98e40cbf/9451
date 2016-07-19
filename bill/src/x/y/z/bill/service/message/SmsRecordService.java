@@ -1,6 +1,7 @@
 package x.y.z.bill.service.message;
 
 import io.alpha.service.BaseService;
+import io.alpha.tx.annotation.TransMark;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import x.y.z.bill.constant.message.SmsPriority;
@@ -13,6 +14,7 @@ import x.y.z.bill.util.ExceptionUtil;
 import java.util.Date;
 
 @Service
+@TransMark
 public class SmsRecordService extends BaseService {
     @Autowired
     private SmsRecordDAO smsRecordDAO;
@@ -48,13 +50,16 @@ public class SmsRecordService extends BaseService {
         smsRecord.setPriority(SmsPriority.INESSENTIAL);
         smsRecord.setCreateTime(new Date());
         try {
-            smsRecordDAO.insert(smsRecord);
+            int result = smsRecordDAO.insert(smsRecord);
+            if (result == 1) {
+                return smsRecord;
+            }
         } catch (Exception e) {
             if (ExceptionUtil.isDuplicateKey(e)) {
                 return getByTxnId(txnId);
             }
             throw e;
         }
-        return smsRecord;
+        return null;
     }
 }
