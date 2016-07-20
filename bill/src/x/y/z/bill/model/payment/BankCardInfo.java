@@ -15,7 +15,7 @@ public class BankCardInfo extends BaseObject {
 
     private String userName;
 
-    private Byte cardType;
+    private Integer cardType;
 
     private String bankCode;
 
@@ -40,6 +40,8 @@ public class BankCardInfo extends BaseObject {
     private Date lastModifyTime;
 
     private Integer version;
+
+    private String clientIp;
 
     public Long getId() {
         return id;
@@ -73,12 +75,13 @@ public class BankCardInfo extends BaseObject {
         this.userName = userName == null ? null : userName.trim();
     }
 
-    public Byte getCardType() {
+    public Integer getCardType() {
         return cardType;
     }
 
-    public void setCardType(Byte cardType) {
+    public BankCardInfo setCardType(Integer cardType) {
         this.cardType = cardType;
+        return this;
     }
 
     public String getBankCode() {
@@ -175,5 +178,14 @@ public class BankCardInfo extends BaseObject {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public String getClientIp() {
+        return clientIp;
+    }
+
+    public BankCardInfo setClientIp(String clientIp) {
+        this.clientIp = clientIp;
+        return this;
     }
 }

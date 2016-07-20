@@ -5,7 +5,7 @@
     <select id="queryEnabledCardBinConfigs" resultType="x.y.z.bill.model.payment.BankCardBin" parameterType="map">
         SELECT
         id, bankCode, bankName, cardName, identifier, type, status, createTime, lastModifyTime
-        from t_payment_bank_card_bin WHERE status = 0
+        from t_payment_bank_card_bin WHERE status = 1
     </select>
 
 </mapper>

@@ -46,6 +46,8 @@ public class ChannelQuickAgreement extends BaseObject {
 
     private Integer version;
 
+    private String clientIp;
+
     private Long bankCardId;
 
     public Long getId() {
@@ -206,5 +208,14 @@ public class ChannelQuickAgreement extends BaseObject {
 
     public void setBankCardId(Long bankCardId) {
         this.bankCardId = bankCardId;
+    }
+
+    public String getClientIp() {
+        return clientIp;
+    }
+
+    public ChannelQuickAgreement setClientIp(String clientIp) {
+        this.clientIp = clientIp;
+        return this;
     }
 }

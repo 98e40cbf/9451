@@ -5,7 +5,7 @@ import java.util.Date;
 
 import io.alpha.core.model.BaseObject;
 
-public class RechageJournal extends BaseObject {
+public class RechargeJournal extends BaseObject {
     private static final long serialVersionUID = 1L;
 
     private Long id;

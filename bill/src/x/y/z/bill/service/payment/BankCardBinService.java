@@ -21,10 +21,9 @@ import io.alpha.tx.annotation.TransMark;
 @TransMark
 public class BankCardBinService extends BaseService {
 
+    public static final Map<String, BankCardBin> CARD_BIN_MAPPING = new HashMap<>();
     @Autowired
     private BankCardBinDAO bankCardBinDAO;
-
-    public static final Map<String, BankCardBin> CARD_BIN_MAPPING = new HashMap<>();
 
     @PostConstruct
     private void loadBankCardBinConfig() {
@@ -60,7 +59,6 @@ public class BankCardBinService extends BaseService {
      */
     public boolean isCreditCard(String bankCardNo) {
         BankCardBin bin = recognition(bankCardNo);
-        return bin != null && bin.getType() != null && bin.getType().intValue() == 0;
+        return bin != null && bin.getType() != null && bin.getType().intValue() == 2;
     }
-
 }

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="x.y.z.bill.mapper.payment.RechargeJournalDAO">
+
+    <select id="queryByTxnId" resultType="x.y.z.bill.model.payment.RechargeJournal" parameterType="map">
+    select 
+    id, txnId, channelCode, channelName, channelSendOrder, channelRecvOrder, amount,
+    cost, status, userId, userName, businessCode, clientIp, actulAmount, remark, replyCode,
+    replyMessage, transTimeout, sendTime, recvTime, toAccountTime, createTime, lastModifyTime
+    from t_payment_recharge_journal
+    where txnId = #{txnId,jdbcType=VARCHAR} limit 1
+  </select>
+    <select id="countRechageJournal" resultType="java.lang.Integer">
+        select
+        count(*)
+        from t_payment_recharge_journal
+        where userId = #{userId,jdbcType=BIGINT}
+        and status = #{status,jdbcType=INTEGER}
+    </select>
+    <select id="queryRechageJournal" resultType="x.y.z.bill.model.payment.RechargeJournal">
+        select
+        id, txnId, channelCode, channelName, channelSendOrder, channelRecvOrder, amount,
+        cost, status, userId, userName, businessCode, clientIp, actulAmount, remark, replyCode,
+        replyMessage, transTimeout, sendTime, recvTime, toAccountTime, createTime, lastModifyTime
+        from t_payment_recharge_journal
+        where userId = #{userId,jdbcType=BIGINT}
+        and status = #{status,jdbcType=INTEGER}
+        limit offset = #{offset,jdbcType=INTEGER},rows = #{rows,jdbcType=INTEGER}
+    </select>
+
+    <insert id="insertSelective" parameterType="x.y.z.bill.model.payment.RechargeJournal">
+        insert into t_payment_recharge_journal
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="txnId != null">
+                txnId,
+            </if>
+            <if test="channelCode != null">
+                channelCode,
+            </if>
+            <if test="channelName != null">
+                channelName,
+            </if>
+            <if test="channelSendOrder != null">
+                channelSendOrder,
+            </if>
+            <if test="channelRecvOrder != null">
+                channelRecvOrder,
+            </if>
+            <if test="amount != null">
+                amount,
+            </if>
+            <if test="cost != null">
+                cost,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="userId != null">
+                userId,
+            </if>
+            <if test="userName != null">
+                userName,
+            </if>
+            <if test="businessCode != null">
+                businessCode,
+            </if>
+            <if test="clientIp != null">
+                clientIp,
+            </if>
+            <if test="actulAmount != null">
+                actulAmount,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="replyCode != null">
+                replyCode,
+            </if>
+            <if test="replyMessage != null">
+                replyMessage,
+            </if>
+            <if test="transTimeout != null">
+                transTimeout,
+            </if>
+            <if test="sendTime != null">
+                sendTime,
+            </if>
+            <if test="recvTime != null">
+                recvTime,
+            </if>
+            <if test="toAccountTime != null">
+                toAccountTime,
+            </if>
+            <if test="createTime != null">
+                createTime,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="version != null">
+                version,
+            </if>
+            <if test="origin != null">
+                origin,
+            </if>
+            <if test="bankCardId != null">
+                bankCardId,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="txnId != null">
+                #{txnId,jdbcType=VARCHAR},
+            </if>
+            <if test="channelCode != null">
+                #{channelCode,jdbcType=VARCHAR},
+            </if>
+            <if test="channelName != null">
+                #{channelName,jdbcType=VARCHAR},
+            </if>
+            <if test="channelSendOrder != null">
+                #{channelSendOrder,jdbcType=VARCHAR},
+            </if>
+            <if test="channelRecvOrder != null">
+                #{channelRecvOrder,jdbcType=VARCHAR},
+            </if>
+            <if test="amount != null">
+                #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="cost != null">
+                #{cost,jdbcType=DECIMAL},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="businessCode != null">
+                #{businessCode,jdbcType=VARCHAR},
+            </if>
+            <if test="clientIp != null">
+                #{clientIp,jdbcType=VARCHAR},
+            </if>
+            <if test="actulAmount != null">
+                #{actulAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="replyCode != null">
+                #{replyCode,jdbcType=VARCHAR},
+            </if>
+            <if test="replyMessage != null">
+                #{replyMessage,jdbcType=VARCHAR},
+            </if>
+            <if test="transTimeout != null">
+                #{transTimeout,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sendTime != null">
+                #{sendTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="recvTime != null">
+                #{recvTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="toAccountTime != null">
+                #{toAccountTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="version != null">
+                #{version,jdbcType=INTEGER},
+            </if>
+            <if test="origin != null">
+                #{origin,jdbcType=VARCHAR},
+            </if>
+            <if test="bankCardId != null">
+                #{bankCardId,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateRechageJournalFailed" parameterType="map">
+        update t_payment_recharge_journal
+        set status = 2,replyCode = #{replyCode,jdbcType=VARCHAR},replyMessage = #{replyMessage,jdbcType=VARCHAR},recvTime = #{recvTime,jdbcType=TIMESTAMP},version = version + 1
+        where txnId = #{txnId,jdbcType=VARCHAR} and version = #{version,jdbcType=INTEGER} and status != 1 limit 1
+    </update>
+    <update id="updateRechageJournalHanding">
+        update t_payment_recharge_journal
+        set status = 3,sendTime = #{sendTime,jdbcType=TIMESTAMP},version = version + 1
+        where txnId = #{txnId,jdbcType=VARCHAR} and version = #{version,jdbcType=INTEGER} and status = -1 limit 1
+    </update>
+    <update id="updateRechageJournalSucceed" parameterType="map">
+        update t_payment_recharge_journal
+        set status = 1,replyCode = #{replyCode,jdbcType=VARCHAR},replyMessage = #{replyMessage,jdbcType=VARCHAR},recvTime = #{recvTime,jdbcType=TIMESTAMP},version = version + 1
+        where txnId = #{txnId,jdbcType=VARCHAR} and version = #{version,jdbcType=INTEGER} and status = 3 limit 1
+    </update>
+</mapper>

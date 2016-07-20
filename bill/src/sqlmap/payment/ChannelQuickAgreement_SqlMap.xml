@@ -1,266 +1,170 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="x.y.z.bill.mapper.payment.ChannelQuickAgreementDAO" >
-  <resultMap id="BaseResultMap" type="x.y.z.bill.model.payment.ChannelQuickAgreement" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="txnId" property="txnId" jdbcType="VARCHAR" />
-    <result column="channelCode" property="channelCode" jdbcType="VARCHAR" />
-    <result column="channelName" property="channelName" jdbcType="VARCHAR" />
-    <result column="channelSendOrder" property="channelSendOrder" jdbcType="VARCHAR" />
-    <result column="businessType" property="businessType" jdbcType="INTEGER" />
-    <result column="userId" property="userId" jdbcType="BIGINT" />
-    <result column="userName" property="userName" jdbcType="VARCHAR" />
-    <result column="amount" property="amount" jdbcType="DECIMAL" />
-    <result column="token" property="token" jdbcType="VARCHAR" />
-    <result column="validCode" property="validCode" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="replyCode" property="replyCode" jdbcType="VARCHAR" />
-    <result column="replyMessage" property="replyMessage" jdbcType="VARCHAR" />
-    <result column="origin" property="origin" jdbcType="VARCHAR" />
-    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="lastModifyTime" property="lastModifyTime" jdbcType="TIMESTAMP" />
-    <result column="identityCode" property="identityCode" jdbcType="VARCHAR" />
-    <result column="version" property="version" jdbcType="INTEGER" />
-    <result column="bankCardId" property="bankCardId" jdbcType="BIGINT" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    id, txnId, channelCode, channelName, channelSendOrder, businessType, userId, userName, 
-    amount, token, validCode, status, replyCode, replyMessage, origin, createTime, lastModifyTime, 
-    identityCode, version, bankCardId
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
+<mapper namespace="x.y.z.bill.mapper.payment.ChannelQuickAgreementDAO">
+    <select id="countQuickAgreementByUser" resultType="java.lang.Integer" parameterType="map">
+    select
+    count(*)
     from t_payment_channel_quick_agreement
-    where id = #{id,jdbcType=BIGINT}
+    where userId = #{userId,jdbcType=BIGINT}
+    and status = #{status,jdbcType=INTEGER}
   </select>
-  <insert id="insert" parameterType="x.y.z.bill.model.payment.ChannelQuickAgreement" >
-    insert into t_payment_channel_quick_agreement (id, txnId, channelCode, 
-      channelName, channelSendOrder, businessType, 
-      userId, userName, amount, 
-      token, validCode, status, 
-      replyCode, replyMessage, origin, 
-      createTime, lastModifyTime, identityCode, 
-      version, bankCardId)
-    values (#{id,jdbcType=BIGINT}, #{txnId,jdbcType=VARCHAR}, #{channelCode,jdbcType=VARCHAR}, 
-      #{channelName,jdbcType=VARCHAR}, #{channelSendOrder,jdbcType=VARCHAR}, #{businessType,jdbcType=INTEGER}, 
-      #{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{amount,jdbcType=DECIMAL}, 
-      #{token,jdbcType=VARCHAR}, #{validCode,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{replyCode,jdbcType=VARCHAR}, #{replyMessage,jdbcType=VARCHAR}, #{origin,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{lastModifyTime,jdbcType=TIMESTAMP}, #{identityCode,jdbcType=VARCHAR}, 
-      #{version,jdbcType=INTEGER}, #{bankCardId,jdbcType=BIGINT})
-  </insert>
-  <insert id="insertSelective" parameterType="x.y.z.bill.model.payment.ChannelQuickAgreement" >
-    insert into t_payment_channel_quick_agreement
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="txnId != null" >
-        txnId,
-      </if>
-      <if test="channelCode != null" >
-        channelCode,
-      </if>
-      <if test="channelName != null" >
-        channelName,
-      </if>
-      <if test="channelSendOrder != null" >
-        channelSendOrder,
-      </if>
-      <if test="businessType != null" >
-        businessType,
-      </if>
-      <if test="userId != null" >
-        userId,
-      </if>
-      <if test="userName != null" >
-        userName,
-      </if>
-      <if test="amount != null" >
-        amount,
-      </if>
-      <if test="token != null" >
-        token,
-      </if>
-      <if test="validCode != null" >
-        validCode,
-      </if>
-      <if test="status != null" >
-        status,
-      </if>
-      <if test="replyCode != null" >
-        replyCode,
-      </if>
-      <if test="replyMessage != null" >
-        replyMessage,
-      </if>
-      <if test="origin != null" >
-        origin,
-      </if>
-      <if test="createTime != null" >
-        createTime,
-      </if>
-      <if test="lastModifyTime != null" >
-        lastModifyTime,
-      </if>
-      <if test="identityCode != null" >
-        identityCode,
-      </if>
-      <if test="version != null" >
-        version,
-      </if>
-      <if test="bankCardId != null" >
-        bankCardId,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="txnId != null" >
-        #{txnId,jdbcType=VARCHAR},
-      </if>
-      <if test="channelCode != null" >
-        #{channelCode,jdbcType=VARCHAR},
-      </if>
-      <if test="channelName != null" >
-        #{channelName,jdbcType=VARCHAR},
-      </if>
-      <if test="channelSendOrder != null" >
-        #{channelSendOrder,jdbcType=VARCHAR},
-      </if>
-      <if test="businessType != null" >
-        #{businessType,jdbcType=INTEGER},
-      </if>
-      <if test="userId != null" >
-        #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="userName != null" >
-        #{userName,jdbcType=VARCHAR},
-      </if>
-      <if test="amount != null" >
-        #{amount,jdbcType=DECIMAL},
-      </if>
-      <if test="token != null" >
-        #{token,jdbcType=VARCHAR},
-      </if>
-      <if test="validCode != null" >
-        #{validCode,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        #{status,jdbcType=INTEGER},
-      </if>
-      <if test="replyCode != null" >
-        #{replyCode,jdbcType=VARCHAR},
-      </if>
-      <if test="replyMessage != null" >
-        #{replyMessage,jdbcType=VARCHAR},
-      </if>
-      <if test="origin != null" >
-        #{origin,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="lastModifyTime != null" >
-        #{lastModifyTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="identityCode != null" >
-        #{identityCode,jdbcType=VARCHAR},
-      </if>
-      <if test="version != null" >
-        #{version,jdbcType=INTEGER},
-      </if>
-      <if test="bankCardId != null" >
-        #{bankCardId,jdbcType=BIGINT},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="x.y.z.bill.model.payment.ChannelQuickAgreement" >
+    <select id="queryByTxnId" resultType="x.y.z.bill.model.payment.ChannelQuickAgreement" parameterType="map">
+    select 
+    id, txnId, channelCode, channelName, channelSendOrder, businessType, userId, userName,
+    amount, token, validCode, status, replyCode, replyMessage, origin, createTime, lastModifyTime,
+    identityCode, version, bankCardId,clientIp
+    from t_payment_channel_quick_agreement
+    where txnId = #{txnId,jdbcType=VARCHAR} limit 1;
+  </select>
+    <insert id="insertSelective" parameterType="x.y.z.bill.model.payment.ChannelQuickAgreement">
+        insert into t_payment_channel_quick_agreement
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="txnId != null">
+                txnId,
+            </if>
+            <if test="channelCode != null">
+                channelCode,
+            </if>
+            <if test="channelName != null">
+                channelName,
+            </if>
+            <if test="channelSendOrder != null">
+                channelSendOrder,
+            </if>
+            <if test="businessType != null">
+                businessType,
+            </if>
+            <if test="userId != null">
+                userId,
+            </if>
+            <if test="userName != null">
+                userName,
+            </if>
+            <if test="amount != null">
+                amount,
+            </if>
+            <if test="token != null">
+                token,
+            </if>
+            <if test="validCode != null">
+                validCode,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="replyCode != null">
+                replyCode,
+            </if>
+            <if test="replyMessage != null">
+                replyMessage,
+            </if>
+            <if test="origin != null">
+                origin,
+            </if>
+            <if test="createTime != null">
+                createTime,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="identityCode != null">
+                identityCode,
+            </if>
+            <if test="version != null">
+                version,
+            </if>
+            <if test="bankCardId != null">
+                bankCardId,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="txnId != null">
+                #{txnId,jdbcType=VARCHAR},
+            </if>
+            <if test="channelCode != null">
+                #{channelCode,jdbcType=VARCHAR},
+            </if>
+            <if test="channelName != null">
+                #{channelName,jdbcType=VARCHAR},
+            </if>
+            <if test="channelSendOrder != null">
+                #{channelSendOrder,jdbcType=VARCHAR},
+            </if>
+            <if test="businessType != null">
+                #{businessType,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="amount != null">
+                #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="token != null">
+                #{token,jdbcType=VARCHAR},
+            </if>
+            <if test="validCode != null">
+                #{validCode,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="replyCode != null">
+                #{replyCode,jdbcType=VARCHAR},
+            </if>
+            <if test="replyMessage != null">
+                #{replyMessage,jdbcType=VARCHAR},
+            </if>
+            <if test="origin != null">
+                #{origin,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="identityCode != null">
+                #{identityCode,jdbcType=VARCHAR},
+            </if>
+            <if test="version != null">
+                #{version,jdbcType=INTEGER},
+            </if>
+            <if test="bankCardId != null">
+                #{bankCardId,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateChannelQuickAgreementFailed">
     update t_payment_channel_quick_agreement
-    <set >
-      <if test="txnId != null" >
-        txnId = #{txnId,jdbcType=VARCHAR},
-      </if>
-      <if test="channelCode != null" >
-        channelCode = #{channelCode,jdbcType=VARCHAR},
-      </if>
-      <if test="channelName != null" >
-        channelName = #{channelName,jdbcType=VARCHAR},
-      </if>
-      <if test="channelSendOrder != null" >
-        channelSendOrder = #{channelSendOrder,jdbcType=VARCHAR},
-      </if>
-      <if test="businessType != null" >
-        businessType = #{businessType,jdbcType=INTEGER},
-      </if>
-      <if test="userId != null" >
-        userId = #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="userName != null" >
-        userName = #{userName,jdbcType=VARCHAR},
-      </if>
-      <if test="amount != null" >
-        amount = #{amount,jdbcType=DECIMAL},
-      </if>
-      <if test="token != null" >
-        token = #{token,jdbcType=VARCHAR},
-      </if>
-      <if test="validCode != null" >
-        validCode = #{validCode,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        status = #{status,jdbcType=INTEGER},
-      </if>
-      <if test="replyCode != null" >
-        replyCode = #{replyCode,jdbcType=VARCHAR},
-      </if>
-      <if test="replyMessage != null" >
-        replyMessage = #{replyMessage,jdbcType=VARCHAR},
-      </if>
-      <if test="origin != null" >
-        origin = #{origin,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null" >
-        createTime = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="lastModifyTime != null" >
-        lastModifyTime = #{lastModifyTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="identityCode != null" >
-        identityCode = #{identityCode,jdbcType=VARCHAR},
-      </if>
-      <if test="version != null" >
-        version = #{version,jdbcType=INTEGER},
-      </if>
-      <if test="bankCardId != null" >
-        bankCardId = #{bankCardId,jdbcType=BIGINT},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="x.y.z.bill.model.payment.ChannelQuickAgreement" >
+    set status = 2,replyCode = #{replyCode,jdbcType=VARCHAR},replyMessage = #{replyMessage,jdbcType=VARCHAR},version = version + 1
+    where txnId = #{txnId,jdbcType=VARCHAR} and version = #{version,jdbcType=INTEGER} and status != 1 limit 1
+    </update>
+    <update id="updateChannelQuickAgreementHanding">
     update t_payment_channel_quick_agreement
-    set txnId = #{txnId,jdbcType=VARCHAR},
-      channelCode = #{channelCode,jdbcType=VARCHAR},
-      channelName = #{channelName,jdbcType=VARCHAR},
-      channelSendOrder = #{channelSendOrder,jdbcType=VARCHAR},
-      businessType = #{businessType,jdbcType=INTEGER},
-      userId = #{userId,jdbcType=BIGINT},
-      userName = #{userName,jdbcType=VARCHAR},
-      amount = #{amount,jdbcType=DECIMAL},
-      token = #{token,jdbcType=VARCHAR},
-      validCode = #{validCode,jdbcType=VARCHAR},
-      status = #{status,jdbcType=INTEGER},
-      replyCode = #{replyCode,jdbcType=VARCHAR},
-      replyMessage = #{replyMessage,jdbcType=VARCHAR},
-      origin = #{origin,jdbcType=VARCHAR},
-      createTime = #{createTime,jdbcType=TIMESTAMP},
-      lastModifyTime = #{lastModifyTime,jdbcType=TIMESTAMP},
-      identityCode = #{identityCode,jdbcType=VARCHAR},
-      version = #{version,jdbcType=INTEGER},
-      bankCardId = #{bankCardId,jdbcType=BIGINT}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+        set status = 3,version = version + 1
+        where txnId = #{txnId,jdbcType=VARCHAR} and version = #{version,jdbcType=INTEGER} and status = -1 limit 1
+    </update>
+    <update id="updateChannelQuickAgreementSucceed">
+        update t_payment_channel_quick_agreement
+        set status = 1,replyCode = #{replyCode,jdbcType=VARCHAR},replyMessage = #{replyMessage,jdbcType=VARCHAR},version = version + 1
+        where txnId = #{txnId,jdbcType=VARCHAR} and version = #{version,jdbcType=INTEGER} and status != 2 limit 1
+    </update>
+    <select id="queryUserQuickAgreementBySucceed" resultType="x.y.z.bill.model.payment.ChannelQuickAgreement"
+            parameterType="map">
+        select
+        id, txnId, channelCode, channelName, channelSendOrder, businessType, userId, userName,
+        amount, token, validCode, status, replyCode, replyMessage, origin, createTime, lastModifyTime,
+        identityCode, version, bankCardId,clientIp
+        from t_payment_channel_quick_agreement
+        where userId = #{userId,jdbcType=BIGINT} and status = 1 limit 1;
+    </select>
 </mapper>

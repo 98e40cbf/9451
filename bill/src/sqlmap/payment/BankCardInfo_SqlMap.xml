@@ -1,230 +1,164 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="x.y.z.bill.mapper.payment.BankCardInfoDAO" >
-  <resultMap id="BaseResultMap" type="x.y.z.bill.model.payment.BankCardInfo" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="txnId" property="txnId" jdbcType="VARCHAR" />
-    <result column="userId" property="userId" jdbcType="BIGINT" />
-    <result column="userName" property="userName" jdbcType="VARCHAR" />
-    <result column="cardType" property="cardType" jdbcType="TINYINT" />
-    <result column="bankCode" property="bankCode" jdbcType="VARCHAR" />
-    <result column="bankName" property="bankName" jdbcType="VARCHAR" />
-    <result column="bankCardNo" property="bankCardNo" jdbcType="VARCHAR" />
-    <result column="idCardNo" property="idCardNo" jdbcType="VARCHAR" />
-    <result column="realName" property="realName" jdbcType="VARCHAR" />
-    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="origin" property="origin" jdbcType="VARCHAR" />
-    <result column="remark" property="remark" jdbcType="VARCHAR" />
-    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="lastModifyTime" property="lastModifyTime" jdbcType="TIMESTAMP" />
-    <result column="version" property="version" jdbcType="INTEGER" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    id, txnId, userId, userName, cardType, bankCode, bankName, bankCardNo, idCardNo, 
-    realName, mobile, status, origin, remark, createTime, lastModifyTime, version
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
+<mapper namespace="x.y.z.bill.mapper.payment.BankCardInfoDAO">
+    <select id="countActivatedBankCardInfoByUser" resultType="java.lang.Integer" parameterType="map">
+    select
+    count(*)
     from t_payment_bank_card_info
-    where id = #{id,jdbcType=BIGINT}
+    where bankCardNo = #{bankCardNo,jdbcType=VARCHAR}
+    and userId = #{userId,jdbcType=BIGINT}
+    and status in (1,3);
   </select>
-  <insert id="insert" parameterType="x.y.z.bill.model.payment.BankCardInfo" >
-    insert into t_payment_bank_card_info (id, txnId, userId, 
-      userName, cardType, bankCode, 
-      bankName, bankCardNo, idCardNo, 
-      realName, mobile, status, 
-      origin, remark, createTime, 
-      lastModifyTime, version)
-    values (#{id,jdbcType=BIGINT}, #{txnId,jdbcType=VARCHAR}, #{userId,jdbcType=BIGINT}, 
-      #{userName,jdbcType=VARCHAR}, #{cardType,jdbcType=TINYINT}, #{bankCode,jdbcType=VARCHAR}, 
-      #{bankName,jdbcType=VARCHAR}, #{bankCardNo,jdbcType=VARCHAR}, #{idCardNo,jdbcType=VARCHAR}, 
-      #{realName,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{origin,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{lastModifyTime,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER})
-  </insert>
-  <insert id="insertSelective" parameterType="x.y.z.bill.model.payment.BankCardInfo" >
-    insert into t_payment_bank_card_info
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="txnId != null" >
-        txnId,
-      </if>
-      <if test="userId != null" >
-        userId,
-      </if>
-      <if test="userName != null" >
-        userName,
-      </if>
-      <if test="cardType != null" >
-        cardType,
-      </if>
-      <if test="bankCode != null" >
-        bankCode,
-      </if>
-      <if test="bankName != null" >
-        bankName,
-      </if>
-      <if test="bankCardNo != null" >
-        bankCardNo,
-      </if>
-      <if test="idCardNo != null" >
-        idCardNo,
-      </if>
-      <if test="realName != null" >
-        realName,
-      </if>
-      <if test="mobile != null" >
-        mobile,
-      </if>
-      <if test="status != null" >
-        status,
-      </if>
-      <if test="origin != null" >
-        origin,
-      </if>
-      <if test="remark != null" >
-        remark,
-      </if>
-      <if test="createTime != null" >
-        createTime,
-      </if>
-      <if test="lastModifyTime != null" >
-        lastModifyTime,
-      </if>
-      <if test="version != null" >
-        version,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="txnId != null" >
-        #{txnId,jdbcType=VARCHAR},
-      </if>
-      <if test="userId != null" >
-        #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="userName != null" >
-        #{userName,jdbcType=VARCHAR},
-      </if>
-      <if test="cardType != null" >
-        #{cardType,jdbcType=TINYINT},
-      </if>
-      <if test="bankCode != null" >
-        #{bankCode,jdbcType=VARCHAR},
-      </if>
-      <if test="bankName != null" >
-        #{bankName,jdbcType=VARCHAR},
-      </if>
-      <if test="bankCardNo != null" >
-        #{bankCardNo,jdbcType=VARCHAR},
-      </if>
-      <if test="idCardNo != null" >
-        #{idCardNo,jdbcType=VARCHAR},
-      </if>
-      <if test="realName != null" >
-        #{realName,jdbcType=VARCHAR},
-      </if>
-      <if test="mobile != null" >
-        #{mobile,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        #{status,jdbcType=INTEGER},
-      </if>
-      <if test="origin != null" >
-        #{origin,jdbcType=VARCHAR},
-      </if>
-      <if test="remark != null" >
-        #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="lastModifyTime != null" >
-        #{lastModifyTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="version != null" >
-        #{version,jdbcType=INTEGER},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="x.y.z.bill.model.payment.BankCardInfo" >
-    update t_payment_bank_card_info
-    <set >
-      <if test="txnId != null" >
-        txnId = #{txnId,jdbcType=VARCHAR},
-      </if>
-      <if test="userId != null" >
-        userId = #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="userName != null" >
-        userName = #{userName,jdbcType=VARCHAR},
-      </if>
-      <if test="cardType != null" >
-        cardType = #{cardType,jdbcType=TINYINT},
-      </if>
-      <if test="bankCode != null" >
-        bankCode = #{bankCode,jdbcType=VARCHAR},
-      </if>
-      <if test="bankName != null" >
-        bankName = #{bankName,jdbcType=VARCHAR},
-      </if>
-      <if test="bankCardNo != null" >
-        bankCardNo = #{bankCardNo,jdbcType=VARCHAR},
-      </if>
-      <if test="idCardNo != null" >
-        idCardNo = #{idCardNo,jdbcType=VARCHAR},
-      </if>
-      <if test="realName != null" >
-        realName = #{realName,jdbcType=VARCHAR},
-      </if>
-      <if test="mobile != null" >
-        mobile = #{mobile,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        status = #{status,jdbcType=INTEGER},
-      </if>
-      <if test="origin != null" >
-        origin = #{origin,jdbcType=VARCHAR},
-      </if>
-      <if test="remark != null" >
-        remark = #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null" >
-        createTime = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="lastModifyTime != null" >
-        lastModifyTime = #{lastModifyTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="version != null" >
-        version = #{version,jdbcType=INTEGER},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="x.y.z.bill.model.payment.BankCardInfo" >
-    update t_payment_bank_card_info
-    set txnId = #{txnId,jdbcType=VARCHAR},
-      userId = #{userId,jdbcType=BIGINT},
-      userName = #{userName,jdbcType=VARCHAR},
-      cardType = #{cardType,jdbcType=TINYINT},
-      bankCode = #{bankCode,jdbcType=VARCHAR},
-      bankName = #{bankName,jdbcType=VARCHAR},
-      bankCardNo = #{bankCardNo,jdbcType=VARCHAR},
-      idCardNo = #{idCardNo,jdbcType=VARCHAR},
-      realName = #{realName,jdbcType=VARCHAR},
-      mobile = #{mobile,jdbcType=VARCHAR},
-      status = #{status,jdbcType=INTEGER},
-      origin = #{origin,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR},
-      createTime = #{createTime,jdbcType=TIMESTAMP},
-      lastModifyTime = #{lastModifyTime,jdbcType=TIMESTAMP},
-      version = #{version,jdbcType=INTEGER}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id"
+            parameterType="x.y.z.bill.model.payment.BankCardInfo">
+        insert into t_payment_bank_card_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="txnId != null">
+                txnId,
+            </if>
+            <if test="userId != null">
+                userId,
+            </if>
+            <if test="userName != null">
+                userName,
+            </if>
+            <if test="cardType != null">
+                cardType,
+            </if>
+            <if test="bankCode != null">
+                bankCode,
+            </if>
+            <if test="bankName != null">
+                bankName,
+            </if>
+            <if test="bankCardNo != null">
+                bankCardNo,
+            </if>
+            <if test="idCardNo != null">
+                idCardNo,
+            </if>
+            <if test="realName != null">
+                realName,
+            </if>
+            <if test="mobile != null">
+                mobile,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="origin != null">
+                origin,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="createTime != null">
+                createTime,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="version != null">
+                version,
+            </if>
+            <if test="clientIp != null">
+                clientIp,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="txnId != null">
+                #{txnId,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="cardType != null">
+                #{cardType,jdbcType=TINYINT},
+            </if>
+            <if test="bankCode != null">
+                #{bankCode,jdbcType=VARCHAR},
+            </if>
+            <if test="bankName != null">
+                #{bankName,jdbcType=VARCHAR},
+            </if>
+            <if test="bankCardNo != null">
+                #{bankCardNo,jdbcType=VARCHAR},
+            </if>
+            <if test="idCardNo != null">
+                #{idCardNo,jdbcType=VARCHAR},
+            </if>
+            <if test="realName != null">
+                #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="origin != null">
+                #{origin,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="version != null">
+                #{version,jdbcType=INTEGER},
+            </if>
+            <if test="clientIp != null">
+                #{clientIp,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="queryByTxnId" resultType="x.y.z.bill.model.payment.BankCardInfo" parameterType="map">
+        select
+        id, txnId, userId, userName, cardType, bankCode, bankName, bankCardNo, idCardNo,
+        realName, mobile, status, origin, remark, createTime, lastModifyTime, version
+        from t_payment_bank_card_info
+        where txnId = #{txnId,jdbcType=VARCHAR} limit 1;
+    </select>
+    <update id="updateBankCardInfoFailed">
+        update t_payment_bank_card_info
+        set status = 2,version = versin + 1
+        where txnId = #{txnId,jdbcType=VARCHAR} and version = #{version,jdbcType=INTEGER} and status != 1 limit 1
+    </update>
+    <update id="updateBankCardInfoHanding">
+        update t_payment_bank_card_info
+        set status = 3,version = versin + 1
+        where txnId = #{txnId,jdbcType=VARCHAR} and version = #{version,jdbcType=INTEGER} and status = -1 limit 1
+    </update>
+    <update id="updateBankCardInfoSucceed">
+        update t_payment_bank_card_info
+        set status = 1,version = versin + 1
+        where txnId = #{txnId,jdbcType=VARCHAR} and version = #{version,jdbcType=INTEGER} and status != 2 limit 1
+    </update>
+    <select id="queryById" resultType="x.y.z.bill.model.payment.BankCardInfo" parameterType="map">
+        select
+        id, txnId, userId, userName, cardType, bankCode, bankName, bankCardNo, idCardNo,
+        realName, mobile, status, origin, remark, createTime, lastModifyTime, version
+        from t_payment_bank_card_info
+        where id = #{id,jdbcType=BIGINT} limit 1;
+    </select>
+    <select id="queryUserBankCardBySucceed" resultType="x.y.z.bill.model.payment.BankCardInfo" parameterType="map">
+        select
+        id, txnId, userId, userName, cardType, bankCode, bankName, bankCardNo, idCardNo,
+        realName, mobile, status, origin, remark, createTime, lastModifyTime, version
+        from t_payment_bank_card_info
+        where userId = #{userId,jdbcType=BIGINT} and status = 1 limit 1;
+    </select>
 </mapper>

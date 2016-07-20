@@ -62,6 +62,8 @@ public class WithdrawJournal extends BaseObject {
 
     private String origin;
 
+    private String clientIp;
+
     private Integer version;
 
     private Long bankCardId;
@@ -296,5 +298,14 @@ public class WithdrawJournal extends BaseObject {
 
     public void setBankCardId(Long bankCardId) {
         this.bankCardId = bankCardId;
+    }
+
+    public String getClientIp() {
+        return clientIp;
+    }
+
+    public WithdrawJournal setClientIp(String clientIp) {
+        this.clientIp = clientIp;
+        return this;
     }
 }

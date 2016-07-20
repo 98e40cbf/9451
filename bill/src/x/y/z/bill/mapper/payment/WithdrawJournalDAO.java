@@ -1,18 +1,23 @@
 package x.y.z.bill.mapper.payment;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import x.y.z.bill.model.payment.WithdrawJournal;
 
 @Repository
 public interface WithdrawJournalDAO {
-    int insert(WithdrawJournal record);
 
     int insertSelective(WithdrawJournal record);
 
-    WithdrawJournal selectByPrimaryKey(Long id);
+    WithdrawJournal queryByTxnId(String txnId);
 
-    int updateByPrimaryKeySelective(WithdrawJournal record);
+    int updateByUserConfirm(@Param("txnId") String txnId, @Param("version") Integer version);
 
-    int updateByPrimaryKey(WithdrawJournal record);
+    int countWithdrawJournal(@Param("userId") Long userId, @Param("status") int status);
+
+    List<WithdrawJournal> queryWithdrawJournal(@Param("userId") Long userId, @Param("status") int status,
+            @Param("offset") int offset, @Param("rows") int rows);
 }
