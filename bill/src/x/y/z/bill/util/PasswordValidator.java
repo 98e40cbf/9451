@@ -1,6 +1,6 @@
 package x.y.z.bill.util;
 
-import org.apache.commons.lang3.ArrayUtils;
+import com.google.common.primitives.Chars;
 
 import io.alpha.util.StringUtils;
 
@@ -21,8 +21,8 @@ public final class PasswordValidator {
         }
         for (int i = 0; i < length; i++) {
             char c = input.charAt(i);
-            if (!ArrayUtils.contains(UPPER, c) && !ArrayUtils.contains(LOWER, c) && !ArrayUtils.contains(NUMBER, c)
-                    && !ArrayUtils.contains(CHARACTER, c)) {
+            if (!Chars.contains(UPPER, c) && !Chars.contains(LOWER, c) && !Chars.contains(NUMBER, c)
+                    && !Chars.contains(CHARACTER, c)) {
                 return false;
             }
         }
@@ -30,12 +30,12 @@ public final class PasswordValidator {
         int lower = contains(LOWER, input);
         int number = contains(NUMBER, input);
         int character = contains(CHARACTER, input);
-        return (upper + lower + number + character) > 1;
+        return upper + lower + number + character > 1;
     }
 
     private static int contains(final char[] chars, final String input) {
         for (int i = 0, len = input.length(); i < len; i++) {
-            if (ArrayUtils.contains(chars, input.charAt(i))) {
+            if (Chars.contains(chars, input.charAt(i))) {
                 return 1;
             }
         }
