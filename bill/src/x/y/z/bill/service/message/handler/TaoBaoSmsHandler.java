@@ -1,17 +1,19 @@
 package x.y.z.bill.service.message.handler;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.taobao.api.DefaultTaobaoClient;
 import com.taobao.api.TaobaoClient;
 import com.taobao.api.request.AlibabaAliqinFcSmsNumSendRequest;
 import com.taobao.api.response.AlibabaAliqinFcSmsNumSendResponse;
+
 import io.alpha.core.dto.ResultDTO;
 import io.alpha.core.util.PropertiesLoader;
 import io.alpha.logging.Logger;
 import io.alpha.logging.LoggerFactory;
 import io.alpha.util.ObjectId;
 import io.alpha.util.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import x.y.z.bill.builder.message.ResultBuilder;
 import x.y.z.bill.constant.message.ResultTypeEnum;
 import x.y.z.bill.constant.message.SmsConstants;
@@ -36,6 +38,13 @@ public class TaoBaoSmsHandler extends BaseSmsHandler {
     public ResultDTO<String> clientSendSms(SmsRecord smsRecord) {
         String identityId = ObjectId.getIdentityId();
         logger.info("{}-[阿里大鱼]短信发送:{}", identityId, smsRecord);
+
+        String templateCode = smsRecord.getSmsTemplateCode();
+        String templateId = smsTemplateService.getTemplateIdByCode(templateCode);
+        if (StringUtils.isBlank(templateId)) {
+            logger.error("{}-[阿里大鱼]短信发送失败:模板Id为空", identityId);
+            return ResultBuilder.buildResult(ResultTypeEnum.FAILED);
+        }
 
         TaobaoClient client = new DefaultTaobaoClient(SMS_URL, SMS_APPKEY, SMS_SECRET);
         AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
@@ -65,12 +74,6 @@ public class TaoBaoSmsHandler extends BaseSmsHandler {
         /**
          * 短信模板ID，传入的模板必须是在阿里大鱼“管理中心-短信模板管理”中的可用模板。示例：SMS_585014
          */
-        String templateCode = smsRecord.getSmsTemplateCode();
-        String templateId = smsTemplateService.getTemplateIdByCode(templateCode);
-        if (StringUtils.isBlank(templateId)) {
-            logger.error("{}-[阿里大鱼]短信发送失败:模板Id为空", identityId);
-            return ResultBuilder.buildResult(ResultTypeEnum.FAILED);
-        }
         req.setSmsTemplateCode(templateId);
 
         try {

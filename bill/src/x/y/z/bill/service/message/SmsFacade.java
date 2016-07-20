@@ -39,8 +39,6 @@ public class SmsFacade implements ApplicationContextAware {
     private SmsRecordService smsRecordService;
     @Autowired
     private SmsRoutingService smsRoutingService;
-    @Autowired
-    private SmsTemplateService smsTemplateService;
 
     /**
      * 发送短信验证码
