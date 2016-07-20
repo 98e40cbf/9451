@@ -21,6 +21,16 @@ public abstract class BaseSmsHandler {
     private SmsSendRecordService smsSendRecordService;
 
     /**
+     * 异步发送短信
+     * @param smsPartnerEnum
+     * @param smsRecord
+     * @return
+     */
+    public ResultDTO<String> sendSmsAsync(SmsPartnerEnum smsPartnerEnum, SmsRecord smsRecord) {
+        return sendSms(smsPartnerEnum, smsRecord);
+    }
+
+    /**
      * 发送短信记录
      * @param smsRecord
      * @return
@@ -28,13 +38,13 @@ public abstract class BaseSmsHandler {
     public ResultDTO<String> sendSms(SmsPartnerEnum smsPartnerEnum, SmsRecord smsRecord) {
         String identityId = ObjectId.getIdentityId();
         long smsId = smsRecord.getId();
-        logger.info("{}-[发送短信记录]-{},处理开始");
+        logger.info("{}-[发送短信记录]-{},处理开始", identityId, smsId);
         SmsSendRecord smsSendRecord = smsSendRecordService.insert(smsPartnerEnum, smsRecord.getId());
         if (smsSendRecord != null && smsSendRecord.getId() != null) {
-
+            return clientSendSms(smsRecord);
         }
 
-        logger.error("[发送短信记录]，处理失败");
+        logger.error("{}-[发送短信记录]，处理失败", identityId, smsId);
         return ResultBuilder.buildResult(ResultTypeEnum.FAILED);
     }
 

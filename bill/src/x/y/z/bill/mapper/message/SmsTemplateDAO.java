@@ -10,4 +10,8 @@ public interface SmsTemplateDAO {
     SmsTemplate selectByPrimaryKey(Long id);
 
     int updateByPrimaryKey(SmsTemplate record);
+
+    SmsTemplate getByTemplateId(String templateId);
+
+    SmsTemplate getByTemplateCode(String templateCode);
 }

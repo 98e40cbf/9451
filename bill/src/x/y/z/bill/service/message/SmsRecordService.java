@@ -1,17 +1,16 @@
 package x.y.z.bill.service.message;
 
-import io.alpha.service.BaseService;
-import io.alpha.tx.annotation.TransMark;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import x.y.z.bill.constant.message.SmsPriority;
-import x.y.z.bill.constant.message.SmsStatusEnum;
+
+import io.alpha.service.BaseService;
+import io.alpha.tx.annotation.TransMark;
+import x.y.z.bill.builder.message.SmsRecordBuilder;
 import x.y.z.bill.constant.message.SmsTypeEnum;
 import x.y.z.bill.mapper.message.SmsRecordDAO;
+import x.y.z.bill.model.message.SmsParam;
 import x.y.z.bill.model.message.SmsRecord;
 import x.y.z.bill.util.ExceptionUtil;
-
-import java.util.Date;
 
 @Service
 @TransMark
@@ -39,16 +38,8 @@ public class SmsRecordService extends BaseService {
      * @return
      */
     public SmsRecord insert(final String txnId, final SmsTypeEnum smsTypeEnum, final String mobiles,
-            final String smsParam) {
-        SmsRecord smsRecord = new SmsRecord();
-        smsRecord.setTxnId(txnId);
-        smsRecord.setSmsType(smsTypeEnum.getType());
-        smsRecord.setSmsStatus(SmsStatusEnum.SUCCESS.getStatus());
-        smsRecord.setReceiveMobiles(mobiles);
-        smsRecord.setSmsParam(smsParam);
-        smsRecord.setSmsTemplateCode(smsTypeEnum.getTemplateCode());
-        smsRecord.setPriority(SmsPriority.INESSENTIAL);
-        smsRecord.setCreateTime(new Date());
+            final SmsParam smsParam) {
+        SmsRecord smsRecord = SmsRecordBuilder.build(txnId, smsTypeEnum, mobiles, smsParam);
         try {
             int result = smsRecordDAO.insert(smsRecord);
             if (result == 1) {

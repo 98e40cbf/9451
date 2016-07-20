@@ -8,8 +8,9 @@ import io.alpha.core.util.PropertiesLoader;
 import io.alpha.logging.Logger;
 import io.alpha.logging.LoggerFactory;
 import io.alpha.util.JsonUtils;
+import org.springframework.scheduling.annotation.Async;
 import x.y.z.bill.constant.message.SmsConstants;
-import x.y.z.bill.dto.message.SmsParam;
+import x.y.z.bill.model.message.SmsParam;
 
 /**
  * 阿里大鱼
@@ -39,11 +40,12 @@ public final class SmsTaoBaoClientUtils {
         req.setRecNum(mobile);
         req.setSmsTemplateCode(SMS_TEMPLATE_CODE);
         try {
-            logger.info("短信发送参数:{}",req.getSmsParam());
+            logger.info("短信发送参数:{}", req.getSmsParam());
             AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
             logger.info("短信发送结果:{}", rsp.getBody());
         } catch (Exception t) {
             logger.error("短信发送异常:{}", t);
         }
     }
+
 }

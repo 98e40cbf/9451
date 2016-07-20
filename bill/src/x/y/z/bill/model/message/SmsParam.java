@@ -1,4 +1,4 @@
-package x.y.z.bill.dto.message;
+package x.y.z.bill.model.message;
 
 import java.io.Serializable;
 

@@ -1,6 +1,7 @@
 package x.y.z.bill.model.message;
 
 import java.util.Date;
+
 import io.alpha.core.model.BaseObject;
 
 public class SmsTemplate extends BaseObject {
@@ -9,6 +10,8 @@ public class SmsTemplate extends BaseObject {
     private Long id;
 
     private String templateCode;
+
+    private String templateId;
 
     private String templateContent;
 
@@ -20,6 +23,14 @@ public class SmsTemplate extends BaseObject {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getTemplateId() {
+        return templateId;
+    }
+
+    public void setTemplateId(String templateId) {
+        this.templateId = templateId;
     }
 
     public String getTemplateCode() {

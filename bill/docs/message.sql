@@ -26,11 +26,13 @@ CREATE TABLE `sms_record` (
 DROP TABLE IF EXISTS `sms_template`;
 CREATE TABLE `sms_template` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `templateCode` varchar(20) NOT NULL COMMENT '模板编号',
+  `templateCode` varchar(20) NOT NULL COMMENT '模板编号，平台内',
+  `templateId` varchar(20) NOT NULL COMMENT '模板ID号，平台外',
   `templateContent` varchar(200) NOT NULL COMMENT '模板内容',
   `createTime` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uni_sms_template_code` (`templateCode`)
+  UNIQUE KEY `uni_sms_templateId` (`templateId`),
+  UNIQUE KEY `uni_sms_templateCode` (`templateCode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='短信模板';
 
 
