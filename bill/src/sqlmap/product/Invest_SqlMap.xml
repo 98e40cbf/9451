@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="x.y.z.bill.mapper.product.InvestDAO">
+    <resultMap id="BaseResultMap" type="x.y.z.bill.model.product.Invest">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="investAmount" property="investAmount" jdbcType="DECIMAL"/>
+        <result column="userId" property="userId" jdbcType="BIGINT"/>
+        <result column="userName" property="userName" jdbcType="VARCHAR"/>
+        <result column="productId" property="productId" jdbcType="BIGINT"/>
+        <result column="investDate" property="investDate" jdbcType="TIMESTAMP"/>
+        <result column="hasPI" property="hasPI" jdbcType="DECIMAL"/>
+        <result column="deadline" property="deadline" jdbcType="INTEGER"/>
+        <result column="hasDeadline" property="hasDeadline" jdbcType="INTEGER"/>
+        <result column="recivedPrincipal" property="recivedPrincipal"
+                jdbcType="DECIMAL"/>
+        <result column="recievedInterest" property="recievedInterest"
+                jdbcType="DECIMAL"/>
+        <result column="hasPrincipal" property="hasPrincipal" jdbcType="DECIMAL"/>
+        <result column="hasInterest" property="hasInterest" jdbcType="DECIMAL"/>
+        <result column="investStatus" property="investStatus" jdbcType="INTEGER"/>
+        <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="platform" property="platform" jdbcType="INTEGER"/>
+        <result column="clientVersion" property="clientVersion"
+                jdbcType="VARCHAR"/>
+        <result column="productName" property="productName" jdbcType="VARCHAR"/>
+        <result column="productType" property="productType" jdbcType="INTEGER"/>
+        <result column="repaymentType" property="repaymentType"
+                jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		id, investAmount, userId, userName, productId, investDate,
+		hasPI,
+		deadline, hasDeadline,
+		recivedPrincipal, recievedInterest,
+		hasPrincipal, hasInterest, investStatus, orderNo,
+		platform,
+		clientVersion, productName, productType, repaymentType
+	</sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap"
+            parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from invest
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <insert id="insert" parameterType="x.y.z.bill.model.product.Invest"
+            useGeneratedKeys="true" keyProperty="id">
+		insert into invest (id,
+		investAmount, userId,
+		userName, productId, investDate,
+		hasPI, deadline,
+		hasDeadline,
+		recivedPrincipal, recievedInterest, hasPrincipal,
+		hasInterest, investStatus, orderNo,
+		platform, clientVersion,
+		productName,
+		productType, repaymentType)
+		values (#{id,jdbcType=BIGINT},
+		#{investAmount,jdbcType=DECIMAL},
+		#{userId,jdbcType=BIGINT},
+		#{userName,jdbcType=VARCHAR}, #{productId,jdbcType=BIGINT},
+		#{investDate,jdbcType=TIMESTAMP},
+		#{hasPI,jdbcType=DECIMAL},
+		#{deadline,jdbcType=INTEGER},
+		#{hasDeadline,jdbcType=INTEGER},
+		#{recivedPrincipal,jdbcType=DECIMAL},
+		#{recievedInterest,jdbcType=DECIMAL},
+		#{hasPrincipal,jdbcType=DECIMAL},
+		#{hasInterest,jdbcType=DECIMAL},
+		#{investStatus,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR},
+		#{platform,jdbcType=INTEGER}, #{clientVersion,jdbcType=VARCHAR},
+		#{productName,jdbcType=VARCHAR},
+		#{productType,jdbcType=INTEGER},
+		#{repaymentType,jdbcType=INTEGER})
+	</insert>
+
+    <update id="updateInvestStatus" parameterType="Object">
+		update invest set
+		investStatus=#{investStatus,jdbcType=INTEGER} where
+		id=#{investId,jdbcType=BIGINT}
+	</update>
+
+    <update id="updateSoldInvestStatus" parameterType="Object">
+		update invest set
+		investStatus=#{investStatus,jdbcType=INTEGER} where
+		productId=#{productId,jdbcType=BIGINT} and investStatus = 2
+	</update>
+
+    <select id="selectInvestStatus" parameterType="Long" resultType="Integer">
+		select investStatus from invest where id=#{investId,jdbcType=BIGINT}
+	</select>
+
+    <select id="selectInvests" resultMap="BaseResultMap"
+            parameterType="Object">
+
+    </select>
+</mapper>

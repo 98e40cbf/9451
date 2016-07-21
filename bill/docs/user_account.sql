@@ -32,7 +32,7 @@ CREATE TABLE `capitaljournal` (
   `digest` varchar(40) NOT NULL,
   `createTime` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_userId_txnId_bizType` (`userId`,`txnId`,`bizType`) USING BTREE
+  UNIQUE KEY `uk_userId_bizType_txnId` (`userId`,`bizType`,`txnId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -63,16 +63,18 @@ CREATE TABLE `user_extra` (
   `realName` varchar(100) NOT NULL,
   `idCardNo` varchar(100) NOT NULL,
   `idCardType` tinyint(3) unsigned NOT NULL,
+  `createTime` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_idCardNo` (`idCardNo`),
   UNIQUE KEY `uk_userId` (`userId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for login_history
+-- Table structure for user_login_history
 -- ----------------------------
 DROP TABLE IF EXISTS `login_history`;
-CREATE TABLE `login_history` (
+DROP TABLE IF EXISTS `user_login_history`;
+CREATE TABLE `user_login_history` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `userId` bigint(20) NOT NULL,
   `loginIp` bigint(20) NOT NULL,
@@ -83,10 +85,10 @@ CREATE TABLE `login_history` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for capitaloperationhistory
+-- Table structure for capital_operation_history
 -- ----------------------------
-DROP TABLE IF EXISTS `capitaloperationhistory`;
-CREATE TABLE `capitaloperationhistory` (
+DROP TABLE IF EXISTS `capital_operation_history`;
+CREATE TABLE `capital_operation_history` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `userId` bigint(20) NOT NULL,
   `amount` decimal(18,2) NOT NULL,
@@ -96,3 +98,35 @@ CREATE TABLE `capitaloperationhistory` (
   `createTime` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for bookkeeping
+-- ----------------------------
+DROP TABLE IF EXISTS `bookkeeping`;
+CREATE TABLE `bookkeeping` (
+  `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+  `recharge` decimal(18,2) NOT NULL,
+  `invest` decimal(18,2) NOT NULL,
+  `withdraw` decimal(18,2) NOT NULL,
+  `lastUpdate` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of bookkeeping
+-- ----------------------------
+INSERT INTO `bookkeeping` VALUES (1, 0.00, 0.00, 0.00, '2016-07-01 00:00:00');
+
+-- ----------------------------
+-- Table structure for mobile_change_history
+-- ----------------------------
+DROP TABLE IF EXISTS `mobile_change_history`;
+CREATE TABLE `mobile_change_history` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `userId` bigint(20) NOT NULL,
+  `source` varchar(100) NOT NULL,
+  `target` varchar(100) NOT NULL,
+  `createTime` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

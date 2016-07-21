@@ -8,4 +8,5 @@
 	<definition name="error_500" template="/WEB-INF/views/common/error/500.jsp" />
 	<definition name="index" template="/WEB-INF/views/index.jsp" />
 	<definition name="payment.index" template="/WEB-INF/views/payment_index.jsp" />
+	<definition name="message.index" template="/WEB-INF/views/message_index.jsp"/>
 </tiles-definitions>

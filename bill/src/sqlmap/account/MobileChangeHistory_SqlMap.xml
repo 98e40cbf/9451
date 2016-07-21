@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="x.y.z.bill.mapper.account.MobileChangeHistoryDAO">
+    <resultMap id="BaseResultMap" type="x.y.z.bill.model.account.MobileChangeHistory">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="userId" property="userId" jdbcType="BIGINT"/>
+        <result column="source" property="source" jdbcType="VARCHAR"/>
+        <result column="target" property="target" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+		id, userId, source, target, createTime
+	</sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from mobile_change_history
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <insert id="insert" parameterType="x.y.z.bill.model.account.MobileChangeHistory">
+		insert into mobile_change_history (userId, source,
+		target, createTime)
+		values
+		(#{userId,jdbcType=BIGINT}, #{source,jdbcType=VARCHAR},
+		#{target,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP})
+	</insert>
+</mapper>

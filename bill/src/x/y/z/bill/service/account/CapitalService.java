@@ -3,12 +3,10 @@ package x.y.z.bill.service.account;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import io.alpha.service.BaseService;
-import io.alpha.tx.annotation.TransMark;
-import io.alpha.util.DecimalUtil;
 import x.y.z.bill.constant.BizType;
 import x.y.z.bill.constant.Direction;
 import x.y.z.bill.exception.AccountNotFoundExcepiton;
@@ -18,10 +16,31 @@ import x.y.z.bill.mapper.account.CapitalAccountDAO;
 import x.y.z.bill.mapper.account.CapitalJournalDAO;
 import x.y.z.bill.model.account.CapitalAccount;
 import x.y.z.bill.model.account.CapitalJournal;
+import io.alpha.core.config.ProcessorHelper;
+import io.alpha.core.dto.PageResultDTO;
+import io.alpha.log.annotation.IgnoreLog;
+import io.alpha.mybatis.statement.RecordCountHelper;
+import io.alpha.service.BaseService;
+import io.alpha.tx.annotation.TransMark;
+import io.alpha.util.DecimalUtil;
+import io.alpha.util.FstUtils;
+import io.alpha.vertx.util.VertxUtils;
+import io.vertx.core.DeploymentOptions;
+import io.vertx.core.Vertx;
 
+@IgnoreLog
 @Service
 @TransMark
-public class CapitalService extends BaseService {
+class CapitalService extends BaseService {
+
+    static final String BOOKKEEPING_ADDRESS = "bookkeeping.accounting.address";
+    private static final Vertx vertx;
+
+    static {
+        vertx = VertxUtils.get("BOOKKEEPING-ACCOUNTING-Vertx");
+        vertx.deployVerticle(BookKeepingVerticle.class.getName(),
+                new DeploymentOptions().setInstances(ProcessorHelper.triple()));
+    }
 
     @Autowired
     private CapitalAccountDAO capitalAccountDAO;
@@ -45,7 +64,7 @@ public class CapitalService extends BaseService {
         for (;;) {
             CapitalAccount account = capitalAccountDAO.selectByUserId(userId);
             if (account == null) {
-                throw new AccountNotFoundExcepiton("资金账户不存在.");
+                throw new AccountNotFoundExcepiton("资金账户不存在:" + userId);
             }
             account.setBalance(DecimalUtil.add(account.getBalance(), amount));
             account.setDigest("n/a");
@@ -64,6 +83,7 @@ public class CapitalService extends BaseService {
                 journal.setDigest("n/a");
                 journal.setMemo(memo);
                 capitalJournalDAO.insert(journal);
+                vertx.eventBus().send(BOOKKEEPING_ADDRESS, FstUtils.serialize(new Accounting(bizType, amount)));
                 return;
             }
         }
@@ -75,10 +95,10 @@ public class CapitalService extends BaseService {
         for (;;) {
             CapitalAccount account = capitalAccountDAO.selectByUserId(userId);
             if (account == null) {
-                throw new AccountNotFoundExcepiton("资金账户不存在.");
+                throw new AccountNotFoundExcepiton("资金账户不存在:" + userId);
             }
             if (DecimalUtil.lt(account.getBalance(), amount)) {
-                throw new BalanceNotEnoughException("余额不足.");
+                throw new BalanceNotEnoughException("余额不足:" + userId);
             }
             account.setBalance(DecimalUtil.subtract(account.getBalance(), amount));
             account.setFrozen(DecimalUtil.add(account.getFrozen(), amount));
@@ -109,12 +129,12 @@ public class CapitalService extends BaseService {
         for (;;) {
             CapitalAccount account = capitalAccountDAO.selectByUserId(userId);
             if (account == null) {
-                throw new AccountNotFoundExcepiton("资金账户不存在.");
+                throw new AccountNotFoundExcepiton("资金账户不存在:" + userId);
             }
-            CapitalJournal origJournal = capitalJournalDAO.selectByUserIdTxnIdAndType(userId, origTxnId,
+            CapitalJournal origJournal = capitalJournalDAO.selectByUserIdTxnIdAndBizType(userId, origTxnId,
                     BizType.preType(bizType));
             if (origJournal == null) {
-                throw new CapitalJournalNotFoundException("冻结申请流水不存在.");
+                throw new CapitalJournalNotFoundException("冻结申请流水不存在:" + origTxnId);
             }
             BigDecimal amount = origJournal.getAmount();
             account.setFrozen(DecimalUtil.subtract(account.getFrozen(), amount));
@@ -137,9 +157,20 @@ public class CapitalService extends BaseService {
                 journal.setDigest("n/a");
                 journal.setMemo(memo);
                 capitalJournalDAO.insert(journal);
+                if (bizStatus) {
+                    vertx.eventBus().send(BOOKKEEPING_ADDRESS, FstUtils.serialize(new Accounting(bizType, amount)));
+                }
                 return;
             }
         }
+    }
+
+    public PageResultDTO<CapitalJournal> queryJournalByUserId(final Long userId, final byte bizType,
+            final RowBounds rowBounds) {
+        PageResultDTO<CapitalJournal> result = new PageResultDTO<>();
+        result.setData(capitalJournalDAO.selectByUserIdBizType(userId, bizType, rowBounds));
+        result.setTotalRow(RecordCountHelper.getCount());
+        return result;
     }
 
 }

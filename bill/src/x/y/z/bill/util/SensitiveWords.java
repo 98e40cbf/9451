@@ -15,7 +15,7 @@ public class SensitiveWords {
     static {
         try {
             words = Files
-                    .readAllLines(Paths.get(ResourceUtils.getResources("classpath:sensitiveWords.txt")[0].getURI()));
+                    .readAllLines(Paths.get(ResourceUtils.getResources("classpath:sensitive-words.txt")[0].getURI()));
         } catch (Exception e) {
         }
         if (words == null) {

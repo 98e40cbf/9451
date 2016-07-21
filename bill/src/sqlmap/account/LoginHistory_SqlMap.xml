@@ -15,11 +15,11 @@
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
 		select
 		<include refid="Base_Column_List" />
-		from login_history
+		from user_login_history
 		where id = #{id,jdbcType=BIGINT}
 	</select>
 	<insert id="insert" parameterType="x.y.z.bill.model.account.LoginHistory" useGeneratedKeys="true" keyProperty="id">
-		insert into login_history (userId, loginIp,
+		insert into user_login_history (userId, loginIp,
 		loginTime, device, browser
 		)
 		values (#{userId,jdbcType=BIGINT}, #{loginIp,jdbcType=BIGINT},

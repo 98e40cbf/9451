@@ -7,9 +7,10 @@
 		<result column="realName" property="realName" jdbcType="VARCHAR" />
 		<result column="idCardNo" property="idCardNo" jdbcType="VARCHAR" />
 		<result column="idCardType" property="idCardType" jdbcType="TINYINT" />
+		<result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, userId, realName, idCardNo, idCardType
+		id, userId, realName, idCardNo, idCardType, createTime
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
 		select
@@ -17,12 +18,18 @@
 		from user_extra
 		where id = #{id,jdbcType=BIGINT}
 	</select>
+	<select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List"/>
+		from user_extra
+		where userId = #{userId,jdbcType=BIGINT}
+	</select>
 	<insert id="insert" parameterType="x.y.z.bill.model.account.UserExtra" useGeneratedKeys="true" keyProperty="id">
 		insert into user_extra (userId, realName,
-		idCardNo, idCardType
+		idCardNo, idCardType, createTime
 		)
 		values (#{userId,jdbcType=BIGINT}, #{realName,jdbcType=VARCHAR},
-		#{idCardNo,jdbcType=VARCHAR}, #{idCardType,jdbcType=TINYINT}
+		#{idCardNo,jdbcType=VARCHAR}, #{idCardType,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}
 		)
 	</insert>
 	<update id="updateByPrimaryKey" parameterType="x.y.z.bill.model.account.UserExtra">

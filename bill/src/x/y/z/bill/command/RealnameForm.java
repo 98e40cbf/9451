@@ -1,5 +1,7 @@
 package x.y.z.bill.command;
 
+import javax.validation.constraints.Pattern;
+
 import org.hibernate.validator.constraints.NotEmpty;
 
 import io.alpha.core.model.BaseObject;
@@ -10,6 +12,7 @@ public class RealnameForm extends BaseObject {
     @NotEmpty
     private String realName;
     @NotEmpty
+    @Pattern(regexp = "^\\d{17}(?:\\d|x|X)$")
     private String idCardNo;
 
     public String getRealName() {

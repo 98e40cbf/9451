@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="x.y.z.bill.mapper.message.SmsSendRecordDAO">
+    <resultMap id="BaseResultMap" type="x.y.z.bill.model.message.SmsSendRecord">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="smsId" property="smsId" jdbcType="BIGINT"/>
+        <result column="partnerType" property="partnerType" jdbcType="TINYINT"/>
+        <result column="smsStatus" property="smsStatus" jdbcType="TINYINT"/>
+        <result column="errorCode" property="errorCode" jdbcType="VARCHAR"/>
+        <result column="errorDetail" property="errorDetail" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, smsId, partnerType, smsStatus, errorCode, errorDetail, createTime
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from sms_send_record
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="getBySmsId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from sms_send_record
+        where smsId = #{smsId,jdbcType=BIGINT}
+        limit 1
+    </select>
+    <insert id="insert" parameterType="x.y.z.bill.model.message.SmsSendRecord" useGeneratedKeys="true" keyProperty="id">
+    insert into sms_send_record (smsId, partnerType,
+      smsStatus, errorCode, errorDetail, 
+      createTime)
+    values (#{smsId,jdbcType=BIGINT}, #{partnerType,jdbcType=TINYINT},
+      #{smsStatus,jdbcType=TINYINT}, #{errorCode,jdbcType=VARCHAR}, #{errorDetail,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="x.y.z.bill.model.message.SmsSendRecord">
+    update sms_send_record
+    set smsId = #{smsId,jdbcType=BIGINT},
+      partnerType = #{partnerType,jdbcType=TINYINT},
+      smsStatus = #{smsStatus,jdbcType=TINYINT},
+      errorCode = #{errorCode,jdbcType=VARCHAR},
+      errorDetail = #{errorDetail,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

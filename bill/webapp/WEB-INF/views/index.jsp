@@ -71,7 +71,60 @@
 						type="text" name="txnId"><br /> <input type="submit" />
 				</form>
 			</td>
-			<td>&nbsp;</td>
+			<td>更改密码:<br>
+
+				<form action="${contextPath}/user/update-password" method="post">
+					userId:<input name="userId" type="text"/><br/> oldPassword:<input
+						name="oldPassword" type="password"/><br/> newPassword:<input
+						name="newPassword" type="password"/><br/>
+					<b:token/>
+					<input type="submit"/>
+				</form>
+			</td>
+		</tr>
+		<tr>
+			<td>资金记录: <br/>
+
+				<form action="${contextPath}/user/list" method="get">
+					userId:<input name="userId" type="text"/><br/> <input
+						type="submit"/>
+				</form>
+			</td>
+			<td>更改手机号:<br>
+
+				<form action="${contextPath}/user/modify-mobile" method="post">
+					userId:<input name="userId" type="text"/><br/> oldMobile:<input
+						name="oldMobile" type="text"/><br/> newMobile:<input
+						name="newMobile" type="text"/><br/>
+					<b:token/>
+					<input type="submit"/>
+				</form>
+			</td>
+		</tr>
+		<tr>
+			<td>用户基本信息: <br/>
+
+				<form action="${contextPath}/user/get" method="get">
+					userId:<input name="userId" type="text"/><br/> <input
+						type="submit"/>
+				</form>
+			</td>
+			<td>用户扩展信息: <br/>
+
+				<form action="${contextPath}/user/extra" method="get">
+					userId:<input name="userId" type="text"/><br/> <input
+						type="submit"/>
+				</form>
+			</td>
+		</tr>
+		<tr>
+			<td>退出: <br/>
+
+				<form action="${contextPath}/user/logout" method="get">
+					<input type="submit"/>
+				</form>
+			</td>
+			<td>&nbsp;
 		</tr>
 	</table>
 
