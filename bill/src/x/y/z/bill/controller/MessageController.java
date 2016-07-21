@@ -9,16 +9,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import x.y.z.bill.command.RegistForm;
+import io.alpha.util.RandomStringGenerator;
+import io.alpha.web.controller.BaseController;
 import x.y.z.bill.command.message.SmsForm;
 import x.y.z.bill.constant.Views;
 import x.y.z.bill.constant.message.SmsBizTypeEnum;
 import x.y.z.bill.constant.message.SmsTypeEnum;
 import x.y.z.bill.dto.message.SmsDTO;
 import x.y.z.bill.service.message.SmsFacade;
-import x.y.z.bill.util.message.SmsTaoBaoClientUtils;
-import io.alpha.util.RandomStringGenerator;
-import io.alpha.web.controller.BaseController;
 
 @Controller
 @RequestMapping("/message")
