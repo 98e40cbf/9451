@@ -41,7 +41,6 @@ public class MessageController extends BaseController {
         smsDTO.setSmsTypeEnum(SmsTypeEnum.REGISTER);
         smsFacade.sendCheckCode(smsDTO);
 
-        SmsTaoBaoClientUtils.sendSms(registForm.getMobile(), registForm.getUsername());
         return "redirect:/";
     }
 }

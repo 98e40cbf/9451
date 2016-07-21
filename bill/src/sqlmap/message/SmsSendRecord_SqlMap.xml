@@ -37,12 +37,17 @@
   </insert>
     <update id="updateByPrimaryKey" parameterType="x.y.z.bill.model.message.SmsSendRecord">
     update sms_send_record
-    set smsId = #{smsId,jdbcType=BIGINT},
-      partnerType = #{partnerType,jdbcType=TINYINT},
-      smsStatus = #{smsStatus,jdbcType=TINYINT},
-      errorCode = #{errorCode,jdbcType=VARCHAR},
-      errorDetail = #{errorDetail,jdbcType=VARCHAR},
-      createTime = #{createTime,jdbcType=TIMESTAMP}
+    <trim prefix="SET" suffixOverrides=",">
+      <if test="smsStatus != null">
+        smsStatus = #{smsStatus,jdbcType=TINYINT},
+      </if>
+      <if test="errorCode != null">
+        errorCode = #{errorCode,jdbcType=VARCHAR},
+      </if>
+      <if test="errorDetail != null">
+        errorDetail = #{errorDetail,jdbcType=VARCHAR},
+      </if>
+    </trim>
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
