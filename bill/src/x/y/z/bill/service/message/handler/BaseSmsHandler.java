@@ -40,12 +40,17 @@ public abstract class BaseSmsHandler {
         long smsId = smsRecord.getId();
         logger.info("{}-[发送短信记录]-{},处理开始", identityId, smsId);
         SmsSendRecord smsSendRecord = smsSendRecordService.insert(smsPartnerEnum, smsRecord.getId());
-        if (smsSendRecord != null && smsSendRecord.getId() != null) {
-            return clientSendSms(smsRecord);
+        ResultDTO<String> result = ResultBuilder.buildResult(ResultTypeEnum.FAILED);
+        if (smsSendRecord == null && smsSendRecord.getId() == null) {
+            logger.error("{}-[发送短信记录]-{}，短信发送记录新增失败:{}", identityId, smsId, result);
+            return result;
         }
 
-        logger.error("{}-[发送短信记录]，处理失败", identityId, smsId);
-        return ResultBuilder.buildResult(ResultTypeEnum.FAILED);
+        long smsSendRecordId = smsSendRecord.getId();
+        result = clientSendSms(smsRecord);
+        smsSendRecordService.update(smsSendRecordId, result);
+        logger.info("{}-[发送短信记录]-{}，处理结果:{}", identityId, smsId, result);
+        return result;
     }
 
     public abstract ResultDTO<String> clientSendSms(SmsRecord smsRecord);

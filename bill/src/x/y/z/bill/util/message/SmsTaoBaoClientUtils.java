@@ -4,11 +4,11 @@ import com.taobao.api.DefaultTaobaoClient;
 import com.taobao.api.TaobaoClient;
 import com.taobao.api.request.AlibabaAliqinFcSmsNumSendRequest;
 import com.taobao.api.response.AlibabaAliqinFcSmsNumSendResponse;
+
 import io.alpha.core.util.PropertiesLoader;
 import io.alpha.logging.Logger;
 import io.alpha.logging.LoggerFactory;
 import io.alpha.util.JsonUtils;
-import org.springframework.scheduling.annotation.Async;
 import x.y.z.bill.constant.message.SmsConstants;
 import x.y.z.bill.model.message.SmsParam;
 

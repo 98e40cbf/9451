@@ -36,4 +36,8 @@ public enum ResultTypeEnum {
     public String getDesc() {
         return desc;
     }
+
+    public static boolean isSuccess(int status){
+        return status == SUCCESS.status;
+    }
 }
