@@ -1,38 +1,56 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="x.y.z.bill.mapper.account.BookKeepingDAO">
-    <resultMap id="BaseResultMap" type="x.y.z.bill.model.account.BookKeeping">
-        <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="recharge" property="recharge" jdbcType="DECIMAL"/>
-        <result column="invest" property="invest" jdbcType="DECIMAL"/>
-        <result column="withdraw" property="withdraw" jdbcType="DECIMAL"/>
-        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-		id, recharge, invest, withdraw, lastUpdate
+	<resultMap id="BaseResultMap" type="x.y.z.bill.model.account.BookKeeping">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="userId" property="userId" jdbcType="BIGINT" />
+		<result column="recharge" property="recharge" jdbcType="DECIMAL" />
+		<result column="invest" property="invest" jdbcType="DECIMAL" />
+		<result column="withdraw" property="withdraw" jdbcType="DECIMAL" />
+		<result column="profit" property="profit" jdbcType="DECIMAL" />
+		<result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, userId, recharge, invest, withdraw, profit, lastUpdate
 	</sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-        select
-        <include refid="Base_Column_List"/>
-        from bookkeeping
-        where id = #{id,jdbcType=INTEGER}
-    </select>
-    <update id="amountToRecharge" parameterType="x.y.z.bill.model.account.BookKeeping">
-		update bookkeeping
-		set recharge = recharge + #{recharge,jdbcType=DECIMAL},
-		lastUpdate = #{lastUpdate,jdbcType=TIMESTAMP}
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from bookkeeping
 		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<insert id="insert" parameterType="x.y.z.bill.model.account.BookKeeping">
+		insert into bookkeeping (userId, recharge,
+		invest, withdraw, profit,
+		lastUpdate)
+		values (#{userId,jdbcType=BIGINT}, #{recharge,jdbcType=DECIMAL},
+		#{invest,jdbcType=DECIMAL}, #{withdraw,jdbcType=DECIMAL}, #{profit,jdbcType=DECIMAL},
+		#{lastUpdate,jdbcType=TIMESTAMP})
+	</insert>
+	<update id="amountToRecharge" parameterType="x.y.z.bill.model.account.BookKeeping">
+		update bookkeeping
+		set recharge = recharge +
+		#{recharge,jdbcType=DECIMAL},
+		lastUpdate = #{lastUpdate,jdbcType=TIMESTAMP}
+		where userId = #{userId,jdbcType=BIGINT}
 	</update>
-    <update id="amountToInvest" parameterType="x.y.z.bill.model.account.BookKeeping">
+	<update id="amountToProfit" parameterType="x.y.z.bill.model.account.BookKeeping">
+		update bookkeeping
+		set profit = profit + #{profit,jdbcType=DECIMAL},
+		lastUpdate = #{lastUpdate,jdbcType=TIMESTAMP}
+		where userId = #{userId,jdbcType=BIGINT}
+	</update>
+	<update id="amountToInvest" parameterType="x.y.z.bill.model.account.BookKeeping">
 		update bookkeeping
 		set invest = invest + #{invest,jdbcType=DECIMAL},
 		lastUpdate = #{lastUpdate,jdbcType=TIMESTAMP}
-		where id = #{id,jdbcType=INTEGER}
+		where userId = #{userId,jdbcType=BIGINT}
 	</update>
-    <update id="amountToWithdraw" parameterType="x.y.z.bill.model.account.BookKeeping">
+	<update id="amountToWithdraw" parameterType="x.y.z.bill.model.account.BookKeeping">
 		update bookkeeping
-		set withdraw = withdraw + #{withdraw,jdbcType=DECIMAL},
+		set withdraw = withdraw +
+		#{withdraw,jdbcType=DECIMAL},
 		lastUpdate = #{lastUpdate,jdbcType=TIMESTAMP}
-		where id = #{id,jdbcType=INTEGER}
+		where userId = #{userId,jdbcType=BIGINT}
 	</update>
 </mapper>

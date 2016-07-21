@@ -5,18 +5,17 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import io.alpha.log.annotation.IgnoreLog;
+import io.alpha.security.util.EncryptionUtils;
+import io.alpha.service.BaseService;
+import io.alpha.tx.annotation.TransMark;
+import io.alpha.util.StringUtils;
 import x.y.z.bill.exception.AccountNotFoundExcepiton;
 import x.y.z.bill.mapper.account.UserDAO;
 import x.y.z.bill.mapper.account.UserExtraDAO;
 import x.y.z.bill.model.account.User;
 import x.y.z.bill.model.account.UserExtra;
 import x.y.z.bill.model.account.ValueUpdate;
-import io.alpha.log.annotation.IgnoreLog;
-import io.alpha.security.util.EncryptionUtils;
-import io.alpha.service.BaseService;
-import io.alpha.tx.annotation.TransMark;
-import io.alpha.util.SequenceHelper;
-import io.alpha.util.StringUtils;
 
 @IgnoreLog
 @Service
@@ -36,10 +35,10 @@ class UserService extends BaseService {
         user.setMobile(EncryptionUtils.encryptByAES(mobile));
         user.setLoginPwd(EncryptionUtils.encodePassword(password));
         user.setPaymentPwd("n/a");
-        user.setEmail(SequenceHelper.get());
+        user.setEmail("n/a");
         user.setCreateTime(new Date());
         userDAO.insert(user);
-        capitalService.createAccount(user.getId());
+        capitalService.createAccountTo(user.getId());
     }
 
     public void realNameAuth(final Long userId, final String realName, final String idCardNo, final byte idCardType)

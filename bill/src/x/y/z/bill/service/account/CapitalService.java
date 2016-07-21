@@ -7,15 +7,6 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import x.y.z.bill.constant.BizType;
-import x.y.z.bill.constant.Direction;
-import x.y.z.bill.exception.AccountNotFoundExcepiton;
-import x.y.z.bill.exception.BalanceNotEnoughException;
-import x.y.z.bill.exception.CapitalJournalNotFoundException;
-import x.y.z.bill.mapper.account.CapitalAccountDAO;
-import x.y.z.bill.mapper.account.CapitalJournalDAO;
-import x.y.z.bill.model.account.CapitalAccount;
-import x.y.z.bill.model.account.CapitalJournal;
 import io.alpha.core.config.ProcessorHelper;
 import io.alpha.core.dto.PageResultDTO;
 import io.alpha.log.annotation.IgnoreLog;
@@ -27,6 +18,17 @@ import io.alpha.util.FstUtils;
 import io.alpha.vertx.util.VertxUtils;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
+import x.y.z.bill.constant.BizType;
+import x.y.z.bill.constant.Direction;
+import x.y.z.bill.exception.AccountNotFoundExcepiton;
+import x.y.z.bill.exception.BalanceNotEnoughException;
+import x.y.z.bill.exception.CapitalJournalNotFoundException;
+import x.y.z.bill.mapper.account.BookKeepingDAO;
+import x.y.z.bill.mapper.account.CapitalAccountDAO;
+import x.y.z.bill.mapper.account.CapitalJournalDAO;
+import x.y.z.bill.model.account.BookKeeping;
+import x.y.z.bill.model.account.CapitalAccount;
+import x.y.z.bill.model.account.CapitalJournal;
 
 @IgnoreLog
 @Service
@@ -46,16 +48,29 @@ class CapitalService extends BaseService {
     private CapitalAccountDAO capitalAccountDAO;
     @Autowired
     private CapitalJournalDAO capitalJournalDAO;
+    @Autowired
+    private BookKeepingDAO bookKeepingDAO;
 
-    public void createAccount(final Long userId) {
+    public void createAccountTo(final Long userId) {
         CapitalAccount account = new CapitalAccount();
         account.setUserId(userId);
         account.setBalance(BigDecimal.ZERO);
         account.setFrozen(BigDecimal.ZERO);
         account.setVersion(0L);
-        account.setLastUpdate(new Date());
         account.setDigest("n/a");
+        account.setLastUpdate(new Date());
         capitalAccountDAO.insert(account);
+        createBookKeepingTo(userId);
+    }
+
+    private void createBookKeepingTo(final Long userId) {
+        BookKeeping bookKeeping = new BookKeeping();
+        bookKeeping.setUserId(userId);
+        bookKeeping.setInvest(BigDecimal.ZERO);
+        bookKeeping.setProfit(BigDecimal.ZERO);
+        bookKeeping.setRecharge(BigDecimal.ZERO);
+        bookKeeping.setWithdraw(BigDecimal.ZERO);
+        bookKeepingDAO.insert(bookKeeping);
     }
 
     public void add(final Long userId, final BigDecimal amount, final String txnId, final String memo,
@@ -83,7 +98,7 @@ class CapitalService extends BaseService {
                 journal.setDigest("n/a");
                 journal.setMemo(memo);
                 capitalJournalDAO.insert(journal);
-                vertx.eventBus().send(BOOKKEEPING_ADDRESS, FstUtils.serialize(new Accounting(bizType, amount)));
+                vertx.eventBus().send(BOOKKEEPING_ADDRESS, FstUtils.serialize(new Accounting(userId, bizType, amount)));
                 return;
             }
         }
@@ -158,7 +173,8 @@ class CapitalService extends BaseService {
                 journal.setMemo(memo);
                 capitalJournalDAO.insert(journal);
                 if (bizStatus) {
-                    vertx.eventBus().send(BOOKKEEPING_ADDRESS, FstUtils.serialize(new Accounting(bizType, amount)));
+                    vertx.eventBus().send(BOOKKEEPING_ADDRESS,
+                            FstUtils.serialize(new Accounting(userId, bizType, amount)));
                 }
                 return;
             }

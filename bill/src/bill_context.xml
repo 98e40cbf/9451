@@ -14,11 +14,11 @@
 			</array>
 		</property>
 	</bean>
-	<context:component-scan annotation-config="true" base-package="x.y.z.bill.service">
+	<context:component-scan annotation-config="true" base-package="x.y.z.bill.service,x.y.z.bill.adapter">
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
 		<context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice" />
 	</context:component-scan>
 
-	<bean id="billRedisConnection" class="x.y.z.bill.component.RedisConnectionFactoryBean" />
+	<!-- <bean id="billRedisConnection" class="x.y.z.bill.component.RedisConnectionFactoryBean" /> -->
 
 </beans>

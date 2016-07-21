@@ -49,8 +49,8 @@ CREATE TABLE `user_base` (
   `createTime` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_username` (`username`),
-  UNIQUE KEY `uk_mobile` (`mobile`),
-  UNIQUE KEY `uk_email` (`email`)
+  UNIQUE KEY `uk_mobile` (`mobile`) -- ,
+--  UNIQUE KEY `uk_email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -104,18 +104,21 @@ CREATE TABLE `capital_operation_history` (
 -- ----------------------------
 DROP TABLE IF EXISTS `bookkeeping`;
 CREATE TABLE `bookkeeping` (
-  `id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `userId` bigint(20) NOT NULL,
   `recharge` decimal(18,2) NOT NULL,
   `invest` decimal(18,2) NOT NULL,
   `withdraw` decimal(18,2) NOT NULL,
+  `profit` decimal(18,2) NOT NULL,
   `lastUpdate` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `idx_userId` (`userId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bookkeeping
 -- ----------------------------
-INSERT INTO `bookkeeping` VALUES (1, 0.00, 0.00, 0.00, '2016-07-01 00:00:00');
+INSERT INTO `bookkeeping` VALUES (1, -1, 0.00, 0.00, 0.00, 0.00, now());
 
 -- ----------------------------
 -- Table structure for mobile_change_history
