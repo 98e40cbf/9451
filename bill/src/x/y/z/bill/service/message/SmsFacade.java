@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 
 import x.y.z.bill.builder.message.ResultBuilder;
+import x.y.z.bill.builder.message.SmsRecordBuilder;
 import x.y.z.bill.constant.message.ResultTypeEnum;
 import x.y.z.bill.constant.message.SmsPartnerEnum;
 import x.y.z.bill.constant.message.SmsTypeEnum;
@@ -58,14 +59,11 @@ public class SmsFacade implements ApplicationContextAware {
 
         // 1，生成验证码
         String checkCode = RandomStringGenerator.randomNumeric(6);
-        String txnId = smsDTO.getTxnId();
-        SmsTypeEnum smsTypeEnum = smsDTO.getSmsTypeEnum();
-        String receiveMobiles = smsDTO.getMobiles();
         SmsParam smsParam = new SmsParam();
         smsParam.setName(checkCode);// 阿里大鱼目前个人暂时没有成功申请到${code}
 
         // 2，新增短信记录
-        SmsRecord smsRecord = smsRecordService.insert(txnId, smsTypeEnum, receiveMobiles, smsParam);
+        SmsRecord smsRecord = smsRecordService.insert(SmsRecordBuilder.build(smsDTO, smsParam));
         if (smsRecord != null && StringUtils.isNotBlank(smsRecord.getSmsParam())) {
             // 3，获取短信路由
             SmsPartnerEnum smsPartnerEnum = smsRoutingService.getSmsPartner();

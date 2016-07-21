@@ -30,16 +30,11 @@ public class SmsRecordService extends BaseService {
 
     /**
      * 新增短信记录
-     *
-     * @param txnId
-     * @param smsTypeEnum
-     * @param mobiles
-     * @param smsParam
+     * @param smsRecord
      * @return
      */
-    public SmsRecord insert(final String txnId, final SmsTypeEnum smsTypeEnum, final String mobiles,
-            final SmsParam smsParam) {
-        SmsRecord smsRecord = SmsRecordBuilder.build(txnId, smsTypeEnum, mobiles, smsParam);
+    public SmsRecord insert(SmsRecord smsRecord) {
+        String txnId = smsRecord.getTxnId();
         try {
             int result = smsRecordDAO.insert(smsRecord);
             if (result == 1) {

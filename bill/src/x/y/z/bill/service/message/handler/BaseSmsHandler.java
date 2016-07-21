@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import x.y.z.bill.builder.message.ResultBuilder;
 import x.y.z.bill.constant.message.ResultTypeEnum;
+import x.y.z.bill.constant.message.SmsBizTypeEnum;
 import x.y.z.bill.constant.message.SmsPartnerEnum;
 import x.y.z.bill.model.message.SmsRecord;
 import x.y.z.bill.model.message.SmsSendRecord;
@@ -49,12 +50,24 @@ public abstract class BaseSmsHandler {
         }
 
         long smsSendRecordId = smsSendRecord.getId();
-        result = clientSendSms(smsRecord);
+        SmsBizTypeEnum smsBizTypeEnum = SmsBizTypeEnum.getEnumByType(smsRecord.getSmsBizType());
+        switch (smsBizTypeEnum) {
+            case VOICE:
+                result = clientSendVoiceSms(smsRecord);
+                break;
+            case TEXT:
+            default:
+                result = clientSendSms(smsRecord);
+                break;
+        }
+
         smsSendRecordService.update(smsSendRecordId, result);
         logger.info("{}-[发送短信记录]-{}，处理结果:{}", identityId, smsId, result);
         return result;
     }
 
     public abstract ResultDTO<String> clientSendSms(SmsRecord smsRecord);
+
+    public abstract ResultDTO<String> clientSendVoiceSms(SmsRecord smsRecord);
 
 }

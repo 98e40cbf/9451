@@ -11,17 +11,26 @@
 <body>
 <table>
     <tr>
-        <td>注册:<br>
-
-            <form action="${contextPath}/message/regist" method="post">
-                username:<input name="username" type="text"/><br/> mobile:<input
-                    name="mobile" type="text"/><br/> password:<input
-                    name="password" type="text"/><br/>
+        <td>文本转语音通知:<br>
+            <form action="${contextPath}/message/voice" method="post">
+                mobile:<input name="mobile" type="text"/><br/>
                 <b:token/>
                 <input type="submit"/>
             </form>
         </td>
     </tr>
+
+    <tr>
+        <td>普通文本短信:<br>
+            <form action="${contextPath}/message/normal" method="post">
+                 mobile:<input name="mobile" type="text"/><br/>
+                <b:token/>
+                <input type="submit"/>
+            </form>
+        </td>
+    </tr>
+
+
 
 </table>
 

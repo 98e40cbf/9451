@@ -5,6 +5,7 @@
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="txnId" property="txnId" jdbcType="VARCHAR"/>
         <result column="smsType" property="smsType" jdbcType="TINYINT"/>
+        <result column="smsBizType" property="smsBizType" jdbcType="TINYINT"/>
         <result column="smsStatus" property="smsStatus" jdbcType="TINYINT"/>
         <result column="receiveMobiles" property="receiveMobiles" jdbcType="VARCHAR"/>
         <result column="smsParam" property="smsParam" jdbcType="VARCHAR"/>
@@ -13,7 +14,7 @@
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, txnId, smsType, smsStatus, receiveMobiles, smsParam, smsTemplateCode, priority, 
+    id, txnId, smsType, smsBizType, smsStatus, receiveMobiles, smsParam, smsTemplateCode, priority,
     createTime
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
@@ -31,25 +32,19 @@
         limit 1
     </select>
     <insert id="insert" parameterType="x.y.z.bill.model.message.SmsRecord" useGeneratedKeys="true" keyProperty="id">
-    insert into sms_record (txnId, smsType,
+    insert into sms_record (txnId, smsType, smsBizType,
       smsStatus, receiveMobiles, smsParam, 
       smsTemplateCode, priority, createTime
       )
-    values (#{txnId,jdbcType=VARCHAR}, #{smsType,jdbcType=TINYINT},
+    values (#{txnId,jdbcType=VARCHAR}, #{smsType,jdbcType=TINYINT}, #{smsBizType,jdbcType=TINYINT},
       #{smsStatus,jdbcType=TINYINT}, #{receiveMobiles,jdbcType=VARCHAR}, #{smsParam,jdbcType=VARCHAR}, 
       #{smsTemplateCode,jdbcType=VARCHAR}, #{priority,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}
       )
   </insert>
     <update id="updateByPrimaryKey" parameterType="x.y.z.bill.model.message.SmsRecord">
     update sms_record
-    set txnId = #{txnId,jdbcType=VARCHAR},
-      smsType = #{smsType,jdbcType=TINYINT},
-      smsStatus = #{smsStatus,jdbcType=TINYINT},
-      receiveMobiles = #{receiveMobiles,jdbcType=VARCHAR},
-      smsParam = #{smsParam,jdbcType=VARCHAR},
-      smsTemplateCode = #{smsTemplateCode,jdbcType=VARCHAR},
-      priority = #{priority,jdbcType=TINYINT},
-      createTime = #{createTime,jdbcType=TIMESTAMP}
+    set
+      smsStatus = #{smsStatus,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
