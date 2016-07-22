@@ -37,6 +37,7 @@ class CapitalService extends BaseService {
 
     static final String BOOKKEEPING_ADDRESS = "bookkeeping.accounting.address";
     private static final long INVEST_MID_ACCT_ID = -60001L;
+    private static final long UNKNOWN_ACCT_ID = -1L;
     private static final Vertx vertx;
 
     static {
@@ -111,7 +112,7 @@ class CapitalService extends BaseService {
                 journal.setCreateTime(current);
                 journal.setDigest("n/a");
                 journal.setMemo(memo);
-                journal.setAcctFrom(-1L);
+                journal.setAcctFrom(UNKNOWN_ACCT_ID);
                 journal.setAcctTo(balanceAcct.getId());
                 capitalJournalDAO.insert(journal);
                 vertx.eventBus().send(BOOKKEEPING_ADDRESS, FstUtils.serialize(new Accounting(userId, bizType, amount)));
@@ -177,7 +178,7 @@ class CapitalService extends BaseService {
 
     public void unfreeze(final Long userId, final String origTxnId, final String memo, final BizType bizType,
             final boolean bizStatus) {
-        CapitalHistoryService.record(userId, DecimalUtil.format(-1L), origTxnId, bizType.getCode(), memo);
+        CapitalHistoryService.record(userId, BigDecimal.ZERO, origTxnId, bizType.getCode(), memo);
         for (;;) {
             CapitalAccount balanceAcct = getBalanceAccount(userId);
             CapitalAccount frozenAcct = getFrozenAccount(userId);
@@ -201,10 +202,12 @@ class CapitalService extends BaseService {
             }
             int frozenCount = capitalAccountDAO.updateByPrimaryKey(frozenAcct);
             int balanceCount = capitalAccountDAO.updateByPrimaryKey(balanceAcct);
-            capitalAccountDAO.updateByPrimaryKey(investMidAcct);
             if (frozenCount == 1 && balanceCount == 1) {
-                handleUnfreezeJournal(userId, origTxnId, memo, bizType, bizStatus, balanceAcct, current, frozenAcct,
-                        amount, investMidAcct);
+                if (bizStatus) {
+                    capitalAccountDAO.updateByPrimaryKey(investMidAcct);
+                }
+                handleUnfreezeJournal(userId, bizType, origTxnId, bizStatus, balanceAcct, frozenAcct, investMidAcct,
+                        amount, current, memo);
                 return;
             }
         }
@@ -219,9 +222,9 @@ class CapitalService extends BaseService {
         return origJournal;
     }
 
-    private void handleUnfreezeJournal(final Long userId, final String origTxnId, final String memo,
-            final BizType bizType, final boolean bizStatus, final CapitalAccount balanceAcct, final Date current,
-            final CapitalAccount frozenAcct, final BigDecimal amount, final CapitalAccount investMidAcct) {
+    private void handleUnfreezeJournal(final Long userId, final BizType bizType, final String origTxnId,
+            final boolean bizStatus, final CapitalAccount balanceAcct, final CapitalAccount frozenAcct,
+            final CapitalAccount investMidAcct, final BigDecimal amount, final Date current, final String memo) {
         CapitalJournal journal = new CapitalJournal();
         journal.setUserId(userId);
         journal.setAmount(amount);
@@ -236,7 +239,7 @@ class CapitalService extends BaseService {
             if (BizType.INVEST_UNFREEZE == bizType) {
                 journal.setAcctTo(investMidAcct.getId());
             } else {
-                journal.setAcctTo(-1L);
+                journal.setAcctTo(UNKNOWN_ACCT_ID);
             }
         } else {
             journal.setAcctTo(balanceAcct.getId());
