@@ -12,15 +12,19 @@ public class CapitalJournal extends BaseObject {
 
     private Long userId;
 
+    private Byte bizType;
+
+    private String txnId;
+
+    private Long acctFrom;
+
+    private Long acctTo;
+
     private BigDecimal amount;
 
     private BigDecimal balance;
 
-    private Byte bizType;
-
     private Byte direction;
-
-    private String txnId;
 
     private String memo;
 
@@ -44,6 +48,38 @@ public class CapitalJournal extends BaseObject {
         this.userId = userId;
     }
 
+    public Byte getBizType() {
+        return bizType;
+    }
+
+    public void setBizType(final Byte bizType) {
+        this.bizType = bizType;
+    }
+
+    public String getTxnId() {
+        return txnId;
+    }
+
+    public void setTxnId(final String txnId) {
+        this.txnId = txnId == null ? null : txnId.trim();
+    }
+
+    public Long getAcctFrom() {
+        return acctFrom;
+    }
+
+    public void setAcctFrom(final Long acctFrom) {
+        this.acctFrom = acctFrom;
+    }
+
+    public Long getAcctTo() {
+        return acctTo;
+    }
+
+    public void setAcctTo(final Long acctTo) {
+        this.acctTo = acctTo;
+    }
+
     public BigDecimal getAmount() {
         return amount;
     }
@@ -60,20 +96,12 @@ public class CapitalJournal extends BaseObject {
         this.balance = balance;
     }
 
-    public Byte getBizType() {
-        return bizType;
+    public Byte getDirection() {
+        return direction;
     }
 
-    public void setBizType(final Byte bizType) {
-        this.bizType = bizType;
-    }
-
-    public String getTxnId() {
-        return txnId;
-    }
-
-    public void setTxnId(final String txnId) {
-        this.txnId = txnId == null ? null : txnId.trim();
+    public void setDirection(final Byte direction) {
+        this.direction = direction;
     }
 
     public String getMemo() {
@@ -98,13 +126,5 @@ public class CapitalJournal extends BaseObject {
 
     public void setCreateTime(final Date createTime) {
         this.createTime = createTime;
-    }
-
-    public Byte getDirection() {
-        return direction;
-    }
-
-    public void setDirection(final Byte direction) {
-        this.direction = direction;
     }
 }

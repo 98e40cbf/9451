@@ -1,33 +1,42 @@
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for capitalaccount
+-- Table structure for capital_account
 -- ----------------------------
 DROP TABLE IF EXISTS `capitalaccount`;
-CREATE TABLE `capitalaccount` (
+DROP TABLE IF EXISTS `capital_account`;
+CREATE TABLE `capital_account` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `userId` bigint(20) NOT NULL,
-  `balance` decimal(18,2) NOT NULL,
-  `frozen` decimal(18,2) NOT NULL,
+  `acctType` tinyint(3) unsigned NOT NULL,
+  `amount` decimal(18,2) NOT NULL,
   `digest` varchar(40) NOT NULL,
-  `version` bigint(20) unsigned NOT NULL,
+  `version` bigint(20) NOT NULL,
   `lastUpdate` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_userId` (`userId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  UNIQUE KEY `uk_userId_type` (`userId`,`acctType`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for capitaljournal
+-- Records of capitalaccount
+-- ----------------------------
+INSERT INTO `capital_account` VALUES (1, -60001, 101, 0.00, 'n/a', 0, now());
+
+-- ----------------------------
+-- Table structure for capital_journal
 -- ----------------------------
 DROP TABLE IF EXISTS `capitaljournal`;
-CREATE TABLE `capitaljournal` (
+DROP TABLE IF EXISTS `capital_journal`;
+CREATE TABLE `capital_journal` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `userId` bigint(20) NOT NULL,
+  `bizType` tinyint(3) unsigned NOT NULL,
+  `txnId` varchar(40) NOT NULL,
+  `acctFrom` bigint(20) NOT NULL,
+  `acctTo` bigint(20) NOT NULL,
   `amount` decimal(18,2) NOT NULL,
   `balance` decimal(18,2) NOT NULL,
-  `bizType` tinyint(3) unsigned NOT NULL,
   `direction` tinyint(3) unsigned NOT NULL,
-  `txnId` varchar(40) NOT NULL,
   `memo` varchar(50) NOT NULL,
   `digest` varchar(40) NOT NULL,
   `createTime` datetime NOT NULL,
@@ -118,7 +127,7 @@ CREATE TABLE `bookkeeping` (
 -- ----------------------------
 -- Records of bookkeeping
 -- ----------------------------
-INSERT INTO `bookkeeping` VALUES (1, -1, 0.00, 0.00, 0.00, 0.00, now());
+INSERT INTO `bookkeeping` VALUES (1, -60000, 0.00, 0.00, 0.00, 0.00, now());
 
 -- ----------------------------
 -- Table structure for mobile_change_history

@@ -4,34 +4,33 @@
 	<resultMap id="BaseResultMap" type="x.y.z.bill.model.account.CapitalAccount">
 		<id column="id" property="id" jdbcType="BIGINT" />
 		<result column="userId" property="userId" jdbcType="BIGINT" />
-		<result column="balance" property="balance" jdbcType="DECIMAL" />
-		<result column="frozen" property="frozen" jdbcType="DECIMAL" />
+		<result column="acctType" property="acctType" jdbcType="TINYINT" />
+		<result column="amount" property="amount" jdbcType="DECIMAL" />
 		<result column="digest" property="digest" jdbcType="VARCHAR" />
 		<result column="version" property="version" jdbcType="BIGINT" />
 		<result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, userId, balance, frozen, digest, version, lastUpdate
+		id, userId, acctType, amount, digest, version, lastUpdate
 	</sql>
-	<select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+	<select id="selectByUserIdAcctType" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
-		from capitalaccount
-		where userId = #{userId,jdbcType=BIGINT}
+		from capital_account
+		where userId = #{userId,jdbcType=BIGINT} and acctType = #{acctType,jdbcType=TINYINT}
 	</select>
-	<insert id="insert" parameterType="x.y.z.bill.model.account.CapitalAccount" useGeneratedKeys="true" keyProperty="id">
-		insert into capitalaccount (userId, balance,
-		frozen, digest, version,
+	<insert id="insert" parameterType="x.y.z.bill.model.account.CapitalAccount">
+		insert into capital_account (userId, acctType,
+		amount, digest, version,
 		lastUpdate)
-		values (#{userId,jdbcType=BIGINT}, #{balance,jdbcType=DECIMAL},
-		#{frozen,jdbcType=DECIMAL}, #{digest,jdbcType=VARCHAR}, #{version,jdbcType=BIGINT},
+		values (#{userId,jdbcType=BIGINT}, #{acctType,jdbcType=TINYINT},
+		#{amount,jdbcType=DECIMAL},
+		#{digest,jdbcType=VARCHAR}, #{version,jdbcType=BIGINT},
 		#{lastUpdate,jdbcType=TIMESTAMP})
 	</insert>
 	<update id="updateByPrimaryKey" parameterType="x.y.z.bill.model.account.CapitalAccount">
-		update capitalaccount
-		set userId = #{userId,jdbcType=BIGINT},
-		balance = #{balance,jdbcType=DECIMAL},
-		frozen = #{frozen,jdbcType=DECIMAL},
+		update capital_account
+		set amount = #{amount,jdbcType=DECIMAL},
 		digest = #{digest,jdbcType=VARCHAR},
 		version = version + 1,
 		lastUpdate = #{lastUpdate,jdbcType=TIMESTAMP}

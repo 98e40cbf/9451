@@ -36,6 +36,7 @@ import x.y.z.bill.model.account.CapitalJournal;
 class CapitalService extends BaseService {
 
     static final String BOOKKEEPING_ADDRESS = "bookkeeping.accounting.address";
+    private static final long INVEST_MID_ACCT_ID = -60001L;
     private static final Vertx vertx;
 
     static {
@@ -52,15 +53,31 @@ class CapitalService extends BaseService {
     private BookKeepingDAO bookKeepingDAO;
 
     public void createAccountTo(final Long userId) {
-        CapitalAccount account = new CapitalAccount();
-        account.setUserId(userId);
-        account.setBalance(BigDecimal.ZERO);
-        account.setFrozen(BigDecimal.ZERO);
-        account.setVersion(0L);
-        account.setDigest("n/a");
-        account.setLastUpdate(new Date());
-        capitalAccountDAO.insert(account);
+        createBalanceAccount(userId);
+        createFrozenAcct(userId);
         createBookKeepingTo(userId);
+    }
+
+    private CapitalAccount createBalanceAccount(final Long userId) {
+        CapitalAccount balanceAcct = new CapitalAccount();
+        balanceAcct.setUserId(userId);
+        balanceAcct.setAcctType(AccountType.USER_BALANCE_ACCT.getCode());
+        balanceAcct.setAmount(BigDecimal.ZERO);
+        balanceAcct.setVersion(0L);
+        balanceAcct.setDigest("n/a");
+        capitalAccountDAO.insert(balanceAcct);
+        return balanceAcct;
+    }
+
+    private CapitalAccount createFrozenAcct(final Long userId) {
+        CapitalAccount frozenAcct = new CapitalAccount();
+        frozenAcct.setUserId(userId);
+        frozenAcct.setAcctType(AccountType.USER_FROZEN_ACCT.getCode());
+        frozenAcct.setAmount(BigDecimal.ZERO);
+        frozenAcct.setVersion(0L);
+        frozenAcct.setDigest("n/a");
+        capitalAccountDAO.insert(frozenAcct);
+        return frozenAcct;
     }
 
     private void createBookKeepingTo(final Long userId) {
@@ -77,26 +94,25 @@ class CapitalService extends BaseService {
             final BizType bizType) {
         CapitalHistoryService.record(userId, amount, txnId, bizType.getCode(), memo);
         for (;;) {
-            CapitalAccount account = capitalAccountDAO.selectByUserId(userId);
-            if (account == null) {
-                throw new AccountNotFoundExcepiton("资金账户不存在:" + userId);
-            }
-            account.setBalance(DecimalUtil.add(account.getBalance(), amount));
-            account.setDigest("n/a");
+            CapitalAccount balanceAcct = getBalanceAccount(userId);
             Date current = new Date();
-            account.setLastUpdate(current);
-            int count = capitalAccountDAO.updateByPrimaryKey(account);
+            balanceAcct.setAmount(DecimalUtil.add(balanceAcct.getAmount(), amount));
+            balanceAcct.setDigest("n/a");
+            balanceAcct.setLastUpdate(current);
+            int count = capitalAccountDAO.updateByPrimaryKey(balanceAcct);
             if (count == 1) {
                 CapitalJournal journal = new CapitalJournal();
                 journal.setUserId(userId);
-                journal.setAmount(amount);
-                journal.setBalance(account.getBalance());
-                journal.setTxnId(txnId);
                 journal.setBizType(bizType.getCode());
+                journal.setTxnId(txnId);
+                journal.setAmount(amount);
+                journal.setBalance(balanceAcct.getAmount());
                 journal.setDirection(Direction.INFLOW);
                 journal.setCreateTime(current);
                 journal.setDigest("n/a");
                 journal.setMemo(memo);
+                journal.setAcctFrom(-1L);
+                journal.setAcctTo(balanceAcct.getId());
                 capitalJournalDAO.insert(journal);
                 vertx.eventBus().send(BOOKKEEPING_ADDRESS, FstUtils.serialize(new Accounting(userId, bizType, amount)));
                 return;
@@ -104,80 +120,131 @@ class CapitalService extends BaseService {
         }
     }
 
+    private CapitalAccount getBalanceAccount(final Long userId) {
+        CapitalAccount balanceAcct = capitalAccountDAO.selectByUserIdAcctType(userId,
+                AccountType.USER_BALANCE_ACCT.getCode());
+        if (balanceAcct == null) {
+            throw new AccountNotFoundExcepiton("用户余额账户不存在:" + userId);
+        }
+        return balanceAcct;
+    }
+
     public void freeze(final Long userId, final BigDecimal amount, final String txnId, final String memo,
             final BizType bizType) {
         CapitalHistoryService.record(userId, amount, txnId, bizType.getCode(), memo);
         for (;;) {
-            CapitalAccount account = capitalAccountDAO.selectByUserId(userId);
-            if (account == null) {
-                throw new AccountNotFoundExcepiton("资金账户不存在:" + userId);
-            }
-            if (DecimalUtil.lt(account.getBalance(), amount)) {
+            CapitalAccount balanceAcct = getBalanceAccount(userId);
+            if (DecimalUtil.lt(balanceAcct.getAmount(), amount)) {
                 throw new BalanceNotEnoughException("余额不足:" + userId);
             }
-            account.setBalance(DecimalUtil.subtract(account.getBalance(), amount));
-            account.setFrozen(DecimalUtil.add(account.getFrozen(), amount));
-            account.setDigest("n/a");
             Date current = new Date();
-            account.setLastUpdate(current);
-            int count = capitalAccountDAO.updateByPrimaryKey(account);
-            if (count == 1) {
+            balanceAcct.setAmount(DecimalUtil.subtract(balanceAcct.getAmount(), amount));
+            balanceAcct.setDigest("n/a");
+            balanceAcct.setLastUpdate(current);
+            CapitalAccount frozenAcct = getFrozenAccount(userId);
+            frozenAcct.setAmount(DecimalUtil.add(frozenAcct.getAmount(), amount));
+            frozenAcct.setDigest("n/a");
+            frozenAcct.setLastUpdate(current);
+            int balanceCount = capitalAccountDAO.updateByPrimaryKey(balanceAcct);
+            int frozenCount = capitalAccountDAO.updateByPrimaryKey(frozenAcct);
+            if (balanceCount == 1 && frozenCount == 1) {
                 CapitalJournal journal = new CapitalJournal();
                 journal.setUserId(userId);
-                journal.setAmount(amount);
-                journal.setBalance(account.getBalance());
-                journal.setTxnId(txnId);
                 journal.setBizType(bizType.getCode());
+                journal.setTxnId(txnId);
+                journal.setAmount(amount);
+                journal.setBalance(balanceAcct.getAmount());
                 journal.setDirection(Direction.OUTFLOW);
                 journal.setCreateTime(current);
                 journal.setDigest("n/a");
                 journal.setMemo(memo);
+                journal.setAcctFrom(balanceAcct.getId());
+                journal.setAcctTo(frozenAcct.getId());
                 capitalJournalDAO.insert(journal);
                 return;
             }
         }
     }
 
+    private CapitalAccount getFrozenAccount(final Long userId) {
+        CapitalAccount frozenAcct = capitalAccountDAO.selectByUserIdAcctType(userId,
+                AccountType.USER_FROZEN_ACCT.getCode());
+        if (frozenAcct == null) {
+            throw new AccountNotFoundExcepiton("用户冻结金额账户不存在:" + userId);
+        }
+        return frozenAcct;
+    }
+
     public void unfreeze(final Long userId, final String origTxnId, final String memo, final BizType bizType,
             final boolean bizStatus) {
         CapitalHistoryService.record(userId, DecimalUtil.format(-1L), origTxnId, bizType.getCode(), memo);
         for (;;) {
-            CapitalAccount account = capitalAccountDAO.selectByUserId(userId);
-            if (account == null) {
-                throw new AccountNotFoundExcepiton("资金账户不存在:" + userId);
-            }
-            CapitalJournal origJournal = capitalJournalDAO.selectByUserIdTxnIdAndBizType(userId, origTxnId,
-                    BizType.preType(bizType));
-            if (origJournal == null) {
-                throw new CapitalJournalNotFoundException("冻结申请流水不存在:" + origTxnId);
-            }
-            BigDecimal amount = origJournal.getAmount();
-            account.setFrozen(DecimalUtil.subtract(account.getFrozen(), amount));
-            if (!bizStatus) {
-                account.setBalance(DecimalUtil.add(account.getBalance(), amount));
-            }
-            account.setDigest("n/a");
+            CapitalAccount balanceAcct = getBalanceAccount(userId);
+            CapitalAccount frozenAcct = getFrozenAccount(userId);
+            CapitalJournal origJournal = getOriginalFreezeJournal(userId, origTxnId, bizType);
             Date current = new Date();
-            account.setLastUpdate(current);
-            int count = capitalAccountDAO.updateByPrimaryKey(account);
-            if (count == 1) {
-                CapitalJournal journal = new CapitalJournal();
-                journal.setUserId(userId);
-                journal.setAmount(amount);
-                journal.setBalance(account.getBalance());
-                journal.setTxnId(origTxnId);
-                journal.setBizType(bizType.getCode());
-                journal.setDirection(bizStatus ? Direction.OUTFLOW : Direction.INFLOW);
-                journal.setCreateTime(current);
-                journal.setDigest("n/a");
-                journal.setMemo(memo);
-                capitalJournalDAO.insert(journal);
-                if (bizStatus) {
-                    vertx.eventBus().send(BOOKKEEPING_ADDRESS,
-                            FstUtils.serialize(new Accounting(userId, bizType, amount)));
-                }
+            BigDecimal amount = origJournal.getAmount();
+            frozenAcct.setAmount(DecimalUtil.subtract(frozenAcct.getAmount(), amount));
+            frozenAcct.setDigest("n/a");
+            frozenAcct.setLastUpdate(current);
+            balanceAcct.setLastUpdate(current);
+            CapitalAccount investMidAcct = null;
+            if (bizStatus) {
+                investMidAcct = capitalAccountDAO.selectByUserIdAcctType(INVEST_MID_ACCT_ID,
+                        AccountType.INVEST_MID_ACCT.getCode());
+                investMidAcct.setAmount(DecimalUtil.add(investMidAcct.getAmount(), amount));
+                investMidAcct.setDigest("n/a");
+                investMidAcct.setLastUpdate(current);
+            } else {
+                balanceAcct.setAmount(DecimalUtil.add(balanceAcct.getAmount(), amount));
+                balanceAcct.setDigest("n/a");
+            }
+            int frozenCount = capitalAccountDAO.updateByPrimaryKey(frozenAcct);
+            int balanceCount = capitalAccountDAO.updateByPrimaryKey(balanceAcct);
+            capitalAccountDAO.updateByPrimaryKey(investMidAcct);
+            if (frozenCount == 1 && balanceCount == 1) {
+                handleUnfreezeJournal(userId, origTxnId, memo, bizType, bizStatus, balanceAcct, current, frozenAcct,
+                        amount, investMidAcct);
                 return;
             }
+        }
+    }
+
+    private CapitalJournal getOriginalFreezeJournal(final Long userId, final String origTxnId, final BizType bizType) {
+        CapitalJournal origJournal = capitalJournalDAO.selectByUserIdBizTypeAndTxnId(userId, BizType.preType(bizType),
+                origTxnId);
+        if (origJournal == null) {
+            throw new CapitalJournalNotFoundException("冻结申请流水不存在:" + origTxnId);
+        }
+        return origJournal;
+    }
+
+    private void handleUnfreezeJournal(final Long userId, final String origTxnId, final String memo,
+            final BizType bizType, final boolean bizStatus, final CapitalAccount balanceAcct, final Date current,
+            final CapitalAccount frozenAcct, final BigDecimal amount, final CapitalAccount investMidAcct) {
+        CapitalJournal journal = new CapitalJournal();
+        journal.setUserId(userId);
+        journal.setAmount(amount);
+        journal.setBalance(balanceAcct.getAmount());
+        journal.setTxnId(origTxnId);
+        journal.setBizType(bizType.getCode());
+        journal.setDirection(bizStatus ? Direction.OUTFLOW : Direction.INFLOW);
+        journal.setCreateTime(current);
+        journal.setDigest("n/a");
+        journal.setAcctFrom(frozenAcct.getId());
+        if (bizStatus) {
+            if (BizType.INVEST_UNFREEZE == bizType) {
+                journal.setAcctTo(investMidAcct.getId());
+            } else {
+                journal.setAcctTo(-1L);
+            }
+        } else {
+            journal.setAcctTo(balanceAcct.getId());
+        }
+        journal.setMemo(memo);
+        capitalJournalDAO.insert(journal);
+        if (bizStatus) {
+            vertx.eventBus().send(BOOKKEEPING_ADDRESS, FstUtils.serialize(new Accounting(userId, bizType, amount)));
         }
     }
 

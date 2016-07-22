@@ -17,6 +17,7 @@ import x.y.z.bill.model.account.BookKeeping;
 public class BookKeepingVerticle extends AbstractVerticle {
 
     private static final Logger logger = LoggerFactory.getLogger(BookKeepingVerticle.class);
+    private static final long COMPANY_ACCT_ID = -60000L;
 
     private static final AtomicReference<BookKeepingDAO> DAO = new AtomicReference<>();
 
@@ -54,7 +55,7 @@ public class BookKeepingVerticle extends AbstractVerticle {
     private void handleWithdraw(final Long userId, final BigDecimal amount) {
         BookKeeping company = new BookKeeping();
         company.setWithdraw(amount);
-        company.setUserId(-1L);
+        company.setUserId(COMPANY_ACCT_ID);
         BookKeeping user = new BookKeeping();
         user.setWithdraw(amount);
         user.setUserId(userId);
@@ -68,7 +69,7 @@ public class BookKeepingVerticle extends AbstractVerticle {
     private void handleProfit(final Long userId, final BigDecimal amount) {
         BookKeeping company = new BookKeeping();
         company.setProfit(amount);
-        company.setUserId(-1L);
+        company.setUserId(COMPANY_ACCT_ID);
         BookKeeping user = new BookKeeping();
         user.setProfit(amount);
         user.setUserId(userId);
@@ -82,7 +83,7 @@ public class BookKeepingVerticle extends AbstractVerticle {
     private void handleInvest(final Long userId, final BigDecimal amount) {
         BookKeeping company = new BookKeeping();
         company.setInvest(amount);
-        company.setUserId(-1L);
+        company.setUserId(COMPANY_ACCT_ID);
         BookKeeping user = new BookKeeping();
         user.setInvest(amount);
         user.setUserId(userId);
@@ -96,7 +97,7 @@ public class BookKeepingVerticle extends AbstractVerticle {
     private void handleRecharge(final Long userId, final BigDecimal amount) {
         BookKeeping company = new BookKeeping();
         company.setRecharge(amount);
-        company.setUserId(-1L);
+        company.setUserId(COMPANY_ACCT_ID);
         BookKeeping user = new BookKeeping();
         user.setRecharge(amount);
         user.setUserId(userId);
