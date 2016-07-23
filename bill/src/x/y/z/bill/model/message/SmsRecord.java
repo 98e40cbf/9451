@@ -13,6 +13,8 @@ public class SmsRecord extends BaseObject {
 
     private Byte smsType;
 
+    private Byte smsBizType;
+
     private Byte smsStatus;
 
     private String receiveMobiles;
@@ -47,6 +49,14 @@ public class SmsRecord extends BaseObject {
 
     public void setSmsType(Byte smsType) {
         this.smsType = smsType;
+    }
+
+    public Byte getSmsBizType() {
+        return smsBizType;
+    }
+
+    public void setSmsBizType(Byte smsBizType) {
+        this.smsBizType = smsBizType;
     }
 
     public Byte getSmsStatus() {

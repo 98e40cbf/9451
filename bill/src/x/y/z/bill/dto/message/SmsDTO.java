@@ -4,6 +4,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
+import x.y.z.bill.constant.message.SmsBizTypeEnum;
 import x.y.z.bill.constant.message.SmsTypeEnum;
 import io.alpha.core.model.BaseObject;
 
@@ -13,6 +14,8 @@ public class SmsDTO extends BaseObject {
     private String txnId;
     @NotNull
     private SmsTypeEnum smsTypeEnum;
+    @NotNull
+    private SmsBizTypeEnum smsBizTypeEnum;
     @NotNull
     @Length(min = 1, max = 600)
     private String mobiles;
@@ -33,6 +36,14 @@ public class SmsDTO extends BaseObject {
 
     public void setSmsTypeEnum(SmsTypeEnum smsTypeEnum) {
         this.smsTypeEnum = smsTypeEnum;
+    }
+
+    public SmsBizTypeEnum getSmsBizTypeEnum() {
+        return smsBizTypeEnum;
+    }
+
+    public void setSmsBizTypeEnum(SmsBizTypeEnum smsBizTypeEnum) {
+        this.smsBizTypeEnum = smsBizTypeEnum;
     }
 
     public String getMobiles() {

@@ -12,9 +12,9 @@ public class CapitalAccount extends BaseObject {
 
     private Long userId;
 
-    private BigDecimal balance;
+    private Byte acctType;
 
-    private BigDecimal frozen;
+    private BigDecimal amount;
 
     private String digest;
 
@@ -38,20 +38,20 @@ public class CapitalAccount extends BaseObject {
         this.userId = userId;
     }
 
-    public BigDecimal getBalance() {
-        return balance;
+    public Byte getAcctType() {
+        return acctType;
     }
 
-    public void setBalance(final BigDecimal balance) {
-        this.balance = balance;
+    public void setAcctType(final Byte acctType) {
+        this.acctType = acctType;
     }
 
-    public BigDecimal getFrozen() {
-        return frozen;
+    public BigDecimal getAmount() {
+        return amount;
     }
 
-    public void setFrozen(final BigDecimal frozen) {
-        this.frozen = frozen;
+    public void setAmount(final BigDecimal amount) {
+        this.amount = amount;
     }
 
     public String getDigest() {

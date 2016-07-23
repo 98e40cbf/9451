@@ -10,14 +10,12 @@ import x.y.z.bill.model.account.CapitalJournal;
 
 @Repository
 public interface CapitalJournalDAO {
+
     int insert(CapitalJournal record);
 
-    CapitalJournal selectByPrimaryKey(Long id);
-
-    CapitalJournal selectByUserIdTxnIdAndBizType(@Param("userId") long userId, @Param("txnId") String txnId,
-            @Param("bizType") byte bizType);
+    CapitalJournal selectByUserIdBizTypeAndTxnId(@Param("userId") long userId, @Param("bizType") byte bizType,
+            @Param("txnId") String txnId);
 
     List<CapitalJournal> selectByUserIdBizType(@Param("userId") Long userId, @Param("bizType") byte bizType,
             RowBounds rowBounds);
-
 }

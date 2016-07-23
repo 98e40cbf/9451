@@ -8,7 +8,9 @@ import io.alpha.core.model.BaseObject;
 public class BookKeeping extends BaseObject {
     private static final long serialVersionUID = 1L;
 
-    private Integer id;
+    private Long id;
+
+    private Long userId;
 
     private BigDecimal recharge;
 
@@ -16,14 +18,24 @@ public class BookKeeping extends BaseObject {
 
     private BigDecimal withdraw;
 
+    private BigDecimal profit;
+
     private Date lastUpdate = new Date();
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(final Integer id) {
+    public void setId(final Long id) {
         this.id = id;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(final Long userId) {
+        this.userId = userId;
     }
 
     public BigDecimal getRecharge() {
@@ -48,6 +60,14 @@ public class BookKeeping extends BaseObject {
 
     public void setWithdraw(final BigDecimal withdraw) {
         this.withdraw = withdraw;
+    }
+
+    public BigDecimal getProfit() {
+        return profit;
+    }
+
+    public void setProfit(final BigDecimal profit) {
+        this.profit = profit;
     }
 
     public Date getLastUpdate() {

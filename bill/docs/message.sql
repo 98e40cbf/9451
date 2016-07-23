@@ -8,6 +8,7 @@ CREATE TABLE `sms_record` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `txnId` varchar(40) NOT NULL COMMENT '业务编号',
   `smsType` tinyint(4) unsigned NOT NULL COMMENT '短信类型',
+  `smsBizType` tinyint(4) unsigned NOT NULL COMMENT '业务类型，1-文本，2-语音',
   `smsStatus` tinyint(4) NOT NULL COMMENT '短信状态',
   `receiveMobiles` varchar(600) NOT NULL COMMENT '接收手机号码，用英文逗号隔开',
   `smsParam` varchar(100) NOT NULL COMMENT '短信模板变量',
@@ -48,3 +49,8 @@ CREATE TABLE `sms_send_record` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uni_sms_send_smsId` (`smsId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='短信发送记录表';
+
+INSERT INTO `sms_template` (templatecode, templateId, templateContent,createTime)
+ VALUES
+('sms_register', 'SMS_12465713', '测试发送用户名，用户名:${name}', now()),
+('sms_register_voice', 'TTS_12520815', '测试发送用户名，用户名:${name}', now());
