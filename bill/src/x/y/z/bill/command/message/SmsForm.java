@@ -1,9 +1,10 @@
 package x.y.z.bill.command.message;
 
-import io.alpha.core.model.BaseObject;
+import javax.validation.constraints.Pattern;
+
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.constraints.Pattern;
+import io.alpha.core.model.BaseObject;
 
 public class SmsForm extends BaseObject {
     private static final long serialVersionUID = 4738293626351299744L;

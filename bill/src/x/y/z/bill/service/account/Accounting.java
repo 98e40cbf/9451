@@ -2,9 +2,9 @@ package x.y.z.bill.service.account;
 
 import java.math.BigDecimal;
 
+import x.y.z.bill.constant.BizType;
 import io.alpha.core.model.BaseObject;
 import io.alpha.util.DecimalUtil;
-import x.y.z.bill.constant.BizType;
 
 class Accounting extends BaseObject {
 

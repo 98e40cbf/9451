@@ -1,22 +1,19 @@
 package x.y.z.bill.util.message;
 
+import x.y.z.bill.constant.message.SmsConstants;
+import x.y.z.bill.model.message.SmsParam;
+
 import com.taobao.api.DefaultTaobaoClient;
 import com.taobao.api.TaobaoClient;
 import com.taobao.api.request.AlibabaAliqinFcSmsNumSendRequest;
 import com.taobao.api.request.AlibabaAliqinFcTtsNumSinglecallRequest;
 import com.taobao.api.response.AlibabaAliqinFcSmsNumSendResponse;
 import com.taobao.api.response.AlibabaAliqinFcTtsNumSinglecallResponse;
+
 import io.alpha.core.util.PropertiesLoader;
 import io.alpha.logging.Logger;
 import io.alpha.logging.LoggerFactory;
 import io.alpha.util.JsonUtils;
-import org.springframework.scheduling.annotation.Async;
-import x.y.z.bill.constant.message.SmsConstants;
-import x.y.z.bill.model.message.SmsParam;
-
-import static org.bouncycastle.asn1.x500.style.RFC4519Style.l;
-import static org.bouncycastle.crypto.tls.ConnectionEnd.client;
-import static x.y.z.bill.constant.ProjectInfo.name;
 
 /**
  * 阿里大鱼
