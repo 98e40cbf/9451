@@ -2,7 +2,8 @@
 SQLyog Ultimate v12.09 (64 bit)
 MySQL - 5.7.9-log : Database - bill
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -136,11 +137,11 @@ CREATE TABLE `t_payment_permission_restrict` (
 
 /*Data for the table `t_payment_permission_restrict` */
 
-/*Table structure for table `t_payment_rechage_journal` */
+/*Table structure for table `t_payment_recharge_journal` */
 
-DROP TABLE IF EXISTS `t_payment_rechage_journal`;
+DROP TABLE IF EXISTS `t_payment_recharge_journal`;
 
-CREATE TABLE `t_payment_rechage_journal` (
+CREATE TABLE `t_payment_recharge_journal` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '编号',
   `txnId` varchar(50) NOT NULL COMMENT '业务订单号',
   `channelCode` varchar(50) NOT NULL COMMENT '渠道编号',
@@ -170,7 +171,7 @@ CREATE TABLE `t_payment_rechage_journal` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='充值流水表';
 
-/*Data for the table `t_payment_rechage_journal` */
+/*Data for the table `t_payment_recharge_journal` */
 
 /*Table structure for table `t_payment_withdraw_journal` */
 

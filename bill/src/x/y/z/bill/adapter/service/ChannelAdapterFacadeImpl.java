@@ -6,7 +6,6 @@
 package x.y.z.bill.adapter.service;
 
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
@@ -17,9 +16,7 @@ import x.y.z.bill.adapter.channel.dto.TreatyInfoDTO;
 import x.y.z.bill.adapter.channel.dto.request.*;
 import x.y.z.bill.adapter.channel.dto.response.*;
 import x.y.z.bill.adapter.config.BaseChannelConfig;
-import x.y.z.bill.adapter.config.ConfigManager;
 import x.y.z.bill.adapter.constant.CommonConstant;
-import x.y.z.bill.adapter.util.RequestContext;
 import io.alpha.exception.FastCheckedException;
 import io.alpha.service.BaseService;
 import io.alpha.validation.ValidationUtils;
@@ -31,8 +28,6 @@ import io.alpha.validation.ValidationUtils;
 @Service(value = "channelAdapterFacade")
 public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdapterFacade, ApplicationContextAware {
 
-    @Autowired
-    private ConfigManager configManager;
     private ApplicationContext context;
 
     /**
@@ -40,8 +35,6 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
      */
     @Override
     public ResponseDTO<AuthResponseDTO> applyAuth(AuthRequestDTO dto) {
-        RequestContext.reset(dto);
-
         // 1.校验参数，校验签名
         try {
             ValidationUtils.validate(dto);
@@ -60,7 +53,7 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
                 return ResponseDTO.buildFail(new AuthResponseDTO(dto), "CONFIG_ERROR", "找不到配置信息");
             }
         } catch (Exception e) {
-            logger.error("订单号[{}]获取渠道配置信息出错.", dto.getTxnId(), e);
+            logger.error("[] - [支付系统] 获取渠道配置信息出错", dto.getTxnId(), e);
             return ResponseDTO.buildFail(new AuthResponseDTO(dto), "CONFIG_ERROR", "获取配置信息出错");
         }
 
@@ -72,7 +65,6 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
      */
     @Override
     public ResponseDTO<AuthConfirmResponseDTO> confirmAuth(AuthConfirmRequestDTO dto) {
-        RequestContext.reset(dto);
 
         try {
             ValidationUtils.validate(dto);
@@ -92,7 +84,7 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
                 return ResponseDTO.buildFail(new AuthConfirmResponseDTO(dto), "CONFIG_ERROR", "找不到配置信息");
             }
         } catch (Exception e) {
-            logger.error("订单号[{}]获取渠道配置信息出错.", dto.getTxnId(), e);
+            logger.error("[] - [支付系统] 获取渠道配置信息出错", dto.getTxnId(), e);
             return ResponseDTO.buildFail(new AuthConfirmResponseDTO(dto), "CONFIG_ERROR", "获取配置信息出错");
         }
 
@@ -104,7 +96,6 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
      */
     @Override
     public ResponseDTO<QueryAuthInfoResponseDTO> queryAuthInfo(AuthRequestDTO dto) {
-        RequestContext.reset(dto);
 
         try {
             ValidationUtils.validate(dto);
@@ -123,7 +114,7 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
                 return ResponseDTO.buildFail(new QueryAuthInfoResponseDTO(dto), "CONFIG_ERROR", "找不到配置信息");
             }
         } catch (Exception e) {
-            logger.error("订单号[{}]获取渠道配置信息出错.", dto.getTxnId(), e);
+            logger.error("[] - [支付系统] 获取渠道配置信息出错", dto.getTxnId(), e);
             return ResponseDTO.buildFail(new QueryAuthInfoResponseDTO(dto), "CONFIG_ERROR", "获取配置信息出错");
         }
 
@@ -135,8 +126,6 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
      */
     @Override
     public ResponseDTO<TreatyInfoDTO> cancelAuthInfo(AuthRequestDTO dto) {
-        RequestContext.reset(dto);
-
         try {
             ValidationUtils.validate(dto);
             ValidationUtils.validate(dto.getTreatyInfo());
@@ -154,7 +143,7 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
                 return ResponseDTO.buildFail(dto.getTreatyInfo(), "CONFIG_ERROR", "找不到配置信息");
             }
         } catch (Exception e) {
-            logger.error("订单号[{}]获取渠道配置信息出错.", dto.getTxnId(), e);
+            logger.error("[] - [支付系统] 获取渠道配置信息出错", dto.getTxnId(), e);
             return ResponseDTO.buildFail(dto.getTreatyInfo(), "CONFIG_ERROR", "获取配置信息出错");
         }
 
@@ -166,7 +155,6 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
      */
     @Override
     public ResponseDTO<QuickPayResponseDTO> applyQuickPay(QuickPayRequestDTO dto) {
-        RequestContext.reset(dto);
         try {
             ValidationUtils.validate(dto);
             ValidationUtils.validate(dto.getTreatyInfo());
@@ -184,7 +172,7 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
                 return ResponseDTO.buildFail(new QuickPayResponseDTO(), "CONFIG_ERROR", "找不到配置信息");
             }
         } catch (Exception e) {
-            logger.error("订单号[{}]获取渠道配置信息出错.", dto.getTxnId(), e);
+            logger.error("[] - [支付系统] 获取渠道配置信息出错", dto.getTxnId(), e);
             return ResponseDTO.buildFail(new QuickPayResponseDTO(), "CONFIG_ERROR", "获取配置信息出错");
         }
 
@@ -196,7 +184,6 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
      */
     @Override
     public ResponseDTO<QuickPayConfirmResponseDTO> confirmQuickPay(QuickPayConfirmRequestDTO dto) {
-        RequestContext.reset(dto);
         try {
             ValidationUtils.validate(dto);
             ValidationUtils.validate(dto.getTreatyInfo());
@@ -214,7 +201,7 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
                 return ResponseDTO.buildFail(new QuickPayConfirmResponseDTO(), "CONFIG_ERROR", "找不到配置信息");
             }
         } catch (Exception e) {
-            logger.error("订单号[{}]获取渠道配置信息出错.", dto.getTxnId(), e);
+            logger.error("[] - [支付系统] 获取渠道配置信息出错", dto.getTxnId(), e);
             return ResponseDTO.buildFail(new QuickPayConfirmResponseDTO(), "CONFIG_ERROR", "获取配置信息出错");
         }
 
@@ -226,7 +213,6 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
      */
     @Override
     public ResponseDTO<WithdrawResponseDTO> withdraw(WithdrawRequestDTO dto) {
-        RequestContext.reset(dto);
         try {
             ValidationUtils.validate(dto);
             ValidationUtils.validate(dto.getTreatyInfo());
@@ -244,7 +230,7 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
                 return ResponseDTO.buildFail(new WithdrawResponseDTO(), "CONFIG_ERROR", "找不到配置信息");
             }
         } catch (Exception e) {
-            logger.error("订单号[{}]获取渠道配置信息出错.", dto.getTxnId(), e);
+            logger.error("[] - [支付系统] 获取渠道配置信息出错", dto.getTxnId(), e);
             return ResponseDTO.buildFail(new WithdrawResponseDTO(), "CONFIG_ERROR", "获取配置信息出错");
         }
 
@@ -256,7 +242,6 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
      */
     @Override
     public ResponseDTO<PayQueryResponseDTO> queryPayOrder(PayQueryRequestDTO dto) {
-        RequestContext.reset(dto);
         try {
             ValidationUtils.validate(dto);
         } catch (FastCheckedException e) {
@@ -273,7 +258,7 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
                 return ResponseDTO.buildFail(new PayQueryResponseDTO(), "CONFIG_ERROR", "找不到配置信息");
             }
         } catch (Exception e) {
-            logger.error("订单号[{}]获取渠道配置信息出错.", dto.getTxnId(), e);
+            logger.error("[] - [支付系统] 获取渠道配置信息出错", dto.getTxnId(), e);
             return ResponseDTO.buildFail(new PayQueryResponseDTO(), "CONFIG_ERROR", "获取配置信息出错");
         }
 
@@ -282,7 +267,6 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
 
     @Override
     public ResponseDTO<EBankApplyPayResponseDTO> generatePayUrl(EBankApplyPayRequestDTO dto) {
-        RequestContext.reset(dto);
         try {
             ValidationUtils.validate(dto);
         } catch (FastCheckedException e) {
@@ -299,7 +283,7 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
                 return ResponseDTO.buildFail(new EBankApplyPayResponseDTO(dto), "CONFIG_ERROR", "找不到配置信息");
             }
         } catch (Exception e) {
-            logger.error("订单号[{}]获取渠道配置信息出错.", dto.getTxnId(), e);
+            logger.error("[] - [支付系统] 获取渠道配置信息出错", dto.getTxnId(), e);
             return ResponseDTO.buildFail(new EBankApplyPayResponseDTO(dto), "CONFIG_ERROR", "获取配置信息出错");
         }
 
@@ -311,7 +295,6 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
      */
     @Override
     public ResponseDTO<Boolean> downloadRecon(ReconDownloadRequestDTO dto) {
-        RequestContext.reset(dto);
         try {
             ValidationUtils.validate(dto);
         } catch (FastCheckedException e) {
@@ -326,7 +309,6 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
      */
     @Override
     public ResponseDTO<PayQueryResponseDTO> payCallback(CallbackRequestDTO dto) {
-        RequestContext.reset(dto);
         try {
             ValidationUtils.validate(dto);
         } catch (FastCheckedException e) {
@@ -343,7 +325,7 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
                 return ResponseDTO.buildFail(new PayQueryResponseDTO(), "CONFIG_ERROR", "找不到配置信息");
             }
         } catch (Exception e) {
-            logger.error("订单号[{}]获取渠道配置信息出错.", dto.getTxnId(), e);
+            logger.error("[] - [支付系统] 获取渠道配置信息出错", dto.getTxnId(), e);
             return ResponseDTO.buildFail(new PayQueryResponseDTO(), "CONFIG_ERROR", "获取配置信息出错");
         }
 
@@ -355,7 +337,6 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
      */
     @Override
     public ResponseDTO<PayQueryResponseDTO> payNotify(PayNotifyRequestDTO dto) {
-        RequestContext.reset(dto);
         try {
             ValidationUtils.validate(dto);
         } catch (FastCheckedException e) {
@@ -372,7 +353,7 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
                 return ResponseDTO.buildFail(new PayQueryResponseDTO(), "CONFIG_ERROR", "找不到配置信息");
             }
         } catch (Exception e) {
-            logger.error("订单号[{}]获取渠道配置信息出错.", dto.getTxnId(), e);
+            logger.error("[] - [支付系统] 获取渠道配置信息出错", dto.getTxnId(), e);
             return ResponseDTO.buildFail(new PayQueryResponseDTO(), "CONFIG_ERROR", "获取配置信息出错");
         }
 
@@ -384,7 +365,6 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
      */
     @Override
     public ResponseDTO<OnlineSignResponseDTO> onlineSign(OnlineSignRequestDTO dto) {
-        RequestContext.reset(dto);
         try {
             ValidationUtils.validate(dto);
         } catch (FastCheckedException e) {
@@ -401,7 +381,7 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
                 return ResponseDTO.buildFail(new OnlineSignResponseDTO(), "CONFIG_ERROR", "找不到配置信息");
             }
         } catch (Exception e) {
-            logger.error("订单号[{}]获取渠道配置信息出错.", dto.getTxnId(), e);
+            logger.error("[] - [支付系统] 获取渠道配置信息出错", dto.getTxnId(), e);
             return ResponseDTO.buildFail(new OnlineSignResponseDTO(), "CONFIG_ERROR", "获取配置信息出错");
         }
 
@@ -413,7 +393,6 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
      */
     @Override
     public ResponseDTO<WithdrawQueryRespDTO> withdrawQuery(WithdrawRequestDTO dto, String channelRecevOrder) {
-        RequestContext.reset(dto);
         try {
             ValidationUtils.validate(dto);
         } catch (FastCheckedException e) {
@@ -430,7 +409,7 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
                 return ResponseDTO.buildFail(new WithdrawQueryRespDTO(), "CONFIG_ERROR", "找不到配置信息");
             }
         } catch (Exception e) {
-            logger.error("订单号[{}]获取渠道配置信息出错.", dto.getTxnId(), e);
+            logger.error("[] - [支付系统] 获取渠道配置信息出错", dto.getTxnId(), e);
             return ResponseDTO.buildFail(new WithdrawQueryRespDTO(), "CONFIG_ERROR", "获取配置信息出错");
         }
 
@@ -442,7 +421,6 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
      */
     @Override
     public ResponseDTO<WithdrawQueryRespDTO> withdrawQuery(BatchWithdrawQueryRequestDTO dto) {
-        RequestContext.reset(dto);
         try {
             ValidationUtils.validate(dto);
         } catch (FastCheckedException e) {
@@ -459,7 +437,7 @@ public class ChannelAdapterFacadeImpl extends BaseService implements ChannelAdap
                 return ResponseDTO.buildFail(new WithdrawQueryRespDTO(), "CONFIG_ERROR", "找不到配置信息");
             }
         } catch (Exception e) {
-            logger.error("订单号[{}]获取渠道配置信息出错.", dto.getTxnId(), e);
+            logger.error("[] - [支付系统] 获取渠道配置信息出错", dto.getTxnId(), e);
             return ResponseDTO.buildFail(new WithdrawQueryRespDTO(), "CONFIG_ERROR", "获取配置信息出错");
         }
 

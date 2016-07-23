@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="x.y.z.bill.mapper.payment.PermissionRestrictDAO">
-
+    <sql id="Full_Column_List">
+        id, txnId, userId, userName, bankCardNo, businessCode, status, tips, remark, createTime,lastModifyTime, version
+    </sql>
     <select id="queryPermissionRestrictByBankCardNo" resultType="x.y.z.bill.model.payment.PermissionRestrict"
             parameterType="map">
-    select 
-      id, txnId, userId, userName, bankCardNo, businessCode, status, tips, remark, createTime,lastModifyTime, version
-    from t_payment_permission_restrict
-    where businessCode = #{businessCode,jdbcType=VARCHAR}
-    and bankCardNo = #{bankCardNo,jdbcType=VARCHAR}
-    and status = 1;
-  </select>
+        select
+        <include refid="Full_Column_List"/>
+        from t_payment_permission_restrict
+        where businessCode = #{businessCode,jdbcType=VARCHAR}
+        and bankCardNo = #{bankCardNo,jdbcType=VARCHAR}
+        and status = 1;
+    </select>
 
     <select id="queryPermissionRestrictByUser" resultType="x.y.z.bill.model.payment.PermissionRestrict"
             parameterType="map">
-    select
-    id, txnId, userId, userName, bankCardNo, businessCode, status, tips, remark, createTime,lastModifyTime, version
-    from t_payment_permission_restrict
-    where businessCode = #{businessCode,jdbcType=VARCHAR}
-    and userId = #{userId,jdbcType=BIGINT}
-    and status = 1;
-  </select>
+        select
+        <include refid="Full_Column_List"/>
+        from t_payment_permission_restrict
+        where businessCode = #{businessCode,jdbcType=VARCHAR}
+        and userId = #{userId,jdbcType=BIGINT}
+        and status = 1;
+    </select>
 
 </mapper>

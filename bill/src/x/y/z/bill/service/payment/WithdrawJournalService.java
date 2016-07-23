@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import x.y.z.bill.adapter.channel.dto.response.ResponseDTO;
-import x.y.z.bill.adapter.channel.dto.response.WithdrawResponseDTO;
 import x.y.z.bill.adapter.constant.ChannelCode;
 import x.y.z.bill.command.ApplyWithdrawFrom;
 import x.y.z.bill.constant.BusinessCode;
 import x.y.z.bill.constant.SystemCode;
 import x.y.z.bill.mapper.payment.WithdrawJournalDAO;
 import x.y.z.bill.model.payment.BankCardInfo;
+import x.y.z.bill.model.payment.PermissionRestrict;
 import x.y.z.bill.model.payment.WithdrawJournal;
 import x.y.z.bill.util.SequenceUtils;
 import io.alpha.core.dto.PageDTO;
@@ -34,17 +34,28 @@ public class WithdrawJournalService extends BaseService {
     private WithdrawJournalDAO withdrawJournalDAO;
     @Autowired
     private BankCardInfoService bankCardInfoService;
+    @Autowired
+    private PermissionRestrictService permissionRestrictService;
 
-    public ResponseDTO<WithdrawResponseDTO> applyWithdraw(ApplyWithdrawFrom from, Long userId, String userName,
-            String clientIp) {
+    public ResponseDTO<String> applyWithdraw(ApplyWithdrawFrom from, Long userId, String userName, String clientIp) {
+        PermissionRestrict userRestrict = permissionRestrictService.restrict(BusinessCode.PAYMENT_WITHDRAW, userId);
+        if (userRestrict != null) {
+            return ResponseDTO.buildFail(null, "", userRestrict.getTips());
+        }
 
         BigDecimal actulAmount = DecimalUtil.subtract(from.getAmount(), WITHDRAW_COST);
 
-        if (DecimalUtil.gt(actulAmount, BigDecimal.ZERO)) {
-            return ResponseDTO.buildFail(null, "", "提现金额不足以支付提现手续费");
+        if (DecimalUtil.lt(actulAmount, BigDecimal.ZERO)) {
+            return ResponseDTO.buildFail("", "", "提现金额不足以支付提现手续费");
         }
 
         BankCardInfo bankCardInfo = bankCardInfoService.queryUserBankCardBySucceed(userId);
+        // 核验银行卡是否存在限制
+        PermissionRestrict cardRestrict = permissionRestrictService.restrict(BusinessCode.PAYMENT_WITHDRAW,
+                bankCardInfo.getBankCardNo());
+        if (cardRestrict != null) {
+            return ResponseDTO.buildFail(null, "", cardRestrict.getTips());
+        }
 
         WithdrawJournal record = new WithdrawJournal();
         String txnId = SequenceUtils.getSequence(SystemCode.PAYMENT, BusinessCode.PAYMENT_WITHDRAW);
@@ -52,7 +63,7 @@ public class WithdrawJournalService extends BaseService {
 
         record.setTxnId(txnId);
         record.setChannelCode(ChannelCode.KFTPAY.getCode());
-        record.setChannelName(ChannelCode.BESTPAY.getDesc());
+        record.setChannelName(ChannelCode.KFTPAY.getDesc());
         record.setChannelSendOrder(channelSendOrder);
         record.setBusinessCode(BusinessCode.PAYMENT_WITHDRAW);
         record.setUserId(userId);
@@ -70,7 +81,7 @@ public class WithdrawJournalService extends BaseService {
         withdrawJournalDAO.insertSelective(record);
         // 发送验证码给用户
 
-        return ResponseDTO.buildSuccess(null, "00", "提现申请成功,待用户确认");
+        return ResponseDTO.buildSuccess(txnId, "00", "提现申请成功,待用户确认");
     }
 
     public ResponseDTO<String> confirmWithdraw(String txnId) {
@@ -83,14 +94,14 @@ public class WithdrawJournalService extends BaseService {
             logger.info("[{}] - [支付系统] - [用户 {}] - [确认提现失败] - [{}]", txnId, record.getUserName(), result);
             throw new RuntimeException();
         }
-        return null;
+        return ResponseDTO.buildSuccess(txnId, "", "提现申请成功，等待后台系统审核");
     }
 
     public PageDTO<WithdrawJournal, String> querySucceedWithdrawJournal(Long userId, int pageNum, int pageSize) {
-        return queryRechageJournalByStatus(userId, 1, pageNum, pageSize);
+        return queryWithdrawJournalByStatus(userId, 1, pageNum, pageSize);
     }
 
-    public PageDTO<WithdrawJournal, String> queryRechageJournalByStatus(Long userId, int status, int pageNum,
+    public PageDTO<WithdrawJournal, String> queryWithdrawJournalByStatus(Long userId, int status, int pageNum,
             int pageSize) {
         PageDTO<WithdrawJournal, String> page = new PageDTO<>();
         int count = withdrawJournalDAO.countWithdrawJournal(userId, status);

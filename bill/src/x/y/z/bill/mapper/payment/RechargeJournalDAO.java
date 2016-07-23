@@ -14,19 +14,21 @@ public interface RechargeJournalDAO {
 
     RechargeJournal queryByTxnId(@Param("txnId") String txnId);
 
-    int updateRechageJournalFailed(@Param("txnId") String txnId, @Param("replyCode") String replyCode,
+    int updateRechargeJournalFailed(@Param("txnId") String txnId, @Param("replyCode") String replyCode,
             @Param("replyMessage") String replyMessage, @Param("recvTime") Date recvTime,
             @Param("version") Integer version);
 
-    int updateRechageJournalHanding(@Param("txnId") String txnId, @Param("sendTime") Date sendTime,
+    int updateRechargeJournalHanding(@Param("txnId") String txnId, @Param("sendTime") Date sendTime,
             @Param("version") Integer version);
 
-    int updateRechageJournalSucceed(@Param("txnId") String txnId, @Param("replyCode") String replyCode,
+    int updateRechargeJournalSucceed(@Param("txnId") String txnId, @Param("replyCode") String replyCode,
             @Param("replyMessage") String replyMessage, @Param("recvTime") Date recvTime,
             @Param("version") Integer version);
 
-    int countRechageJournal(@Param("userId") Long userId, @Param("status") int status);
+    int countRechargeJournal(@Param("userId") Long userId, @Param("status") int status);
 
-    List<RechargeJournal> queryRechageJournal(@Param("userId") Long userId, @Param("status") int status,
+    List<RechargeJournal> queryRechargeJournal(@Param("userId") Long userId, @Param("status") int status,
             @Param("offset") int offset, @Param("rows") int rows);
+
+    RechargeJournal queryUserFirstRechargeJournal(Long userId);
 }

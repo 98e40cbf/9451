@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="x.y.z.bill.mapper.payment.WithdrawJournalDAO">
+    <sql id="Full_Column_List">
+        id, txnId, channelCode, channelName, channelSendOrder, channelRecvOrder, channelSendSerial,
+        businessCode, userId, userName, amount, actulAmount, cost, status, auditStatus, auditdUserId,
+        auditUserName, auditTime, remark, replyCode, replyMessage, sendTime, recvTime, toAccountTime,
+        createTime, lastModifyTime, origin,clientIp, version, bankCardId
+    </sql>
     <insert id="insertSelective" parameterType="x.y.z.bill.model.payment.WithdrawJournal">
         insert into t_payment_withdraw_journal
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -191,12 +197,9 @@
 
     <select id="queryByTxnId" resultType="x.y.z.bill.model.payment.WithdrawJournal" parameterType="map">
         select
-        id, txnId, channelCode, channelName, channelSendOrder, channelRecvOrder, channelSendSerial,
-        businessCode, userId, userName, amount, actulAmount, cost, status, auditStatus, auditdUserId,
-        auditUserName, auditTime, remark, replyCode, replyMessage, sendTime, recvTime, toAccountTime,
-        createTime, lastModifyTime, origin,clientIp, version, bankCardId
+        <include refid="Full_Column_List"/>
         from t_payment_withdraw_journal
-        where id = #{id,jdbcType=BIGINT}
+        where txnId = #{txnId,jdbcType=VARCHAR}
     </select>
     <select id="countWithdrawJournal" resultType="java.lang.Integer">
         select
@@ -207,10 +210,7 @@
     </select>
     <select id="queryWithdrawJournal" resultType="x.y.z.bill.model.payment.WithdrawJournal">
         select
-        id, txnId, channelCode, channelName, channelSendOrder, channelRecvOrder, channelSendSerial,
-        businessCode, userId, userName, amount, actulAmount, cost, status, auditStatus, auditdUserId,
-        auditUserName, auditTime, remark, replyCode, replyMessage, sendTime, recvTime, toAccountTime,
-        createTime, lastModifyTime, origin,clientIp, version, bankCardId
+        <include refid="Full_Column_List"/>
         from t_payment_withdraw_journal
         where userId = #{userId,jdbcType=BIGINT}
         and status = #{status,jdbcType=INTEGER}

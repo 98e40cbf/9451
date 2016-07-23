@@ -14,6 +14,7 @@ import x.y.z.bill.adapter.channel.dto.response.AuthConfirmResponseDTO;
 import x.y.z.bill.adapter.channel.dto.response.AuthResponseDTO;
 import x.y.z.bill.adapter.channel.dto.response.ResponseDTO;
 import x.y.z.bill.adapter.constant.ChannelCode;
+import x.y.z.bill.adapter.util.SerialContext;
 import x.y.z.bill.command.ApplyQuickPayAgreementFrom;
 import x.y.z.bill.command.ConfirmFrom;
 import x.y.z.bill.constant.BusinessCode;
@@ -56,8 +57,9 @@ public class QuickAgreementService extends BaseService {
      * @return
      */
     public ResponseDTO<AuthResponseDTO> applyQuickPayAgreement(ApplyQuickPayAgreementFrom from, Long userId,
-            String userName, String clientIp) {
+                                                               String userName, String clientIp) {
         String txnId = SequenceUtils.getSequence(SystemCode.PAYMENT, BusinessCode.PAYMENT_QUICK_PAY_AGREEMENT);
+        SerialContext.set(txnId);
         logger.info("[{}] [支付系统] - [申请快捷支付] - [用户:{}]", txnId, userName);
 
         // 核验银行卡是否存在限制
@@ -69,7 +71,7 @@ public class QuickAgreementService extends BaseService {
         PermissionRestrict userRestrict = permissionRestrictService.restrict(BusinessCode.PAYMENT_QUICK_PAY_AGREEMENT,
                 userId);
         if (userRestrict != null) {
-            return ResponseDTO.buildFail(null, "", cardRestrict.getTips());
+            return ResponseDTO.buildFail(null, "", userRestrict.getTips());
         }
 
         // 核验卡BIN信息
@@ -77,8 +79,8 @@ public class QuickAgreementService extends BaseService {
         if (bin == null) {
             return ResponseDTO.buildFail(null, "", "用户银行卡不能识别");
         }
-        if (bin.getType() != null && bin.getType().intValue() == 1) {
-            return ResponseDTO.buildFail(null, "", "暂不支持信用卡");
+        if (bin.getType() != null && bin.getType().intValue() == 2) {
+            // return ResponseDTO.buildFail(null, "", "暂不支持信用卡");
         }
 
         // 验证银行卡是否bei被他人使用
@@ -145,13 +147,20 @@ public class QuickAgreementService extends BaseService {
         dto.setChannelSendOrder(channelSendOrder);
         dto.setChannelCode(ChannelCode.BILL99.getCode());
         ResponseDTO<AuthResponseDTO> response = channelAdapterFacade.applyAuth(dto);
-        if (ResponseDTO.Status.FAILED.equals(response.getStatus())) {
+        if (!ResponseDTO.Status.SUCCESS.equals(response.getStatus())) {
             updateChannelQuickAgreementFailed(txnId, response.getResponseCode(), response.getResponseMessage());
         }
         if (ResponseDTO.Status.SUCCESS.equals(response.getStatus())) {
-            updateChannelQuickAgreementSucceed(txnId, response.getResponseCode(), response.getResponseMessage());
+            updateApplyChannelQuickAgreementSucceed(txnId, response.getData().getChannelToken(),
+                    response.getResponseCode(), response.getResponseMessage());
         }
         return response;
+    }
+
+    private void updateApplyChannelQuickAgreementSucceed(String txnId, String token, String responseCode, String responseMessage) {
+        ChannelQuickAgreement channelQuickAgreement = channelQuickAgreementDAO.queryByTxnId(txnId);
+        channelQuickAgreementDAO.updateApplyChannelQuickAgreementSucceed(txnId, token, responseCode, responseMessage,
+                channelQuickAgreement.getVersion());
     }
 
     public void updateChannelQuickAgreementSucceed(String txnId, String responseCode, String responseMessage) {
@@ -212,6 +221,7 @@ public class QuickAgreementService extends BaseService {
             dto.setChannelSendOrder(channelQuickAgreement.getChannelSendOrder());
             dto.setChannelCode(ChannelCode.BILL99.getCode());
             dto.setSecurityCode(from.getSecurityCode());
+            dto.setChannelToken(channelQuickAgreement.getToken());
             ResponseDTO<AuthConfirmResponseDTO> response = channelAdapterFacade.confirmAuth(dto);
             if (ResponseDTO.Status.SUCCESS.equals(response.getStatus())) {
                 updateChannelQuickAgreementSucceed(txnId, response.getResponseCode(), response.getResponseMessage());

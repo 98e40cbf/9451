@@ -10,7 +10,7 @@ public interface BankCardInfoDAO {
 
     int countActivatedBankCardInfoByUser(@Param("bankCardNo") String bankCardNo, @Param("userId") Long userId);
 
-    BankCardInfo insertSelective(BankCardInfo record);
+    int insertSelective(BankCardInfo record);
 
     BankCardInfo queryByTxnId(String txnId);
 

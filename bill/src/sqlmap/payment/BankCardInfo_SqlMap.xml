@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="x.y.z.bill.mapper.payment.BankCardInfoDAO">
+    <sql id="Full_Column_List">
+        id, txnId, userId, userName, cardType, bankCode, bankName, bankCardNo, idCardNo,
+        realName, mobile, status, origin, remark, createTime, lastModifyTime, version
+    </sql>
     <select id="countActivatedBankCardInfoByUser" resultType="java.lang.Integer" parameterType="map">
     select
     count(*)
@@ -127,37 +131,34 @@
     </insert>
     <select id="queryByTxnId" resultType="x.y.z.bill.model.payment.BankCardInfo" parameterType="map">
         select
-        id, txnId, userId, userName, cardType, bankCode, bankName, bankCardNo, idCardNo,
-        realName, mobile, status, origin, remark, createTime, lastModifyTime, version
+        <include refid="Full_Column_List"/>
         from t_payment_bank_card_info
         where txnId = #{txnId,jdbcType=VARCHAR} limit 1;
     </select>
     <update id="updateBankCardInfoFailed">
         update t_payment_bank_card_info
-        set status = 2,version = versin + 1
+        set status = 2,version = version + 1
         where txnId = #{txnId,jdbcType=VARCHAR} and version = #{version,jdbcType=INTEGER} and status != 1 limit 1
     </update>
     <update id="updateBankCardInfoHanding">
         update t_payment_bank_card_info
-        set status = 3,version = versin + 1
+        set status = 3,version = version + 1
         where txnId = #{txnId,jdbcType=VARCHAR} and version = #{version,jdbcType=INTEGER} and status = -1 limit 1
     </update>
     <update id="updateBankCardInfoSucceed">
         update t_payment_bank_card_info
-        set status = 1,version = versin + 1
+        set status = 1,version = version + 1
         where txnId = #{txnId,jdbcType=VARCHAR} and version = #{version,jdbcType=INTEGER} and status != 2 limit 1
     </update>
     <select id="queryById" resultType="x.y.z.bill.model.payment.BankCardInfo" parameterType="map">
         select
-        id, txnId, userId, userName, cardType, bankCode, bankName, bankCardNo, idCardNo,
-        realName, mobile, status, origin, remark, createTime, lastModifyTime, version
+        <include refid="Full_Column_List"/>
         from t_payment_bank_card_info
         where id = #{id,jdbcType=BIGINT} limit 1;
     </select>
     <select id="queryUserBankCardBySucceed" resultType="x.y.z.bill.model.payment.BankCardInfo" parameterType="map">
         select
-        id, txnId, userId, userName, cardType, bankCode, bankName, bankCardNo, idCardNo,
-        realName, mobile, status, origin, remark, createTime, lastModifyTime, version
+        <include refid="Full_Column_List"/>
         from t_payment_bank_card_info
         where userId = #{userId,jdbcType=BIGINT} and status = 1 limit 1;
     </select>

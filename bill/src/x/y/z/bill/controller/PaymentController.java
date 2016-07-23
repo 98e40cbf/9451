@@ -3,7 +3,6 @@ package x.y.z.bill.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -113,17 +112,19 @@ public class PaymentController extends BaseController {
 
     @ResponseBody
     @PostMapping("/card/apply/withdraw")
-    public ResponseDTO<WithdrawResponseDTO> applyWithdraw(@Valid final ApplyWithdrawFrom from,
-            final BindingResult result, HttpServletRequest request) {
+    public ResponseDTO<String> applyWithdraw(@Valid final ApplyWithdrawFrom from, final BindingResult result,
+            HttpServletRequest request) {
         if (result.hasErrors()) {
             return ResponseDTO.buildFail(null, "", "参数校验异常");
         }
 
-        ResponseDTO<WithdrawResponseDTO> response = withdrawJournalService.applyWithdraw(from, userId, userName,
+        ResponseDTO<String> response = withdrawJournalService.applyWithdraw(from, userId, userName,
                 HttpUtils.getRemoteIpAddr(request));
         if (response != null && ResponseDTO.Status.SUCCESS.equals(response.getStatus())) {
-            String securityCode = RandomStringUtils.randomNumeric(6);
-            request.getSession().setAttribute("PAYMENT_WITHDRAW_TXN_ID", response.getData().getTxnId());
+            // TODO 验证码需要进行修改
+            // String securityCode = RandomStringUtils.randomNumeric(6);
+            String securityCode = "123456";
+            request.getSession().setAttribute("PAYMENT_WITHDRAW_TXN_ID", response.getData());
             request.getSession().setAttribute("PAYMENT_WITHDRAW_SECURITY_CODE", securityCode);
         }
         return response;
@@ -153,9 +154,10 @@ public class PaymentController extends BaseController {
     }
 
     @ResponseBody
-    @GetMapping("/journal/rechage/{pageNum}/{pageSize}")
-    public PageDTO<RechargeJournal, String> queryRechageJournal(@PathVariable int pageNum, @PathVariable int pageSize) {
-        return rechargeJournalService.querySucceedRechageJournal(userId, pageNum, pageSize);
+    @GetMapping("/journal/recharge/{pageNum}/{pageSize}")
+    public PageDTO<RechargeJournal, String> queryRechargeJournal(@PathVariable int pageNum,
+            @PathVariable int pageSize) {
+        return rechargeJournalService.querySucceedRechargeJournal(userId, pageNum, pageSize);
     }
 
     @ResponseBody

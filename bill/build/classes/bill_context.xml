@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xmlns="http://www.springframework.org/schema/beans"
-       xsi:schemaLocation="
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xsi:schemaLocation="
 			http://www.springframework.org/schema/beans
 			http://www.springframework.org/schema/beans/spring-beans.xsd
 			http://www.springframework.org/schema/context
 			http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <bean class="io.alpha.core.config.ScannerConfigurer">
-        <property name="basePackages">
-            <array>
-                <value>x.y.z.bill</value>
-            </array>
-        </property>
-    </bean>
-    <context:component-scan annotation-config="true" base-package="x.y.z.bill.service,x.y.z.bill.adapter.*">
-        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-        <context:exclude-filter type="annotation"
-                                expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
-    </context:component-scan>
-    <!--
-    <bean id="billRedisConnection" class="x.y.z.bill.component.RedisConnectionFactoryBean" />
-    -->
+	<bean class="io.alpha.core.config.ScannerConfigurer">
+		<property name="basePackages">
+			<array>
+				<value>x.y.z.bill</value>
+			</array>
+		</property>
+	</bean>
+	<context:component-scan annotation-config="true" base-package="x.y.z.bill.service,x.y.z.bill.adapter">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+		<context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice" />
+	</context:component-scan>
+	<!--
+	<bean id="billRedisConnection" class="x.y.z.bill.component.RedisConnectionFactoryBean" />
+	-->
 </beans>

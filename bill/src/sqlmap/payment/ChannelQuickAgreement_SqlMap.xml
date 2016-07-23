@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="x.y.z.bill.mapper.payment.ChannelQuickAgreementDAO">
+    <sql id="Full_Column_List">
+        id, txnId, channelCode, channelName, channelSendOrder, businessType, userId, userName,
+        amount, token, validCode, status, replyCode, replyMessage, origin, createTime, lastModifyTime,
+        identityCode, version, bankCardId,clientIp
+    </sql>
     <select id="countQuickAgreementByUser" resultType="java.lang.Integer" parameterType="map">
     select
     count(*)
@@ -9,13 +14,11 @@
     and status = #{status,jdbcType=INTEGER}
   </select>
     <select id="queryByTxnId" resultType="x.y.z.bill.model.payment.ChannelQuickAgreement" parameterType="map">
-    select 
-    id, txnId, channelCode, channelName, channelSendOrder, businessType, userId, userName,
-    amount, token, validCode, status, replyCode, replyMessage, origin, createTime, lastModifyTime,
-    identityCode, version, bankCardId,clientIp
-    from t_payment_channel_quick_agreement
-    where txnId = #{txnId,jdbcType=VARCHAR} limit 1;
-  </select>
+        select
+        <include refid="Full_Column_List"/>
+        from t_payment_channel_quick_agreement
+        where txnId = #{txnId,jdbcType=VARCHAR} limit 1;
+    </select>
     <insert id="insertSelective" parameterType="x.y.z.bill.model.payment.ChannelQuickAgreement">
         insert into t_payment_channel_quick_agreement
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -158,12 +161,15 @@
         set status = 1,replyCode = #{replyCode,jdbcType=VARCHAR},replyMessage = #{replyMessage,jdbcType=VARCHAR},version = version + 1
         where txnId = #{txnId,jdbcType=VARCHAR} and version = #{version,jdbcType=INTEGER} and status != 2 limit 1
     </update>
+    <update id="updateApplyChannelQuickAgreementSucceed">
+        update t_payment_channel_quick_agreement
+        set token = #{token,jdbcType=VARCHAR},replyCode = #{replyCode,jdbcType=VARCHAR},replyMessage = #{replyMessage,jdbcType=VARCHAR},version = version + 1
+        where txnId = #{txnId,jdbcType=VARCHAR} and version = #{version,jdbcType=INTEGER} limit 1
+    </update>
     <select id="queryUserQuickAgreementBySucceed" resultType="x.y.z.bill.model.payment.ChannelQuickAgreement"
             parameterType="map">
         select
-        id, txnId, channelCode, channelName, channelSendOrder, businessType, userId, userName,
-        amount, token, validCode, status, replyCode, replyMessage, origin, createTime, lastModifyTime,
-        identityCode, version, bankCardId,clientIp
+        <include refid="Full_Column_List"/>
         from t_payment_channel_quick_agreement
         where userId = #{userId,jdbcType=BIGINT} and status = 1 limit 1;
     </select>

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import x.y.z.bill.mapper.payment.PermissionRestrictDAO;
 import x.y.z.bill.model.payment.PermissionRestrict;
+import io.alpha.security.util.EncryptionUtils;
 import io.alpha.service.BaseService;
 import io.alpha.tx.annotation.TransMark;
 
@@ -19,6 +20,11 @@ public class PermissionRestrictService extends BaseService {
     private PermissionRestrictDAO permissionRestrictDAO;
 
     public PermissionRestrict restrict(String businessCode, String bankCardNo) {
+        try {
+            bankCardNo = EncryptionUtils.encryptByAES(bankCardNo);
+        } catch (Exception e) {
+            throw new SecurityException(e);
+        }
         return permissionRestrictDAO.queryPermissionRestrictByBankCardNo(businessCode, bankCardNo);
     }
 

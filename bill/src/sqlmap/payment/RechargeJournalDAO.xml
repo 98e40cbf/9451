@@ -1,31 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="x.y.z.bill.mapper.payment.RechargeJournalDAO">
-
+    <sql id="Full_Column_List">
+        id, txnId, channelCode, channelName, channelSendOrder, channelRecvOrder, amount,
+        cost, status, userId, userName, businessCode, clientIp, actulAmount, remark, replyCode,
+        replyMessage, transTimeout, sendTime, recvTime, toAccountTime, createTime, lastModifyTime,version
+    </sql>
     <select id="queryByTxnId" resultType="x.y.z.bill.model.payment.RechargeJournal" parameterType="map">
-    select 
-    id, txnId, channelCode, channelName, channelSendOrder, channelRecvOrder, amount,
-    cost, status, userId, userName, businessCode, clientIp, actulAmount, remark, replyCode,
-    replyMessage, transTimeout, sendTime, recvTime, toAccountTime, createTime, lastModifyTime
+    select
+    <include refid="Full_Column_List"/>
     from t_payment_recharge_journal
     where txnId = #{txnId,jdbcType=VARCHAR} limit 1
   </select>
-    <select id="countRechageJournal" resultType="java.lang.Integer">
+    <select id="countRechargeJournal" resultType="java.lang.Integer">
         select
         count(*)
         from t_payment_recharge_journal
         where userId = #{userId,jdbcType=BIGINT}
         and status = #{status,jdbcType=INTEGER}
     </select>
-    <select id="queryRechageJournal" resultType="x.y.z.bill.model.payment.RechargeJournal">
+    <select id="queryRechargeJournal" resultType="x.y.z.bill.model.payment.RechargeJournal">
         select
-        id, txnId, channelCode, channelName, channelSendOrder, channelRecvOrder, amount,
-        cost, status, userId, userName, businessCode, clientIp, actulAmount, remark, replyCode,
-        replyMessage, transTimeout, sendTime, recvTime, toAccountTime, createTime, lastModifyTime
+        <include refid="Full_Column_List"/>
         from t_payment_recharge_journal
         where userId = #{userId,jdbcType=BIGINT}
         and status = #{status,jdbcType=INTEGER}
         limit offset = #{offset,jdbcType=INTEGER},rows = #{rows,jdbcType=INTEGER}
+    </select>
+    <select id="queryUserFirstRechargeJournal" resultType="x.y.z.bill.model.payment.RechargeJournal">
+        select
+        <include refid="Full_Column_List"/>
+        from t_payment_recharge_journal
+        where userId = #{userId,jdbcType=BIGINT} and status = 1 order by createTime asc limit 1;
     </select>
 
     <insert id="insertSelective" parameterType="x.y.z.bill.model.payment.RechargeJournal">
@@ -191,17 +197,17 @@
             </if>
         </trim>
     </insert>
-    <update id="updateRechageJournalFailed" parameterType="map">
+    <update id="updateRechargeJournalFailed" parameterType="map">
         update t_payment_recharge_journal
         set status = 2,replyCode = #{replyCode,jdbcType=VARCHAR},replyMessage = #{replyMessage,jdbcType=VARCHAR},recvTime = #{recvTime,jdbcType=TIMESTAMP},version = version + 1
         where txnId = #{txnId,jdbcType=VARCHAR} and version = #{version,jdbcType=INTEGER} and status != 1 limit 1
     </update>
-    <update id="updateRechageJournalHanding">
+    <update id="updateRechargeJournalHanding">
         update t_payment_recharge_journal
         set status = 3,sendTime = #{sendTime,jdbcType=TIMESTAMP},version = version + 1
         where txnId = #{txnId,jdbcType=VARCHAR} and version = #{version,jdbcType=INTEGER} and status = -1 limit 1
     </update>
-    <update id="updateRechageJournalSucceed" parameterType="map">
+    <update id="updateRechargeJournalSucceed" parameterType="map">
         update t_payment_recharge_journal
         set status = 1,replyCode = #{replyCode,jdbcType=VARCHAR},replyMessage = #{replyMessage,jdbcType=VARCHAR},recvTime = #{recvTime,jdbcType=TIMESTAMP},version = version + 1
         where txnId = #{txnId,jdbcType=VARCHAR} and version = #{version,jdbcType=INTEGER} and status = 3 limit 1

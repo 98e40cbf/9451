@@ -35,11 +35,8 @@ import x.y.z.bill.adapter.util.XMLSerializer;
 
 @Service(value = "adapter_100002")
 public class Bill99Adapter extends GenericAdapter implements Bill99Status {
-    // private static final Charset UTF8 = Charset.forName("UTF-8");
     @Autowired
     private ConfigManager configManager;
-
-    // private final static ExecutorService pool = Executors.newFixedThreadPool(2);
 
     /**
      * 获取渠道编码
@@ -98,7 +95,7 @@ public class Bill99Adapter extends GenericAdapter implements Bill99Status {
             message = callBill99Server(dto.getTxnId(), message, config.getSslContext(), createAuthorization(config),
                     config.getIndieAuthUrl());
         } catch (Exception e) {
-            logger.error("[快钱]申请鉴权出错.", e);
+            logger.error("[{}] - [支付系统] - [快钱渠道] - 申请鉴权出错", dto.getTxnId(), e);
             return ResponseDTO.buildException("NET_ERROR", "与服务器通信出错");
         }
         return Bill99Builder.buildAuthResp(dto, message);
@@ -130,7 +127,7 @@ public class Bill99Adapter extends GenericAdapter implements Bill99Status {
             message = callBill99Server(dto.getTxnId(), message, config.getSslContext(), createAuthorization(config),
                     config.getIndieAuthVerifyUrl());
         } catch (Exception e) {
-            logger.error("[快钱]验证鉴权出错.", e);
+            logger.error("[{}] - [支付系统] - [快钱渠道] - 确认鉴权异常", dto.getTxnId(), e);
             return ResponseDTO.buildException("NET_ERROR", "与服务器通信出错");
         }
         return Bill99Builder.buildResponse(dto, message);
@@ -156,7 +153,7 @@ public class Bill99Adapter extends GenericAdapter implements Bill99Status {
             message = callBill99Server(dto.getTxnId(), message, config.getSslContext(), createAuthorization(config),
                     config.getPciQueryUrl());
         } catch (Exception e) {
-            logger.error("[快钱]查询鉴权出错.", e);
+            logger.error("[{}] - [支付系统] - [快钱渠道] - 订单查询异常", dto.getTxnId(), e);
             return ResponseDTO.buildException("NET_ERROR", "与服务器通信出错");
         }
         return Bill99Builder.buildQueryAuthResp(dto, message);
@@ -176,12 +173,11 @@ public class Bill99Adapter extends GenericAdapter implements Bill99Status {
                     authData.getResponseMessage());
         }
         if (authData.getData() == null || !authData.getData().isAuthenticate()) {
-            logger.info("订单号[{}]快钱取消协议返回成功，未找到该卡的鉴权信息.", requestDTO.getTxnId());
+            logger.info("[{}] - [支付系统] - [快钱渠道] - 快钱取消协议返回成功，未找到该卡的鉴权信息.", requestDTO.getTxnId());
             return ResponseDTO.buildSuccess(requestDTO.getTreatyInfo(), authData.getResponseCode(),
                     authData.getResponseMessage());
         }
 
-        logger.debug("订单号[{}]快钱发起取消鉴权请求.", requestDTO.getTxnId());
         Bill99Config config = getConfig(requestDTO);
 
         MasMessage message = new MasMessage();
@@ -198,7 +194,7 @@ public class Bill99Adapter extends GenericAdapter implements Bill99Status {
             message = callBill99Server(requestDTO.getTxnId(), message, config.getSslContext(),
                     createAuthorization(config), config.getPciQueryUrl());
         } catch (Exception e) {
-            logger.error("[快钱]查询鉴权出错.", e);
+            logger.error("[{}] - [支付系统] - [快钱渠道] - 取消鉴权协议异常", requestDTO.getTxnId(), e);
             return ResponseDTO.buildException("NET_ERROR", "与服务器通信出错");
         }
         return Bill99Builder.buildCancelAuth(requestDTO, message);
@@ -227,7 +223,7 @@ public class Bill99Adapter extends GenericAdapter implements Bill99Status {
             masMessage = callBill99Server(dto.getTxnId(), masMessage, config.getSslContext(),
                     createAuthorization(config), config.getQuickPayUrl());
         } catch (Exception e) {
-            logger.error("[快钱]申请快捷支付出错.", e);
+            logger.error("[{}] - [支付系统] - [快钱渠道] - 快捷支付申请异常", dto.getTxnId(), e);
             return ResponseDTO.buildException("NET_ERROR", "与服务器通信出错");
         }
         return Bill99Builder.buildQuickPayResp(dto, masMessage);
@@ -264,7 +260,7 @@ public class Bill99Adapter extends GenericAdapter implements Bill99Status {
             message = callBill99Server(dto.getTxnId(), message, config.getSslContext(), createAuthorization(config),
                     config.getQuickPayVerifyUrl());
         } catch (Exception e) {
-            logger.error("[快钱]确认快捷支付出错.", e);
+            logger.error("[{}] - [支付系统] - [快钱渠道] - 快捷支付确认异常", dto.getTxnId(), e);
             return ResponseDTO.buildException("NET_ERROR", "与服务器通信出错");
         }
         return Bill99Builder.buildQuickPayConfirmResp(dto, message);
@@ -292,7 +288,7 @@ public class Bill99Adapter extends GenericAdapter implements Bill99Status {
             message = callBill99Server(dto.getTxnId(), message, config.getSslContext(), createAuthorization(config),
                     config.getOrderQueryUrl());
         } catch (Exception e) {
-            logger.error("[快钱]确认快捷支付出错.", e);
+            logger.error("[{}] - [支付系统] - [快钱渠道] - 查询支付订单异常", dto.getTxnId(), e);
             return ResponseDTO.buildException("NET_ERROR", "与服务器通信出错");
         }
 
@@ -322,21 +318,16 @@ public class Bill99Adapter extends GenericAdapter implements Bill99Status {
         HttpResponse httpResponse = null;
         try {
             String sendData = XMLSerializer.toXML(message, false);
-            if (logger.isDebugEnabled()) {
-                logger.debug("[支付系统] - [发送快钱服务器] 数据:{}", sendData);
-            }
+            logger.info("[{}] - [支付系统] - [发送快钱服务器] 数据:{}", txnId, sendData);
             HttpResult httpResult = HttpClientTools.sendRequest(sendData, httpRequest);
-            if (logger.isDebugEnabled()) {
-                logger.debug("[支付系统] - [接收快钱服务器] 数据:{}", httpResult);
-            }
+            logger.info("[{}] - [支付系统] - [接收快钱服务器] 数据:{}", txnId, httpResult);
             if (httpResult != null) {
                 if (HttpStatus.SC_OK == httpResult.getResultCode()) {
                     message = XMLSerializer.parseXml(httpResult.getResponseBody(), MasMessage.class);
-                    System.out.println(message);
                 }
             }
         } catch (Throwable e) {
-            logger.error("[快钱]请求出错.", e);
+            logger.error("[{}] - [支付系统] - [快钱渠道] - 访问快钱服务器异常", txnId, e);
             throw e;
         } finally {
             // 获得响应具体内容

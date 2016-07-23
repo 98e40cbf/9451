@@ -24,6 +24,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import x.y.z.bill.adapter.util.SerialContext;
 import io.alpha.logging.Logger;
 import io.alpha.logging.LoggerFactory;
 
@@ -169,14 +170,12 @@ public class HttpClientTools {
             httpResult = new HttpResult(statusLine.getStatusCode(), responseData);
             return httpResult;
         } catch (ConnectTimeoutException | UnknownHostException | HttpHostConnectException e) {
-            logger.error("发送HTTP请求至{}出现异常.", requestDTO.getUrl(), e);
+            logger.error("[{}] - [支付系统] - 发送渠道网络故障", SerialContext.get(), e);
             throw e;
         } finally {
             if (httpResult != null) {
                 currentTime = System.currentTimeMillis() - currentTime;
                 httpResult.setExecuteTime(currentTime);
-                logger.info("<<<<<< 请求响应 >>>>>>\r\n{}\r\n{}\r\n<<<<<< ---------------- >>>>>>\r\n", requestDTO.getUrl(),
-                        httpResult.toString());
             }
             // 获得响应具体内容
             // 关闭输入流同时会将连接交回至连接处理

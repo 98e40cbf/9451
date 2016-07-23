@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import x.y.z.bill.mapper.payment.BankCardInfoDAO;
 import x.y.z.bill.model.payment.BankCardInfo;
+import io.alpha.security.util.EncryptionUtils;
 import io.alpha.service.BaseService;
 import io.alpha.tx.annotation.TransMark;
 
@@ -26,12 +27,19 @@ public class BankCardInfoService extends BaseService {
      * @return
      */
     public boolean isOtherPeopleUseCard(String bankCardNo, Long userId) {
+        try {
+            bankCardNo = EncryptionUtils.encryptByAES(bankCardNo);
+        } catch (Exception e) {
+            throw new SecurityException(e);
+        }
         return bankCardInfoDAO.countActivatedBankCardInfoByUser(bankCardNo, userId) > 0 ? true : false;
     }
 
     public BankCardInfo save(BankCardInfo bankCardInfo) {
-        return bankCardInfoDAO.insertSelective(bankCardInfo);
-
+        bankCardInfo.encrypt();
+        bankCardInfoDAO.insertSelective(bankCardInfo);
+        bankCardInfo.decrypt();
+        return bankCardInfo;
     }
 
     public void updateBankCardInfoFailed(String txnId) {
@@ -45,11 +53,19 @@ public class BankCardInfoService extends BaseService {
     }
 
     public BankCardInfo queryByTxnId(String txnId) {
-        return bankCardInfoDAO.queryByTxnId(txnId);
+        BankCardInfo bankCardInfo = bankCardInfoDAO.queryByTxnId(txnId);
+        if (bankCardInfo != null) {
+            bankCardInfo.decrypt();
+        }
+        return bankCardInfo;
     }
 
     public BankCardInfo queryUserBankCardBySucceed(Long userId) {
-        return bankCardInfoDAO.queryUserBankCardBySucceed(userId);
+        BankCardInfo bankCardInfo = bankCardInfoDAO.queryUserBankCardBySucceed(userId);
+        if (bankCardInfo != null) {
+            bankCardInfo.decrypt();
+        }
+        return bankCardInfo;
     }
 
     public void updateBankCardInfoSucceed(String txnId) {
@@ -58,6 +74,10 @@ public class BankCardInfoService extends BaseService {
     }
 
     public BankCardInfo queryById(Long id) {
-        return bankCardInfoDAO.queryById(id);
+        BankCardInfo bankCardInfo = bankCardInfoDAO.queryById(id);
+        if (bankCardInfo != null) {
+            bankCardInfo.decrypt();
+        }
+        return bankCardInfo;
     }
 }

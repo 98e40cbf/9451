@@ -99,6 +99,44 @@
             </form>
         </td>
     </tr>
+    <tr>
+        <td>申请提现:<br>
+
+            <form action="${contextPath}/payment/card/apply/withdraw" method="post">
+                <table>
+                    <tr>
+                        <td>支付金额</td>
+                        <td><input name="amount" type="text" value="1000.00"/></td>
+                    </tr>
+                    <tr>
+                        <td>来源</td>
+                        <td><input name="origin" type="text" value="PC"/></td>
+                    </tr>
+                </table>
+                <b:token/>
+                <input type="submit"/>
+            </form>
+        </td>
+    </tr>
+    <tr>
+        <td>确认提现:<br>
+
+            <form action="${contextPath}/payment/card/confirm/withdraw" method="post">
+                <table>
+                    <tr>
+                        <td>验证码</td>
+                        <td><input name="securityCode" type="text" value=""/></td>
+                    </tr>
+                    <tr>
+                        <td>来源</td>
+                        <td><input name="origin" type="text" value="PC"/></td>
+                    </tr>
+                </table>
+                <b:token/>
+                <input type="submit"/>
+            </form>
+        </td>
+    </tr>
 </table>
 
 

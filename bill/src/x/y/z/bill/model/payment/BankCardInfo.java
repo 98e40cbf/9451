@@ -3,6 +3,7 @@ package x.y.z.bill.model.payment;
 import java.util.Date;
 
 import io.alpha.core.model.BaseObject;
+import io.alpha.security.util.EncryptionUtils;
 
 public class BankCardInfo extends BaseObject {
     private static final long serialVersionUID = 1L;
@@ -187,5 +188,43 @@ public class BankCardInfo extends BaseObject {
     public BankCardInfo setClientIp(String clientIp) {
         this.clientIp = clientIp;
         return this;
+    }
+
+    public void encrypt() {
+        try {
+            if (this.bankCardNo != null) {
+                this.bankCardNo = EncryptionUtils.encryptByAES(bankCardNo);
+            }
+            if (this.idCardNo != null) {
+                this.idCardNo = EncryptionUtils.encryptByAES(idCardNo);
+            }
+            if (this.realName != null) {
+                this.realName = EncryptionUtils.encryptByAES(realName);
+            }
+            if (this.mobile != null) {
+                this.mobile = EncryptionUtils.encryptByAES(mobile);
+            }
+        } catch (Exception e) {
+            throw new SecurityException(e);
+        }
+    }
+
+    public void decrypt() {
+        try {
+            if (this.bankCardNo != null) {
+                this.bankCardNo = EncryptionUtils.decryptByAES(bankCardNo);
+            }
+            if (this.idCardNo != null) {
+                this.idCardNo = EncryptionUtils.decryptByAES(idCardNo);
+            }
+            if (this.realName != null) {
+                this.realName = EncryptionUtils.decryptByAES(realName);
+            }
+            if (this.mobile != null) {
+                this.mobile = EncryptionUtils.decryptByAES(mobile);
+            }
+        } catch (Exception e) {
+            throw new SecurityException(e);
+        }
     }
 }
